@@ -1,104 +1,119 @@
-import {DocumentTextIcon} from '@sanity/icons'
-import {format, parseISO} from 'date-fns'
-import {defineField, defineType} from 'sanity'
-
-/**
- * Post schema.  Define and edit the fields for the 'post' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
- */
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import {VscSettings} from 'react-icons/vsc'
+import {TbMeat} from 'react-icons/tb'
+import {FaBullhorn as icon} from 'react-icons/fa'
 
 export const post = defineType({
-  name: 'post',
-  title: 'Post',
-  icon: DocumentTextIcon,
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      description: 'A slug is required for the post to show up in the preview',
-      options: {
-        source: 'title',
-        maxLength: 96,
-        isUnique: (value, context) => context.defaultIsUnique(value, context),
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'blockContent',
-    }),
-    defineField({
-      name: 'excerpt',
-      title: 'Excerpt',
-      type: 'text',
-    }),
-    defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'alt',
-        },
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative text',
-          description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
-        },
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'date',
-      title: 'Date',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-    }),
-    defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: [{type: 'person'}],
-    }),
-  ],
-  // List preview configuration. https://www.sanity.io/docs/previews-list-views
-  preview: {
-    select: {
-      title: 'title',
-      authorFirstName: 'author.firstName',
-      authorLastName: 'author.lastName',
-      date: 'date',
-      media: 'coverImage',
-    },
-    prepare({title, media, authorFirstName, authorLastName, date}) {
-      const subtitles = [
-        authorFirstName && authorLastName && `by ${authorFirstName} ${authorLastName}`,
-        date && `on ${format(parseISO(date), 'LLL d, yyyy')}`,
-      ].filter(Boolean)
-
-      return {title, media, subtitle: subtitles.join(' ')}
-    },
-  },
+	name: 'post',
+	title: 'Post',
+	type: 'document',
+	icon,
+	groups: [
+		{
+			title: 'Post Settings',
+			name: 'postSettings',
+			icon: VscSettings,
+			default: true,
+		},
+		{
+			title: 'Post Content',
+			name: 'postContent',
+			icon: TbMeat,
+		},
+	],
+	fields: [
+		defineField({
+			name: 'title',
+			title: 'Title',
+			type: 'string',
+			group: 'postSettings',
+		}),
+		defineField({
+			name: 'slug',
+			title: 'Slug',
+			type: 'slug',
+			validation: (Rule) => Rule.required(),
+			options: {
+				source: 'title',
+				maxLength: 96,
+			},
+			group: 'postSettings',
+		}),
+		defineField({
+			name: 'overview',
+			description:
+				'Used both for the <meta> description tag for SEO, and the personal website subheader. Should be fewer than 160 characters.',
+			title: 'Overview',
+			type: 'array',
+			of: [
+				// Paragraphs
+				defineArrayMember({
+					lists: [],
+					marks: {
+						annotations: [],
+						decorators: [
+							{
+								title: 'Italic',
+								value: 'em',
+							},
+							{
+								title: 'Strong',
+								value: 'strong',
+							},
+						],
+					},
+					styles: [],
+					type: 'block',
+				}),
+			],
+			group: 'postSettings',
+		}),
+		defineField({
+			title: 'Author',
+			name: 'author',
+			type: 'reference',
+			to: [{type: 'trainer'}],
+			group: 'postSettings',
+		}),
+		defineField({
+			name: 'excerpt',
+			title: 'Excerpt',
+			type: 'simplePortableText',
+			description:
+				'This field will appear in places where this post is linked. For example, in a related resources grid.',
+			group: 'postSettings',
+		}),
+		defineField({
+			name: 'image',
+			title: 'Header Image',
+			type: 'mainImage',
+			options: {
+				hotspot: true,
+			},
+			group: 'postContent',
+		}),
+		defineField({
+			name: 'subheader',
+			title: 'Subheader',
+			type: 'string',
+			group: 'postContent',
+		}),
+		defineField({
+			name: 'body',
+			title: 'Body',
+			type: 'mainPortableText',
+			group: 'postContent',
+		}),
+	],
+	preview: {
+		select: {
+			title: 'title',
+			author: 'author.name',
+			media: 'image',
+		},
+		prepare(selection) {
+			const {author} = selection
+			return {...selection, subtitle: author && `by ${author}`}
+		},
+	},
 })

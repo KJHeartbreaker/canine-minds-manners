@@ -30,7 +30,7 @@ Run the command in your Terminal to initialize this template on your local compu
 See the documentation if you are [having issues with the CLI](https://www.sanity.io/help/cli-errors).
 
 ```shell
-npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
+pnpm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
 ```
 
 #### 2. Run Studio and Next.js app locally
@@ -38,7 +38,8 @@ npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
 Navigate to the template directory using `cd <your app name>`, and start the development servers by running the following command
 
 ```shell
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 #### 3. Open the app and sign in to the Studio
@@ -62,7 +63,7 @@ Your content should now appear in your Next.js app ([http://localhost:3000](http
 You may want to start with some sample content and we've got you covered. Run this command from the root of your project to import the provided dataset (sample-data.tar.gz) into your Sanity project. This step is optional but can be helpful for getting started quickly.
 
 ```shell
-npm run import-sample-data
+pnpm run import-sample-data
 ```
 
 #### 3. Extending the Sanity schema
@@ -73,7 +74,7 @@ The schema for the `Post` document type is defined in the `studio/src/schemaType
 
 #### 1. Deploy Sanity Studio
 
-Your Next.js frontend (`/frontend`) and Sanity Studio (`/studio`) are still only running on your local computer. It's time to deploy and get it into the hands of other content editors.
+Your Next.js frontend (`/web`) and Sanity Studio (`/studio`) are still only running on your local computer. It's time to deploy and get it into the hands of other content editors.
 
 Back in your Studio directory (`/studio`), run the following command to deploy your Sanity Studio.
 

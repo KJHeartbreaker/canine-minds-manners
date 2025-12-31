@@ -1,62 +1,119 @@
-import {defineField, defineType} from 'sanity'
-import {DocumentIcon} from '@sanity/icons'
-
-/**
- * Page schema.  Define and edit the fields for the 'page' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
- */
+import {GrDocument as icon} from 'react-icons/gr'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const page = defineType({
+  type: 'document',
   name: 'page',
   title: 'Page',
-  type: 'document',
-  icon: DocumentIcon,
+  icon,
   fields: [
     defineField({
-      name: 'name',
-      title: 'Name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      name: 'title',
+      title: 'Title',
+      validation: (rule) => rule.required(),
     }),
-
     defineField({
+      type: 'slug',
       name: 'slug',
       title: 'Slug',
-      type: 'slug',
-      validation: (Rule) => Rule.required(),
       options: {
-        source: 'name',
-        maxLength: 96,
+        source: 'title',
       },
+      validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'heading',
-      title: 'Heading',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'subheading',
-      title: 'Subheading',
-      type: 'string',
-    }),
-    defineField({
-      name: 'pageBuilder',
-      title: 'Page builder',
+      name: 'overview',
+      description:
+        'Used both for the <meta> description tag for SEO, and the personal website subheader.',
+      title: 'Overview',
       type: 'array',
-      of: [{type: 'callToAction'}, {type: 'infoSection'}],
-      options: {
-        insertMenu: {
-          // Configure the "Add Item" menu to display a thumbnail preview of the content type. https://www.sanity.io/docs/array-type#efb1fe03459d
-          views: [
-            {
-              name: 'grid',
-              previewImageUrl: (schemaTypeName) =>
-                `/static/page-builder-thumbnails/${schemaTypeName}.webp`,
-            },
-          ],
-        },
-      },
+      of: [
+        // Paragraphs
+        defineArrayMember({
+          lists: [],
+          marks: {
+            annotations: [],
+            decorators: [
+              {
+                title: 'Italic',
+                value: 'em',
+              },
+              {
+                title: 'Strong',
+                value: 'strong',
+              },
+            ],
+          },
+          styles: [],
+          type: 'block',
+        }),
+      ],
+      // validation: (rule) => rule.max(155).required(),
+    }),
+    defineField({
+      name: 'content',
+      type: 'array',
+      title: 'Page sections',
+      description: 'Add, edit, and reorder sections',
+      of: [
+        defineArrayMember({
+          name: 'Hero Banner',
+          type: 'heroBanner',
+        }),
+        defineArrayMember({
+          name: 'Single Column Content Block',
+          type: 'singleColumnContentBlock',
+        }),
+        defineArrayMember({
+          name: 'Content Rows',
+          type: 'rowContainer',
+        }),
+        defineArrayMember({
+          name: 'Product Grid',
+          type: 'productGridContainer',
+        }),
+        defineArrayMember({
+          name: 'Programs Grid',
+          type: 'programsGridContainer',
+        }),
+        defineArrayMember({
+          name: 'Trainers Grid',
+          type: 'trainersGridContainer',
+        }),
+        defineArrayMember({
+          name: 'Testimonials',
+          type: 'testimonialGridContainer',
+        }),
+        defineArrayMember({
+          name: 'Custom Component',
+          type: 'customComponent',
+        }),
+        defineArrayMember({
+          name: 'Class Row',
+          type: 'classRowsContainer',
+        }),
+        defineArrayMember({
+          name: 'Related Resources',
+          type: 'relatedResourcesRow',
+        }),
+        defineArrayMember({
+          name: 'Contact Page Map',
+          type: 'contactPageMap',
+        }),
+      ],
     }),
   ],
+  preview: {
+    select: {
+      title: 'title',
+      slug: 'slug.current',
+    },
+    prepare({title, slug}) {
+      return {
+        title,
+        subtitle: `/${slug}`,
+      }
+    },
+  },
 })
