@@ -2,7 +2,7 @@ import './globals.css'
 
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Montserrat, Paytone_One, Kalam } from 'next/font/google'
 import { draftMode } from 'next/headers'
 import { toPlainText } from 'next-sanity'
 import { VisualEditing } from 'next-sanity/visual-editing'
@@ -52,17 +52,36 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-const inter = Inter({
-  variable: '--font-inter',
+// Load custom fonts matching the old site's typography
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
   subsets: ['latin'],
   display: 'swap',
+  weight: ['300', '400', '600', '700'],
+})
+
+const paytoneOne = Paytone_One({
+  variable: '--font-paytone-one',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400'],
+})
+
+const kalam = Kalam({
+  variable: '--font-kalam',
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400'],
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled: isDraftMode } = await draftMode()
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
+    <html
+      lang="en"
+      className={`${montserrat.variable} ${paytoneOne.variable} ${kalam.variable} bg-white text-black`}
+    >
       <body>
         <section className="min-h-screen pt-24">
           {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
