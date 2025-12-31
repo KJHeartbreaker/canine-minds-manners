@@ -85,11 +85,10 @@
   --font-title1-mobile-size: calc(44 / var(--unit) * 1rem);
   --font-title1-mobile-line-height: calc(48 / 40);
 
-  /* Font families - will be set via next/font in layout.tsx */
-  --font-montserrat: 'Inter', sans-serif;
-  --font-paytone-one: 'Inter', sans-serif;
-  --font-kalam: 'Inter', cursive;
-  --font-mono: 'Inter', monospace;
+  /* Font families - set via next/font in layout.tsx */
+  /* Next.js font loader sets --font-montserrat, --font-paytone-one, --font-kalam on the html element */
+  /* For mono, we use Montserrat as fallback since we don't have a separate mono font loaded */
+  --font-mono: var(--font-montserrat), monospace;
 
   --default-transition-duration: 250ms;
 }
@@ -107,6 +106,16 @@
     position: relative;
     -webkit-overflow-scrolling: touch;
     color: var(--color-grey-33);
+  }
+
+  /* Ensure font-display class uses Paytone One */
+  .font-display {
+    font-family: var(--font-paytone-one), sans-serif;
+  }
+
+  /* Ensure font-sans class uses Montserrat */
+  .font-sans {
+    font-family: var(--font-montserrat), sans-serif;
   }
 
   @media (prefers-reduced-motion: no-preference) {
