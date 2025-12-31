@@ -531,15 +531,11 @@ export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
-// Query: *[_type == "settings"][0]
+// Query: *[_type == "settings"][0] {      _id,  title,  description,  ogImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  menuItems[] {    _key,    _type,    title,    cta {        title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }    },    subnav[] {      _key,      landingPageRoute -> {        _id,        "slug": slug.current,        _type      }    }  },  footerLogos[] {    _key,    alt,    asset -> {      _id,      metadata {        lqip      }    }  }  }
 export type SettingsQueryResult = {
   _id: string
-  _type: 'settings'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
   title: string
-  description?: Array<{
+  description: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -570,21 +566,32 @@ export type SettingsQueryResult = {
     level?: number
     _type: 'block'
     _key: string
-  }>
-  ogImage?: {
-    asset?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    metadataBase?: string
-    _type: 'image'
-  }
+  }> | null
+  ogImage: {
+    alt: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      url: string | null
+      metadata: {
+        dimensions: {
+          width: number | null
+          height: number | null
+          aspectRatio: number | null
+        } | null
+        lqip: string | null
+        palette: {
+          dominant: {
+            background: string | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  menuItems: null
+  footerLogos: null
 } | null
 
 // Source: sanity/lib/queries.ts
@@ -792,7 +799,7 @@ export type PagesSlugsResult = Array<{
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "settings"][0]': SettingsQueryResult
+    '\n  *[_type == "settings"][0] {\n    \n  _id,\n  title,\n  description,\n  ogImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  menuItems[] {\n    _key,\n    _type,\n    title,\n    cta {\n      \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n    },\n    subnav[] {\n      _key,\n      landingPageRoute -> {\n        _id,\n        "slug": slug.current,\n        _type\n      }\n    }\n  },\n  footerLogos[] {\n    _key,\n    alt,\n    asset -> {\n      _id,\n      metadata {\n        lqip\n      }\n    }\n  }\n\n  }\n': SettingsQueryResult
     '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    name,\n    slug,\n    heading,\n    subheading,\n    "content": content[]{\n      ...\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  coverImage,\n  "date": coalesce(date, _updatedAt),\n  "author": author->{firstName, lastName, picture},\n\n  }\n': AllPostsQueryResult

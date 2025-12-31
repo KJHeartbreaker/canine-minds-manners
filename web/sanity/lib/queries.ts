@@ -1,6 +1,20 @@
 import {defineQuery} from 'next-sanity'
+import {
+  settingsProjection,
+  imageProjection,
+  ctaProjection,
+  authorProjection,
+} from './query-fragments'
 
-export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
+/**
+ * Settings query - used in layout for navigation and footer
+ * This is fetched once and can be cached
+ */
+export const settingsQuery = defineQuery(`
+  *[_type == "settings"][0] {
+    ${settingsProjection}
+  }
+`)
 
 const postFields = /* groq */ `
   _id,

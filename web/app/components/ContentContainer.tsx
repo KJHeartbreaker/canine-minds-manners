@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils'
-import { ReactNode } from 'react'
+import { ReactNode, CSSProperties } from 'react'
 
 interface ContentContainerProps {
     children: ReactNode
     className?: string
+    style?: CSSProperties
 }
 
 /**
@@ -13,6 +14,7 @@ interface ContentContainerProps {
 export default function ContentContainer({
     children,
     className,
+    style,
 }: ContentContainerProps) {
     return (
         <div
@@ -25,6 +27,7 @@ export default function ContentContainer({
                 'xxl:max-w-[1600px]',
                 className
             )}
+            style={style}
         >
             {children}
         </div>

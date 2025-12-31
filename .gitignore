@@ -29,3 +29,7 @@ next-env.d.ts
 
 # VS Code
 .vscode
+
+# Documentation reports (generated/working docs)
+web/CODE_SMELLS_REPORT.md
+web/ARCHITECTURE.md
