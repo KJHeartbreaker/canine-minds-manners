@@ -8,9 +8,10 @@ import SimplePortableText from '../portableText/SimplePortableText'
 interface HeroBannerBlockProps {
     block: {
         _key: string
-        _type: 'Hero Banner'
+        _type: 'heroBanner'
         size?: 'standard' | 'x-large'
         image?: any
+        overlay?: 'noOverlay' | 'darkOverlay' | 'blueOverlay'
         imageOverlay?: 'noOverlay' | 'darkOverlay' | 'blueOverlay'
         heading?: string
         subheading?: string
@@ -29,17 +30,18 @@ interface HeroBannerBlockProps {
  * Displays a hero banner with optional background image, heading, subheading, and copy
  */
 export default function HeroBannerBlock({ block }: HeroBannerBlockProps) {
-    const { size = 'standard', image, imageOverlay = 'noOverlay', heading, subheading, copy, copyColor, subHeadingColor, headingColor } = block
+    const { size = 'standard', image, overlay, imageOverlay: propImageOverlay, heading, subheading, copy, copyColor, subHeadingColor, headingColor } = block
+    // Use overlay from block, fallback to imageOverlay prop, then default to 'noOverlay'
+    const overlayValue = overlay || propImageOverlay || 'noOverlay'
 
-    const bgSize = size === 'standard' ? 'h-[300px] lg:h-[400px]' : size === 'x-large' ? 'h-[500px] lg:h-[600px]' : ''
+    // Ensure height is always set - default to standard if size doesn't match
+    const bgSize = size === 'x-large' ? 'h-[500px] lg:h-[600px]' : 'h-[300px] lg:h-[400px]'
     const copyBlock = size === 'x-large' ? 'mt-[100px] lg:mt-[300px]' : ''
 
     // Use CSS custom properties for responsive height
-    const heightStyle = size === 'standard'
-        ? { '--hero-height-mobile': '300px', '--hero-height-desktop': '400px' } as React.CSSProperties
-        : size === 'x-large'
-            ? { '--hero-height-mobile': '500px', '--hero-height-desktop': '600px' } as React.CSSProperties
-            : undefined
+    const heightStyle = size === 'x-large'
+        ? { '--hero-height-mobile': '500px', '--hero-height-desktop': '600px' } as React.CSSProperties
+        : { '--hero-height-mobile': '300px', '--hero-height-desktop': '400px' } as React.CSSProperties
 
     return (
         <section
@@ -58,8 +60,8 @@ export default function HeroBannerBlock({ block }: HeroBannerBlockProps) {
                             priority
                         />
                     </div>
-                    {imageOverlay === 'darkOverlay' && <div className="absolute inset-0 z-0 bg-black/50" />}
-                    {imageOverlay === 'blueOverlay' && <div className="absolute inset-0 z-0 bg-blue-44/70" />}
+                    {overlayValue === 'darkOverlay' && <div className="absolute inset-0 z-0 bg-black/50" />}
+                    {overlayValue === 'blueOverlay' && <div className="absolute inset-0 z-0 bg-blue-44/70" />}
                 </>
             )}
             <div className={cn('absolute z-10 flex w-8/12 flex-col items-center justify-center text-center', copyBlock)}>

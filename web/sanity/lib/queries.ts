@@ -77,7 +77,65 @@ export const getHomePageQuery = defineQuery(`
     heading,
     subheading,
     "content": content[]{
+      _key,
+      _type,
       ...,
+      _type == 'heroBanner' => {
+        size,
+        subheading,
+        subHeadingColor,
+        heading,
+        headingColor,
+        copy {
+          portableTextBlock[] {
+            ...,
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
+          }
+        },
+        copyColor,
+        image {
+          ${imageProjection}
+        },
+        overlay,
+        cta {
+          title,
+          arrow,
+          kind,
+          link,
+          fileDownload {
+            ${fileDownloadProjection}
+          },
+          landingPageRoute-> {
+            _id,
+            "slug": slug.current,
+            _type
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -491,6 +549,64 @@ export const blogLandingPageQuery = defineQuery(`
     overview,
     "content": content[]{
       ...,
+      _type == 'heroBanner' => {
+        _key,
+        _type,
+        size,
+        subheading,
+        subHeadingColor,
+        heading,
+        headingColor,
+        copy {
+          portableTextBlock[] {
+            ...,
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
+          }
+        },
+        copyColor,
+        image {
+          ${imageProjection}
+        },
+        overlay,
+        cta {
+          title,
+          arrow,
+          kind,
+          link,
+          fileDownload {
+            ${fileDownloadProjection}
+          },
+          landingPageRoute-> {
+            _id,
+            "slug": slug.current,
+            _type
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -560,7 +676,65 @@ export const getPageQuery = defineQuery(`
     heading,
     subheading,
     "content": content[]{
+      _key,
+      _type,
       ...,
+      _type == 'heroBanner' => {
+        size,
+        subheading,
+        subHeadingColor,
+        heading,
+        headingColor,
+        copy {
+          portableTextBlock[] {
+            ...,
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
+          }
+        },
+        copyColor,
+        image {
+          ${imageProjection}
+        },
+        overlay,
+        cta {
+          title,
+          arrow,
+          kind,
+          link,
+          fileDownload {
+            ${fileDownloadProjection}
+          },
+          landingPageRoute-> {
+            _id,
+            "slug": slug.current,
+            _type
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },

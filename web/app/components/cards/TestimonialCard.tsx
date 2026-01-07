@@ -1,7 +1,7 @@
 'use client'
 
 import { PortableTextBlock } from 'next-sanity'
-import { SanityIcon } from '../SanityImage'
+import { BsChatQuote } from 'react-icons/bs'
 import SimplePortableText from '../portableText/SimplePortableText'
 
 export interface TestimonialCardProps {
@@ -25,17 +25,7 @@ export default function TestimonialCard({ heading, copy }: TestimonialCardProps)
         <div data-component="TestimonialCard" className="flex flex-col justify-center items-center bg-white p-5 h-full">
             {/* Quotation Icon */}
             <div className="flex items-center justify-center w-[65px] h-[65px] rounded-full bg-yellow md:w-[85px] md:h-[85px]">
-                <SanityIcon
-                    image={{
-                        alt: 'quotation icon',
-                        asset: {
-                            _id: 'image-1a5362e99c83130e95a5cfc3fe6ca7d9dcc4a75d-32x23-svg',
-                        },
-                    }}
-                    alt="quotation icon"
-                    size={40}
-                    className="md:w-[50px] md:h-[50px]"
-                />
+                <BsChatQuote className="w-10 h-10 text-grey-33 md:w-[50px] md:h-[50px]" aria-label="quotation icon" />
             </div>
 
             {/* Content */}

@@ -72,7 +72,10 @@ export default function BlockRenderer({ block, index, pageId, pageType }: BlockP
       </div>
     )
   }
-  // Block doesn't exist yet
+  // Block doesn't exist yet - log for debugging
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(`Block type "${block._type}" not found in Blocks. Available types:`, Object.keys(Blocks))
+  }
   return React.createElement(
     () => (
       <div className="w-full bg-gray-100 text-center text-gray-500 p-20 rounded">
