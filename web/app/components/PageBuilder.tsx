@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 import BlockRenderer from '@/app/components/BlockRenderer'
 import { GetPageQueryResult } from '@/sanity.types'
-import { dataAttr } from '@/sanity/lib/utils'
+import { dataAttr, cleanStegaData } from '@/sanity/lib/utils'
 import { studioUrl } from '@/sanity/lib/api'
 
 type PageBuilderPageProps = {
@@ -82,10 +82,13 @@ function renderEmptyState(page: GetPageQueryResult) {
 }
 
 export default function PageBuilder({ page }: PageBuilderPageProps) {
+  // Clean stega encoding from page data so components don't need to handle it
+  const cleanedPage = page ? cleanStegaData(page) : page
+
   const pageBuilderSections = useOptimistic<
     PageBuilderSection[] | undefined,
     SanityDocument<PageData>
-  >(page?.content || [], (currentSections, action) => {
+  >(cleanedPage?.content || [], (currentSections, action) => {
     // The action contains updated document data from Sanity
     // when someone makes an edit in the Studio
 
@@ -97,7 +100,9 @@ export default function PageBuilder({ page }: PageBuilderPageProps) {
     // If there are sections in the updated document, use them
     if (action.document.content) {
       // Reconcile References. https://www.sanity.io/docs/enabling-drag-and-drop#ffe728eea8c1
-      return action.document.content.map(
+      // Clean stega encoding from incoming updates
+      const cleanedContent = cleanStegaData(action.document.content)
+      return cleanedContent.map(
         (section) => currentSections?.find((s) => s._key === section?._key) || section,
       )
     }
@@ -106,11 +111,11 @@ export default function PageBuilder({ page }: PageBuilderPageProps) {
     return currentSections
   })
 
-  if (!page) {
-    return renderEmptyState(page)
+  if (!cleanedPage) {
+    return renderEmptyState(cleanedPage)
   }
 
   return pageBuilderSections && pageBuilderSections.length > 0
-    ? renderSections(pageBuilderSections, page)
-    : renderEmptyState(page)
+    ? renderSections(pageBuilderSections, cleanedPage)
+    : renderEmptyState(cleanedPage)
 }

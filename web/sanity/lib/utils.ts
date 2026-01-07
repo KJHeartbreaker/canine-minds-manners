@@ -3,6 +3,52 @@ import {Link} from '@/sanity.types'
 import {dataset, projectId, studioUrl} from '@/sanity/lib/api'
 import {createDataAttribute, CreateDataAttributeProps} from 'next-sanity'
 import {getImageDimensions} from '@sanity/asset-utils'
+import {stegaClean} from '@sanity/client/stega'
+
+/**
+ * Cleans invisible Unicode characters from Sanity stega encoding
+ * Uses Sanity's built-in stegaClean function for consistency
+ * @param str - The string to clean
+ * @returns The cleaned string, or undefined if input was undefined
+ */
+export function cleanStegaString(str: string | undefined): string | undefined {
+  if (!str) return str
+  return stegaClean(str) as string | undefined
+}
+
+/**
+ * Recursively cleans all string values in an object/array structure
+ * This allows components to work with clean data without knowing about stega encoding
+ * @param data - The data structure to clean (object, array, or primitive)
+ * @returns The cleaned data structure
+ */
+export function cleanStegaData<T>(data: T): T {
+  if (data === null || data === undefined) {
+    return data
+  }
+
+  // Clean strings directly
+  if (typeof data === 'string') {
+    return stegaClean(data) as T
+  }
+
+  // Recursively clean arrays
+  if (Array.isArray(data)) {
+    return data.map(cleanStegaData) as T
+  }
+
+  // Recursively clean objects
+  if (typeof data === 'object') {
+    const cleaned = {} as T
+    for (const [key, value] of Object.entries(data)) {
+      ;(cleaned as any)[key] = cleanStegaData(value)
+    }
+    return cleaned
+  }
+
+  // Return primitives as-is
+  return data
+}
 
 const imageBuilder = createImageUrlBuilder({
   projectId: projectId || '',
