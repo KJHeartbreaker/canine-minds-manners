@@ -15,12 +15,16 @@ export default {
       },
     },
     screens: {
-      xs: '576px',
-      sm: '768px',
-      md: '992px',
-      lg: '1366px',
-      xl: '1600px',
-      xxl: '1920px',
+      // Custom breakpoints from old site - commented out to use Tailwind defaults
+      // xs: '576px',
+      // sm: '768px',
+      // md: '992px',
+      // lg: '1366px',
+      // xl: '1600px',
+      // xxl: '1920px',
+      // Tailwind defaults: sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px
+      // Adding xxl as custom breakpoint for max-width: 1440px
+      xxl: '1440px',
     },
     extend: {
       boxShadow: {
@@ -107,6 +111,9 @@ export default {
           sm: '3.75rem', // 60px
           md: '6.25rem', // 100px
         },
+      },
+      zIndex: {
+        '1': '1',
       },
     },
   },

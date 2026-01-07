@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import { PortableTextBlock } from 'next-sanity'
-import { cn } from '@/lib/utils'
 import SanityImage from './SanityImage'
-import SimplePortableText from './SimplePortableText'
+import SimplePortableText from './portableText/SimplePortableText'
 
 export interface ImageButtonCardProps {
     key: string
@@ -13,11 +12,11 @@ export interface ImageButtonCardProps {
     copy: {
         portableTextBlock: PortableTextBlock[]
     }
-    landingPageRoute: {
+    landingPageRoute?: {
         _id: string
-        slug: string
+        slug?: string
         _type: string
-    }
+    } | null
 }
 
 /**
@@ -30,9 +29,11 @@ export default function ImageButtonCard({
     copy,
     landingPageRoute,
 }: ImageButtonCardProps) {
-    const href = landingPageRoute.slug.startsWith('/')
-        ? landingPageRoute.slug
-        : `/${landingPageRoute.slug}`
+    const href = landingPageRoute?.slug
+        ? landingPageRoute.slug.startsWith('/')
+            ? landingPageRoute.slug
+            : `/${landingPageRoute.slug}`
+        : '#'
 
     return (
         <div className="relative w-full h-[220px]">

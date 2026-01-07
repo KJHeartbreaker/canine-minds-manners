@@ -54,9 +54,9 @@
   --unit: 16;
   --font-micro-size: calc(12 / var(--unit) * 1rem);
   --font-micro-line-height: calc(14 / 10);
-  --font-small-size: calc(16 / var(--unit) * 1rem);
+  --font-small-size: calc(14 / var(--unit) * 1rem); /* 14px mobile */
   --font-small-line-height: calc(21 / 14);
-  --font-base-size: 16px;
+  --font-base-size: 16px; /* 16px desktop */
   --font-base-line-height: calc(26 / var(--unit));
   --font-large-size: calc(18 / var(--unit) * 1rem);
   --font-large-line-height: calc(27 / 18);
@@ -64,9 +64,9 @@
   /* Title sizes */
   --font-title5-size: calc(18 / var(--unit) * 1rem);
   --font-title5-line-height: calc(30 / 21);
-  --font-title4-size: calc(20 / var(--unit) * 1rem);
+  --font-title4-size: calc(22 / var(--unit) * 1rem);
   --font-title4-line-height: calc(30 / 21);
-  --font-title3-size: calc(23 / var(--unit) * 1rem);
+  --font-title3-size: calc(26 / var(--unit) * 1rem);
   --font-title3-line-height: calc(30 / 21);
   --font-title2-size: calc(36 / var(--unit) * 1rem);
   --font-title2-line-height: calc(30 / 24);
@@ -76,9 +76,9 @@
   /* Mobile title sizes */
   --font-title5-mobile-size: var(--unit);
   --font-title5-mobile-line-height: calc(26 / var(--unit));
-  --font-title4-mobile-size: calc(22 / var(--unit) * 1rem);
+  --font-title4-mobile-size: calc(20 / var(--unit) * 1rem);
   --font-title4-mobile-line-height: calc(30 / 21 * var(--font-title5-size));
-  --font-title3-mobile-size: calc(26 / var(--unit) * 1rem);
+  --font-title3-mobile-size: calc(23 / var(--unit) * 1rem);
   --font-title3-mobile-line-height: calc(24 / 21);
   --font-title2-mobile-size: calc(30 / var(--unit) * 1rem);
   --font-title2-mobile-line-height: calc(36 / 24);
@@ -125,10 +125,11 @@
   }
 
   /* Typography Base Styles */
+  /* Headings use Paytone One by default, unless explicitly overridden with font classes */
   h1,
   h2,
   h3,
-  h4,
+  h4:not(.dog-name):not(.font-mono):not(.font-sans),
   h5 {
     color: var(--color-grey-33);
     font-family: var(--font-paytone-one), sans-serif;
@@ -219,12 +220,35 @@
     font-family: var(--font-montserrat), sans-serif;
   }
 
+  /* Spans and other inline elements inside headings should inherit the heading's font */
+  h1 span,
+  h1 a,
+  h2 span,
+  h2 a,
+  h3 span,
+  h3 a,
+  h4 span,
+  h4 a,
+  h5 span,
+  h5 a {
+    font-family: inherit;
+  }
+
   p,
   span,
   ul,
   li,
   hr {
     color: var(--color-grey-33);
+  }
+
+  /* Spans inside elements with color classes should inherit the color */
+  .text-white *,
+  .text-orange *,
+  .text-yellow *,
+  .text-blue *,
+  .cmmWhite * {
+    color: inherit;
   }
 
   p,
@@ -256,6 +280,44 @@
     color: var(--color-orange-hover);
   }
 
+  /* Embedded AcuityButton */
+  a.acuity-embed-button[data-component="AcuityButton"] {
+    all: unset !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    background: transparent !important;
+    margin-bottom: 5px !important;
+    padding: 5px 0!important;
+    font-size: var(--font-small-size);
+    line-height: var(--font-small-line-height);
+  }
+
+  a.acuity-embed-button[data-component="AcuityButton"] span {
+    cursor: pointer !important;
+    color: var(--color-blue-33) !important;
+    font-weight: 600 !important;
+    font-family: var(--font-montserrat), sans-serif !important;
+    text-decoration: underline !important;
+    font-size: var(--font-small-size) !important;
+    line-height: var(--font-small-line-height) !important;
+  }
+
+  @media (min-width: 768px) {
+    a.acuity-embed-button[data-component="AcuityButton"] {
+      font-size: var(--font-base-size);
+      line-height: var(--font-base-line-height);
+    }
+
+    a.acuity-embed-button[data-component="AcuityButton"] span {
+      font-size: var(--font-base-size) !important;
+      line-height: var(--font-base-line-height) !important;
+    }
+  }
+
+  a.acuity-embed-button[data-component="AcuityButton"]:hover span {
+    color: var(--color-orange-hover) !important;
+  }
+
   ol,
   ul {
     list-style-type: disc;
@@ -267,6 +329,37 @@
     margin-inline-start: 2em;
     margin-bottom: 8px;
     list-style-image: url("/images/ListStylePaw.svg");
+  }
+
+  /* Hero section height fix - ensures height is applied even with flex and absolute children */
+  .hero-section[style*='--hero-height-mobile'] {
+    height: var(--hero-height-mobile);
+  }
+
+  @media (min-width: 1024px) {
+    .hero-section[style*='--hero-height-desktop'] {
+      height: var(--hero-height-desktop);
+    }
+  }
+
+  /* Ensure background images fill their containers in ContentBlock */
+  section[data-component="Section"].has-bg {
+    min-height: 400px;
+  }
+
+  section[data-component="Section"].has-bg > div[class*="absolute"][class*="inset-0"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  section[data-component="Section"].has-bg > div[class*="absolute"] > div[class*="relative"] {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   blockquote {
@@ -342,4 +435,36 @@
   .cmmWhite {
     color: var(--color-white);
   }
+}
+
+/* Carousel/Swiper Styles */
+.mainSwiper .swiper-button-prev,
+.mainSwiper .swiper-button-next {
+  color: var(--color-orange) !important;
+}
+
+.mainSwiper .swiper-button-prev:hover,
+.mainSwiper .swiper-button-next:hover {
+  color: var(--color-orange-hover) !important;
+}
+
+.mainSwiper .swiper-pagination-bullet {
+  background: var(--color-white) !important;
+  opacity: 0.4 !important;
+}
+
+.mainSwiper .swiper-pagination-bullet-active {
+  background: var(--color-orange) !important;
+  opacity: 1 !important;
+}
+
+.navSwipe .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.navSwipe .swiper-slide-thumb-active {
+  opacity: 1;
 }

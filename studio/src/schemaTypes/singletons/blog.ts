@@ -71,18 +71,9 @@ export const blogLandingPage = defineType({
 			title: 'Page sections',
 			description: 'Add, edit, and reorder sections',
 			of: [
-				defineArrayMember({
-					name: 'Hero Banner',
-					type: 'heroBanner',
-				}),
-				defineArrayMember({
-					name: 'Single Column Content Block',
-					type: 'singleColumnContentBlock',
-				}),
-				defineArrayMember({
-					name: 'Posts Grid',
-					type: 'postsGridContainer',
-				}),
+				defineArrayMember({type: 'heroBanner'}),
+				defineArrayMember({type: 'singleColumnContentBlock'}),
+				defineArrayMember({type: 'postsGridContainer'}),
 			],
 		}),
 	],

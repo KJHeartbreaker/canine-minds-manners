@@ -1,34 +1,34 @@
 /* eslint-disable react/destructuring-assignment */
-import {BsCardText, BsCircle, BsCircleFill} from 'react-icons/bs'
-import {defineArrayMember, defineField, defineType} from 'sanity'
-import {LiaExternalLinkSquareAltSolid as internalLinkIcon} from 'react-icons/lia'
+import { BsCardText, BsCircle, BsCircleFill } from 'react-icons/bs'
+import { defineArrayMember, defineField, defineType } from 'sanity'
+import { LiaExternalLinkSquareAltSolid as internalLinkIcon } from 'react-icons/lia'
 
 const cmmYellowIcon = () => <BsCircleFill color="#feca2d" />
 const cmmYellowDecorator = (props: any) => (
-	<span style={{color: '#feca2d'}}>{props.children}</span>
+	<span style={{ color: '#feca2d' }}>{props.children}</span>
 )
 
 const cmmBlueIcon = () => <BsCircleFill color="#057198" />
-const cmmBlueDecorator = (props: any) => <span style={{color: '#057198'}}>{props.children}</span>
+const cmmBlueDecorator = (props: any) => <span style={{ color: '#057198' }}>{props.children}</span>
 
 const cmmDarkBlueIcon = () => <BsCircleFill color="#013b63" />
 const cmmDarkBlueDecorator = (props: any) => (
-	<span style={{color: '#013b63'}}>{props.children}</span>
+	<span style={{ color: '#013b63' }}>{props.children}</span>
 )
 
 const cmmOrangeIcon = () => <BsCircleFill color="#ee6d08" />
 const cmmOrangeDecorator = (props: any) => (
-	<span style={{color: '#ee6d08'}}>{props.children}</span>
+	<span style={{ color: '#ee6d08' }}>{props.children}</span>
 )
 
 const cmmWhiteIcon = () => <BsCircle />
 const cmmWhiteDecorator = (props: any) => (
-	<span style={{color: 'white', backgroundColor: '#333333'}}>{props.children}</span>
+	<span style={{ color: 'white', backgroundColor: '#333333' }}>{props.children}</span>
 )
 
-const HighlightIcon = () => <span style={{fontWeight: 'bold', color: 'yellow'}}> H </span>
+const HighlightIcon = () => <span style={{ fontWeight: 'bold', color: 'yellow' }}> H </span>
 const HighlightDecorator = (props: any) => (
-	<span style={{backgroundColor: 'yellow'}}>{props.children}</span>
+	<span style={{ backgroundColor: 'yellow' }}>{props.children}</span>
 )
 
 export const mainPortableText = defineType({
@@ -45,17 +45,17 @@ export const mainPortableText = defineType({
 					type: 'block',
 					title: 'Block',
 					styles: [
-						{title: 'Paragraph', value: 'normal'},
-						{title: 'H1', value: 'h1'},
-						{title: 'H2', value: 'h2'},
-						{title: 'H3', value: 'h3'},
-						{title: 'H4', value: 'h4'},
-						{title: 'H5', value: 'h5'},
-						{title: 'Quote', value: 'blockquote'},
+						{ title: 'Paragraph', value: 'normal' },
+						{ title: 'H1', value: 'h1' },
+						{ title: 'H2', value: 'h2' },
+						{ title: 'H3', value: 'h3' },
+						{ title: 'H4', value: 'h4' },
+						{ title: 'H5', value: 'h5' },
+						{ title: 'Quote', value: 'blockquote' },
 					],
 					lists: [
-						{title: 'Bullet', value: 'bullet'},
-						{title: 'Number', value: 'number'},
+						{ title: 'Bullet', value: 'bullet' },
+						{ title: 'Number', value: 'number' },
 					],
 					marks: {
 						decorators: [
@@ -89,16 +89,16 @@ export const mainPortableText = defineType({
 								icon: cmmWhiteIcon,
 								component: cmmWhiteDecorator,
 							},
-							{title: 'Strong', value: 'strong'},
-							{title: 'Emphasis', value: 'em'},
-							{title: 'Underline', value: 'underline'},
+							{ title: 'Strong', value: 'strong' },
+							{ title: 'Emphasis', value: 'em' },
+							{ title: 'Underline', value: 'underline' },
 							{
 								title: 'Highlight',
 								value: 'highlight',
 								icon: HighlightIcon,
 								component: HighlightDecorator,
 							},
-							{title: 'Strike', value: 'strike-through'},
+							{ title: 'Strike', value: 'strike-through' },
 						],
 						annotations: [
 							{
@@ -131,7 +131,7 @@ export const mainPortableText = defineType({
 									{
 										name: 'item',
 										type: 'reference',
-										to: [{type: 'page'}, {type: 'class'}],
+										to: [{ type: 'page' }, { type: 'class' }],
 									},
 								],
 							},

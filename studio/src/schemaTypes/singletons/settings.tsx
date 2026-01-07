@@ -1,13 +1,11 @@
-import {GiSettingsKnobs as icon} from 'react-icons/gi'
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import { GiSettingsKnobs as icon } from 'react-icons/gi'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const settings = defineType({
 	name: 'settings',
 	title: 'Settings and Menus',
 	type: 'document',
 	icon,
-	// Uncomment below to have edits publish automatically as you type
-	// liveEdit: true,
 	fields: [
 		defineField({
 			name: 'menuItems',
@@ -15,9 +13,9 @@ export const settings = defineType({
 			description: 'Links displayed on the header of your site.',
 			type: 'array',
 			of: [
-				defineArrayMember({type: 'navCTA'}),
-				defineArrayMember({type: 'navDropdownCTA'}),
-				defineArrayMember({type: 'blogLandingPage'}),
+				defineArrayMember({ type: 'navCTA' }),
+				defineArrayMember({ type: 'navDropdownCTA' }),
+				defineArrayMember({ type: 'blogLandingPage' }),
 			],
 		}),
 		defineField({
@@ -25,7 +23,7 @@ export const settings = defineType({
 			title: 'Footer Logos',
 			description: 'These are the accreditations that appear in the footer.',
 			type: 'array',
-			of: [defineArrayMember({type: 'logo'})],
+			of: [defineArrayMember({ type: 'logo' })],
 		}),
 		defineField({
 			name: 'ogImage',

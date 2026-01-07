@@ -1,6 +1,6 @@
 export default function SideBySideIcons() {
   return (
-    <div className="relative flex gap-[0] -mt-16 group">
+    <div className="relative flex gap-0 -mt-16 group">
       <div className="z-10 aspect-square w-32 h-32 flex justify-center items-center rounded-full border-white border-4 bg-white transform translate-x-2 group-hover:scale-110 group-hover:-translate-x-5 transition-all duration-300">
         <svg
           className="w-full duration-300 transition"
@@ -35,7 +35,7 @@ export default function SideBySideIcons() {
         >
           <mask
             id="mask0_408_139"
-            style={{maskType: 'alpha'}}
+            style={{ maskType: 'alpha' }}
             maskUnits="userSpaceOnUse"
             x="0"
             y="0"

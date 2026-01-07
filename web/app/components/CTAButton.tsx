@@ -66,7 +66,7 @@ export default function CTAButton({
     }
 
     // Landing page route handler
-    if (landingPageRoute) {
+    if (landingPageRoute && landingPageRoute.slug) {
         const href = landingPageRoute.slug.startsWith('/')
             ? landingPageRoute.slug
             : `/${landingPageRoute.slug}`

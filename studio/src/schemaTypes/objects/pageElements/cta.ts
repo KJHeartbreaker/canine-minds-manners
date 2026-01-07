@@ -49,7 +49,7 @@ export const cta = defineType({
       type: 'reference',
       description: 'This links to another page within the site',
       fieldset: 'link',
-      to: [{type: 'page'}],
+      to: [{type: 'page'}, {type: 'post'}],
     }),
     defineField({
       title: 'External link',

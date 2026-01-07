@@ -36,11 +36,60 @@ export default function SanityImage({
     sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
     fill = false,
     objectFit = 'cover',
-    quality = 85,
+    quality = 75,
     loading,
     aspectRatio,
 }: SanityImageProps) {
-    if (!source?.asset?._ref) {
+    // Handle both reference format (_ref) and resolved format (_id or url)
+    if (!source) {
+        return null
+    }
+
+    // If we have a direct URL (resolved format), use it directly
+    // Check both source.url and source.asset.url
+    const directUrl = source.url || source.asset?.url
+    if (directUrl) {
+        const imageAlt = alt || source.alt || ''
+        const imageWidth = width || source.asset?.metadata?.dimensions?.width || 400
+        const imageHeight = height || source.asset?.metadata?.dimensions?.height || 300
+
+        if (fill) {
+            const aspectClass = aspectRatio
+                ? `aspect-[${aspectRatio.replace('/', '-')}]`
+                : undefined
+            return (
+                <div className={cn('relative', aspectClass, className)}>
+                    <Image
+                        src={directUrl}
+                        alt={imageAlt}
+                        fill
+                        className={cn('object-' + objectFit)}
+                        priority={priority}
+                        quality={quality}
+                        sizes={sizes}
+                        loading={loading}
+                    />
+                </div>
+            )
+        }
+
+        return (
+            <Image
+                src={directUrl}
+                alt={imageAlt}
+                width={imageWidth}
+                height={imageHeight}
+                className={cn('object-' + objectFit, className)}
+                priority={priority}
+                quality={quality}
+                sizes={sizes}
+                loading={loading}
+            />
+        )
+    }
+
+    // Otherwise, try to use the reference format
+    if (!source?.asset?._ref && !source?.asset?._id) {
         return null
     }
 

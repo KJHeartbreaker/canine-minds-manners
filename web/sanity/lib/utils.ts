@@ -1,4 +1,4 @@
-import createImageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 import {Link} from '@/sanity.types'
 import {dataset, projectId, studioUrl} from '@/sanity/lib/api'
 import {createDataAttribute, CreateDataAttributeProps} from 'next-sanity'
@@ -10,7 +10,43 @@ const imageBuilder = createImageUrlBuilder({
 })
 
 export const urlForImage = (source: any) => {
-  // Ensure that source image contains a valid reference
+  // Handle resolved format (has _id or url)
+  if (source?.asset?._id) {
+    const crop = source.crop
+
+    // Try to get dimensions from metadata if available
+    let width = source.asset?.metadata?.dimensions?.width
+    let height = source.asset?.metadata?.dimensions?.height
+
+    if (!width || !height) {
+      try {
+        const dimensions = getImageDimensions(source.asset._id)
+        width = dimensions.width
+        height = dimensions.height
+      } catch {
+        // Fallback dimensions
+        width = 800
+        height = 600
+      }
+    }
+
+    if (crop) {
+      // compute the cropped image's area
+      const croppedWidth = Math.floor(width * (1 - (crop.right + crop.left)))
+      const croppedHeight = Math.floor(height * (1 - (crop.top + crop.bottom)))
+
+      // compute the cropped image's position
+      const left = Math.floor(width * crop.left)
+      const top = Math.floor(height * crop.top)
+
+      // gather into a url
+      return imageBuilder?.image(source).rect(left, top, croppedWidth, croppedHeight).auto('format')
+    }
+
+    return imageBuilder?.image(source).auto('format')
+  }
+
+  // Handle reference format (_ref)
   if (!source?.asset?._ref) {
     return undefined
   }
@@ -21,7 +57,7 @@ export const urlForImage = (source: any) => {
   // get the image's og dimensions
   const {width, height} = getImageDimensions(imageRef)
 
-  if (Boolean(crop)) {
+  if (crop) {
     // compute the cropped image's area
     const croppedWidth = Math.floor(width * (1 - (crop.right + crop.left)))
 
@@ -61,13 +97,16 @@ export function linkResolver(link: Link | undefined) {
       if (link?.page && typeof link.page === 'string') {
         return `/${link.page}`
       }
+      break
     case 'post':
       if (link?.post && typeof link.post === 'string') {
-        return `/posts/${link.post}`
+        return `/blog/${link.post}`
       }
+      break
     default:
       return null
   }
+  return null
 }
 
 type DataAttributeConfig = CreateDataAttributeProps &

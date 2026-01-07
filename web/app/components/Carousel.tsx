@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import type SwiperCore from 'swiper'
 import { FreeMode, Navigation, Thumbs, Pagination } from 'swiper/modules'
@@ -32,23 +32,38 @@ interface CarouselProps {
  */
 export default function Carousel({
     carouselImages,
-    showThumbs = false,
+    showThumbs = true,
     showPagination = true,
 }: CarouselProps) {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null)
+    const [mainSwiper, setMainSwiper] = useState<SwiperCore | null>(null)
+
+    // Update thumbs connection when thumbs swiper is ready
+    useEffect(() => {
+        if (mainSwiper && thumbsSwiper && !thumbsSwiper.destroyed && mainSwiper.thumbs) {
+            // Swiper.js requires mutating the instance to configure thumbs
+            // eslint-disable-next-line react-hooks/immutability
+            mainSwiper.thumbs.swiper = thumbsSwiper
+            if (typeof mainSwiper.thumbs.init === 'function') {
+                mainSwiper.thumbs.init()
+            }
+            mainSwiper.update()
+        }
+    }, [mainSwiper, thumbsSwiper])
 
     if (!carouselImages || carouselImages.length === 0) {
         return null
     }
 
     return (
-        <div className="w-full rounded-lg overflow-hidden">
+        <div data-component="Carousel" className="w-full rounded-lg overflow-hidden">
             {/* Main Swiper */}
             <Swiper
+                onSwiper={setMainSwiper}
                 loop
                 spaceBetween={10}
                 navigation
-                thumbs={thumbsSwiper && !thumbsSwiper.destroyed ? { swiper: thumbsSwiper } : undefined}
+                thumbs={showThumbs ? (thumbsSwiper && !thumbsSwiper.destroyed ? { swiper: thumbsSwiper } : { swiper: null }) : undefined}
                 pagination={showPagination ? { clickable: true } : false}
                 modules={[FreeMode, Navigation, Thumbs, Pagination]}
                 className="mainSwiper h-[350px] md:h-[500px]"
@@ -67,50 +82,30 @@ export default function Carousel({
 
             {/* Thumbnail Swiper */}
             {showThumbs && (
-                <Swiper
-                    onSwiper={setThumbsSwiper}
-                    loop
-                    spaceBetween={10}
-                    slidesPerView={4}
-                    freeMode
-                    watchSlidesProgress
-                    modules={[FreeMode, Navigation, Thumbs]}
-                    className="navSwiper h-[100px] md:h-[150px] py-2.5"
-                >
-                    {carouselImages.map((image, i) => (
-                        <SwiperSlide key={i}>
-                            <SanityImage
-                                image={image}
-                                width={400}
-                                height={300}
-                                className="w-full h-full object-cover"
-                            />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                <div className={cn('box-border py-2.5 w-full h-[100px] md:h-[150px] transition-opacity duration-300', !thumbsSwiper && 'opacity-0 pointer-events-none')}>
+                    <Swiper
+                        onSwiper={setThumbsSwiper}
+                        loop
+                        spaceBetween={10}
+                        slidesPerView={4}
+                        freeMode
+                        watchSlidesProgress
+                        modules={[FreeMode, Navigation, Thumbs]}
+                        className="navSwipe w-full h-full"
+                    >
+                        {carouselImages.map((image, i) => (
+                            <SwiperSlide key={i} className="w-1/4 h-full">
+                                <SanityImage
+                                    image={image}
+                                    width={400}
+                                    height={300}
+                                    className="block w-full h-full object-cover"
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
             )}
-
-            {/* Custom Swiper Styles */}
-            <style jsx global>{`
-        .mainSwiper .swiper-button-prev,
-        .mainSwiper .swiper-button-next {
-          color: var(--color-orange);
-        }
-
-        .mainSwiper .swiper-button-prev:hover,
-        .mainSwiper .swiper-button-next:hover {
-          color: var(--color-blue-22);
-        }
-
-        .mainSwiper .swiper-pagination-bullet-active {
-          background: var(--color-orange);
-        }
-
-        .mainSwiper .swiper-pagination-bullet {
-          background: var(--color-white);
-          opacity: 1;
-        }
-      `}</style>
         </div>
     )
 }
