@@ -1,12 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Swiper as SwiperType } from 'swiper'
 import { cn } from '@/lib/utils'
 import Modal from '../../Modal'
 import SanityImage from '../../SanityImage'
-import { GalleryCarousel } from './GalleryCarousel'
 import { SanityImage as SanityImageType } from '../../types'
+
+// Dynamically import GalleryCarousel to reduce initial bundle size (Swiper is ~200KB+)
+const GalleryCarousel = dynamic(() => import('./GalleryCarousel').then((mod) => ({ default: mod.GalleryCarousel })), {
+    loading: () => <div className="w-full h-[350px] md:h-[500px] bg-gray-200 animate-pulse rounded-lg" />,
+    ssr: false,
+})
 
 interface GalleryGridProps {
     images: SanityImageType[]
@@ -98,13 +104,15 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
                         setSelectedImageIndex(0)
                     }}
                 >
-                    <GalleryCarousel
-                        key={isModalOpen ? 'open' : 'closed'}
-                        images={images}
-                        selectedImageIndex={selectedImageIndex}
-                        thumbsSwiper={thumbsSwiper}
-                        setThumbsSwiper={setThumbsSwiper}
-                    />
+                    <Suspense fallback={<div className="w-full h-[350px] md:h-[500px] bg-gray-200 animate-pulse rounded-lg" />}>
+                        <GalleryCarousel
+                            key={isModalOpen ? 'open' : 'closed'}
+                            images={images}
+                            selectedImageIndex={selectedImageIndex}
+                            thumbsSwiper={thumbsSwiper}
+                            setThumbsSwiper={setThumbsSwiper}
+                        />
+                    </Suspense>
                 </Modal>
             )}
         </div>

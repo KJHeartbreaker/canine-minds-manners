@@ -71,8 +71,9 @@ const paytoneOne = Paytone_One({
 const kalam = Kalam({
   variable: '--font-kalam',
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional', // Less critical font (only used for dog names), won't block rendering
   weight: ['400'],
+  preload: false, // Don't preload since it's not critical for initial render
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -83,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang="en"
       className={`${montserrat.variable} ${paytoneOne.variable} ${kalam.variable} bg-white text-black`}
     >
-      <body>
+      <body suppressHydrationWarning>
         {/* Analytics scripts - loads after page is interactive */}
         <Analytics />
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}

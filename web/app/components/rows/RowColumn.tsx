@@ -1,13 +1,20 @@
 'use client'
 
+import { Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import { PortableTextBlock } from 'next-sanity'
 import { cn } from '@/lib/utils'
 import IconCard from '../cards/IconCard'
 import SanityImage from '../SanityImage'
 import ImageButtonCard from '../cards/ImageButtonCard'
 import CustomPortableText from '../portableText/PortableText'
-import Carousel from '../Carousel'
 import ContactFormPanel from '../forms/ContactFormPanel'
+
+// Dynamically import Carousel to reduce initial bundle size (Swiper is ~200KB+)
+const Carousel = dynamic(() => import('../Carousel'), {
+    loading: () => <div className="w-full h-[350px] md:h-[500px] bg-gray-200 animate-pulse rounded-lg" />,
+    ssr: false,
+})
 
 interface PanelContent {
     _key: string
@@ -64,7 +71,9 @@ export default function RowColumn(panel: RowColumnProps) {
             {_type === 'acuityForm' && <ContactFormPanel title={title} copy={copy} type="acuityForm" />}
             {_type === 'carousel' && carouselImages && (
                 <div className="w-full rounded-lg overflow-hidden">
-                    <Carousel carouselImages={carouselImages} />
+                    <Suspense fallback={<div className="w-full h-[350px] md:h-[500px] bg-gray-200 animate-pulse rounded-lg" />}>
+                        <Carousel carouselImages={carouselImages} />
+                    </Suspense>
                 </div>
             )}
             {_type === 'form' && <ContactFormPanel title={title} copy={copy} type="form" />}
