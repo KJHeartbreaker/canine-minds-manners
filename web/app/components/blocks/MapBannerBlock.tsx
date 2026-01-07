@@ -45,25 +45,29 @@ export default function MapBannerBlock({ block }: MapBannerBlockProps) {
     return (
         <section data-component="MapBannerBlock" className="flex flex-col w-full">
             {/* Map Container */}
-            <div className="relative w-full h-[450px] md:h-[600px]">
+            <div className="relative w-full">
+                {/* Find Us Button - Mobile only, centered at top */}
                 {mapLink && (
-                    <div className="absolute top-5 left-5 z-10">
+                    <div className="flex justify-center items-center h-[100px] sm:hidden">
                         <CTAButton title="Find Us" kind="button" link={mapLink} arrow={false} />
                     </div>
                 )}
+                {/* Map iframe - Hidden on mobile, shown on desktop */}
                 {src && (
-                    <iframe
-                        src={src}
-                        style={{ border: 0, width: '100%', height: '100%' }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title="Canine Minds & Manners Google Map"
-                        className="border-0"
-                    />
+                    <div className="hidden sm:block h-[750px]">
+                        <iframe
+                            src={src}
+                            style={{ border: 0, width: '100%', height: '100%' }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Canine Minds & Manners Google Map"
+                            className="border-0"
+                        />
+                    </div>
                 )}
                 {/* Form Panel Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 bg-white p-5 md:p-10 max-h-[50%] overflow-y-auto">
+                <div className="w-full bg-white p-2.5 opacity-90 z-10 sm:absolute sm:w-[320px] sm:top-[125px] sm:left-5 sm:rounded-md sm:border-2 sm:border-blue-22 md:w-[450px] lg:w-[600px] lg:p-5 xl:left-[10%]">
                     {copy?.portableTextBlock && (
                         <div className="copyBlock mb-5">
                             <SimplePortableText value={copy.portableTextBlock} />
@@ -75,14 +79,15 @@ export default function MapBannerBlock({ block }: MapBannerBlockProps) {
 
             {/* Icon Cards */}
             {iconCards && iconCards.length > 0 && (
-                <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="flex flex-col w-full justify-around p-5 sm:flex-row">
                     {iconCards.map((iC, i) => (
-                        <IconCard
-                            key={`${iC.icon?.asset?._id || i}-${i}`}
-                            icon={iC.icon}
-                            heading={iC.heading}
-                            copy={iC.copy}
-                        />
+                        <div key={`${iC.icon?.asset?._id || i}-${i}`} className="flex-1 h-full sm:border-r sm:border-grey-22 last:sm:border-r-0 [&>div]:rounded-none [&>div>p]:m-0">
+                            <IconCard
+                                icon={iC.icon}
+                                heading={iC.heading}
+                                copy={iC.copy}
+                            />
+                        </div>
                     ))}
                 </div>
             )}

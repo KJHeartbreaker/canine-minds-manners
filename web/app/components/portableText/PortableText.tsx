@@ -139,13 +139,16 @@ export default function CustomPortableText({
       ),
       cta: ({ value }: { value: any }) => {
         return (
-          <CTAButton
-            title={value?.title}
-            kind={value?.kind}
-            landingPageRoute={value?.landingPageRoute}
-            link={value?.link}
-            arrow={value?.arrow}
-          />
+          <div className="my-3">
+            <CTAButton
+              title={value?.title}
+              kind={value?.kind}
+              landingPageRoute={value?.landingPageRoute}
+              link={value?.link}
+              arrow={value?.arrow}
+              fileDownload={value?.fileDownload}
+            />
+          </div>
         )
       },
       youtube: ({ value }: { value: { url?: string } }) => {

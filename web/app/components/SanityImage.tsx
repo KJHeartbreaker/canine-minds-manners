@@ -126,9 +126,14 @@ export default function SanityImage({
     const imageWidth = width || dimensions.width
     const imageHeight = height || dimensions.height
 
+    // If we have explicit dimensions and a hotspot, use fit('crop') to respect the focal point
+    const finalUrl = source.hotspot && (width || height)
+        ? imageUrl.width(imageWidth).height(imageHeight).fit('crop').url()
+        : imageUrl.url()
+
     return (
         <Image
-            src={imageUrl.url()}
+            src={finalUrl}
             alt={imageAlt}
             width={imageWidth}
             height={imageHeight}
@@ -155,10 +160,39 @@ export function SanityIcon({
     size?: number
     className?: string
 }) {
-    if (!source?.asset?._ref) {
+    // Handle both reference format (_ref) and resolved format (_id or url)
+    if (!source?.asset) {
         return null
     }
 
+    // If asset is dereferenced and has a direct URL, use it
+    if (source.asset.url) {
+        // For SVG files, use a regular img tag as Next.js Image doesn't optimize SVGs
+        const isSvg = source.asset.url.includes('.svg') || source.asset._type === 'sanity.imageAsset' && source.asset.url.endsWith('.svg')
+        if (isSvg) {
+            return (
+                <img
+                    src={source.asset.url}
+                    alt={alt}
+                    width={size}
+                    height={size}
+                    className={className}
+                />
+            )
+        }
+        return (
+            <Image
+                src={source.asset.url}
+                alt={alt}
+                width={size}
+                height={size}
+                className={className}
+                loading="eager"
+            />
+        )
+    }
+
+    // Otherwise, use urlForImage which handles both _ref and _id formats
     const imageUrl = urlForImage(source)
     if (!imageUrl) {
         return null

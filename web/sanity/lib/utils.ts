@@ -43,6 +43,12 @@ export const urlForImage = (source: any) => {
       return imageBuilder?.image(source).rect(left, top, croppedWidth, croppedHeight).auto('format')
     }
 
+    // If hotspot exists, use fit('crop') to respect the focal point
+    // The hotspot will be used as the center point when cropping
+    if (source.hotspot) {
+      return imageBuilder?.image(source).fit('crop').auto('format')
+    }
+
     return imageBuilder?.image(source).auto('format')
   }
 
@@ -69,6 +75,12 @@ export const urlForImage = (source: any) => {
 
     // gather into a url
     return imageBuilder?.image(source).rect(left, top, croppedWidth, croppedHeight).auto('format')
+  }
+
+  // If hotspot exists, use fit('crop') to respect the focal point
+  // The hotspot will be used as the center point when cropping
+  if (source.hotspot) {
+    return imageBuilder?.image(source).fit('crop').auto('format')
   }
 
   return imageBuilder?.image(source).auto('format')

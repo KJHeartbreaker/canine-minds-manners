@@ -62,33 +62,35 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
     }
 
     return (
-        <div data-component="GalleryGrid" className="grid gap-2.5 grid-cols-1 grid-rows-auto p-2.5 sm:grid-cols-[repeat(3,250px)] sm:grid-rows-[repeat(5,100px)] sm:p-0 lg:grid-cols-[repeat(3,380px)] lg:grid-rows-[repeat(5,150px)]">
-            {images.map((image, index) => {
-                const { col, rowStart, height, classes } = generateImagePositions(index)
-                return (
-                    <div
-                        key={image.asset?._id || index}
-                        className={cn(
-                            'flex cursor-pointer',
-                            `sm:col-start-${col}`,
-                            `sm:row-start-${rowStart}`,
-                            classes === 'top-short' && 'sm:row-end-[span_2]',
-                            classes === 'top-long' && 'sm:row-end-[span_3]',
-                            classes === 'bottom-short' && 'sm:row-end-[span_2]',
-                            classes === 'bottom-long' && 'sm:row-end-[span_3]',
-                        )}
-                        onClick={() => openModal(index)}
-                    >
-                        <SanityImage
-                            image={image}
-                            alt={image?.alt}
-                            width={400}
-                            height={height}
-                            className="h-full object-cover"
-                        />
-                    </div>
-                )
-            })}
+        <div data-component="GalleryGrid" className="flex justify-center w-full">
+            <div className="grid gap-2.5 grid-cols-1 grid-rows-auto p-2.5 sm:grid-cols-[repeat(3,250px)] sm:grid-rows-[repeat(5,100px)] sm:p-0 lg:grid-cols-[repeat(3,380px)] lg:grid-rows-[repeat(5,150px)]">
+                {images.map((image, index) => {
+                    const { col, rowStart, height, classes } = generateImagePositions(index)
+                    return (
+                        <div
+                            key={image.asset?._id || index}
+                            className={cn(
+                                'flex cursor-pointer',
+                                `sm:col-start-${col}`,
+                                `sm:row-start-${rowStart}`,
+                                classes === 'top-short' && 'sm:row-end-[span_2]',
+                                classes === 'top-long' && 'sm:row-end-[span_3]',
+                                classes === 'bottom-short' && 'sm:row-end-[span_2]',
+                                classes === 'bottom-long' && 'sm:row-end-[span_3]',
+                            )}
+                            onClick={() => openModal(index)}
+                        >
+                            <SanityImage
+                                image={image}
+                                alt={image?.alt}
+                                width={400}
+                                height={height}
+                                className="h-full object-cover"
+                            />
+                        </div>
+                    )
+                })}
+            </div>
             {isModalOpen && (
                 <Modal
                     closeModal={() => {

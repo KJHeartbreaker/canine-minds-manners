@@ -52,8 +52,8 @@ export default function ContentBlock({
             data-component="ContentBlock"
             skinny={skinny}
             hasBg={hasBg}
+            short={removeBottomPadding}
             className={cn(
-                removeBottomPadding && 'pb-0',
                 hasBg && 'has-bg',
                 className,
             )}

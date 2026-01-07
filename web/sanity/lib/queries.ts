@@ -7,6 +7,7 @@ import {
   classProjection,
   productProjection,
   postProjection,
+  fileDownloadProjection,
 } from './query-fragments'
 
 /**
@@ -183,10 +184,7 @@ export const getHomePageQuery = defineQuery(`
                   kind,
                   link,
                   fileDownload {
-                    asset -> {
-                      _id,
-                      url
-                    }
+                    ${fileDownloadProjection}
                   },
                   landingPageRoute-> {
                     _id,
@@ -260,10 +258,7 @@ export const getHomePageQuery = defineQuery(`
                 kind,
                 link,
                 fileDownload {
-                  asset -> {
-                    _id,
-                    url
-                  }
+                  ${fileDownloadProjection}
                 },
                 landingPageRoute-> {
                   _id,
@@ -363,10 +358,7 @@ export const getHomePageQuery = defineQuery(`
                 kind,
                 link,
                 fileDownload {
-                  asset -> {
-                    _id,
-                    url
-                  }
+                  ${fileDownloadProjection}
                 },
                 landingPageRoute-> {
                   _id,
@@ -408,10 +400,7 @@ export const getHomePageQuery = defineQuery(`
               kind,
               link,
               fileDownload {
-                asset -> {
-                  _id,
-                  url
-                }
+                ${fileDownloadProjection}
               },
               landingPageRoute-> {
                 _id,
@@ -452,10 +441,7 @@ export const getHomePageQuery = defineQuery(`
             kind,
             link,
             fileDownload {
-              asset -> {
-                _id,
-                url
-              }
+              ${fileDownloadProjection}
             },
             landingPageRoute-> {
               _id,
@@ -681,10 +667,7 @@ export const getPageQuery = defineQuery(`
                   kind,
                   link,
                   fileDownload {
-                    asset -> {
-                      _id,
-                      url
-                    }
+                    ${fileDownloadProjection}
                   },
                   landingPageRoute-> {
                     _id,
@@ -758,10 +741,7 @@ export const getPageQuery = defineQuery(`
                 kind,
                 link,
                 fileDownload {
-                  asset -> {
-                    _id,
-                    url
-                  }
+                  ${fileDownloadProjection}
                 },
                 landingPageRoute-> {
                   _id,
@@ -861,10 +841,7 @@ export const getPageQuery = defineQuery(`
                 kind,
                 link,
                 fileDownload {
-                  asset -> {
-                    _id,
-                    url
-                  }
+                  ${fileDownloadProjection}
                 },
                 landingPageRoute-> {
                   _id,
@@ -906,10 +883,7 @@ export const getPageQuery = defineQuery(`
               kind,
               link,
               fileDownload {
-                asset -> {
-                  _id,
-                  url
-                }
+                ${fileDownloadProjection}
               },
               landingPageRoute-> {
                 _id,
@@ -950,10 +924,7 @@ export const getPageQuery = defineQuery(`
             kind,
             link,
             fileDownload {
-              asset -> {
-                _id,
-                url
-              }
+              ${fileDownloadProjection}
             },
             landingPageRoute-> {
               _id,
@@ -1070,10 +1041,7 @@ export const postQuery = defineQuery(`
           kind,
           link,
           fileDownload {
-            asset -> {
-              _id,
-              url
-            }
+            ${fileDownloadProjection}
           },
           landingPageRoute-> {
             _id,

@@ -1,11 +1,24 @@
 'use client'
 
 import ContentContainer from '../wrappers/ContentContainer'
-import TrainerCard, { TrainerCardProps } from '../cards/TrainerCard'
+import TrainerCard from '../cards/TrainerCard'
 import { getStableKey } from '../types'
 
 interface TrainersGridProps {
-    trainers: TrainerCardProps[]
+    trainers: Array<{
+        name: string
+        slug?: {
+            current?: string
+        }
+        picture?: any
+        image?: any
+        certifications?: {
+            portableTextBlock: any[]
+        }
+        certs?: {
+            portableTextBlock: any[]
+        }
+    }>
 }
 
 /**
@@ -24,8 +37,8 @@ export default function TrainersGrid({ trainers }: TrainersGridProps) {
                     key={getStableKey({ _id: trainer.slug?.current, _key: trainer.slug?.current }, i)}
                     name={trainer.name}
                     slug={trainer.slug}
-                    certs={trainer.certs}
-                    image={trainer.image}
+                    certs={trainer.certifications || trainer.certs}
+                    image={trainer.picture || trainer.image}
                 />
             ))}
         </ContentContainer>

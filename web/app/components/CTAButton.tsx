@@ -44,7 +44,7 @@ export default function CTAButton({
                     target="_blank"
                     rel="noopener noreferrer"
                     className={cn(
-                        'flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
+                        'inline-flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
                         className,
                     )}
                 >
@@ -58,7 +58,7 @@ export default function CTAButton({
                 href={fileDownload.asset.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn('flex flex-row items-center justify-center', className)}
+                className={cn('inline-flex flex-row items-center justify-center', className)}
             >
                 {title} <MdFileDownload className="ml-2" />
             </Link>
@@ -77,7 +77,7 @@ export default function CTAButton({
                     href={href}
                     rel="noopener noreferrer"
                     className={cn(
-                        'flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
+                        'inline-flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
                         className,
                     )}
                 >
@@ -90,7 +90,7 @@ export default function CTAButton({
             <Link
                 href={href}
                 rel="noopener noreferrer"
-                className={cn('flex flex-row items-center justify-center', className)}
+                className={cn('inline-flex flex-row items-center justify-center', className)}
             >
                 {title} {arrow && <HiOutlineArrowNarrowRight className="ml-2" />}
             </Link>
@@ -103,7 +103,7 @@ export default function CTAButton({
             <Link
                 href={link || '#'}
                 className={cn(
-                    'flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
+                    'inline-flex flex-row items-center justify-center rounded bg-orange px-4 py-2 font-bold text-white transition-colors hover:bg-grey-33',
                     className,
                 )}
             >
@@ -117,7 +117,7 @@ export default function CTAButton({
             href={link || '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className={cn('flex flex-row items-center justify-center', className)}
+            className={cn('inline-flex flex-row items-center justify-center', className)}
         >
             {title} {arrow && <HiOutlineArrowNarrowRight className="ml-2" />}
         </Link>

@@ -133,6 +133,16 @@ export const programCardProjection = `
   }
 `
 
+// File download projection for CTA blocks
+export const fileDownloadProjection = `
+  _type,
+  asset-> {
+    _id,
+    _type,
+    url
+  }
+`
+
 // Settings/navigation projection
 export const settingsProjection = `
   _id,
