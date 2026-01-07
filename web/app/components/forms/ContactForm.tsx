@@ -1,13 +1,18 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import dynamic from 'next/dynamic'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { ToastContainer, toast } from 'react-toastify'
-import Confetti from 'react-confetti'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validationSchema, type FormValues } from '@/lib/validations'
 import 'react-toastify/dist/ReactToastify.css'
+
+// Dynamically import Confetti only when needed (reduces initial bundle by ~30KB)
+const Confetti = dynamic(() => import('react-confetti'), {
+    ssr: false,
+})
 
 /**
  * Contact Form Component

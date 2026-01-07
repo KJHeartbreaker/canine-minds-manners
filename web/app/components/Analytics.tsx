@@ -2,21 +2,16 @@
 
 import Script from 'next/script'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || ''
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
 
 /**
- * Modern analytics component using Next.js Script component
- * Handles both Google Tag Manager and Google Analytics
- *
- * Best practices:
- * - Uses afterInteractive strategy for non-blocking scripts
- * - Tracks page views on route changes
- * - Environment variables for IDs
+ * Internal component that uses useSearchParams
+ * Must be wrapped in Suspense boundary
  */
-export default function Analytics() {
+function AnalyticsTracker() {
     const pathname = usePathname()
     const searchParams = useSearchParams()
 
@@ -33,6 +28,21 @@ export default function Analytics() {
             })
         }
     }, [pathname, searchParams])
+
+    return null
+}
+
+/**
+ * Modern analytics component using Next.js Script component
+ * Handles both Google Tag Manager and Google Analytics
+ *
+ * Best practices:
+ * - Uses afterInteractive strategy for non-blocking scripts
+ * - Tracks page views on route changes
+ * - Environment variables for IDs
+ * - Wrapped in Suspense for useSearchParams compatibility
+ */
+export default function Analytics() {
 
     if (!GTM_ID && !GA_MEASUREMENT_ID) {
         return null
@@ -90,6 +100,13 @@ export default function Analytics() {
                         }}
                     />
                 </>
+            )}
+
+            {/* Page view tracking - wrapped in Suspense for useSearchParams */}
+            {GA_MEASUREMENT_ID && (
+                <Suspense fallback={null}>
+                    <AnalyticsTracker />
+                </Suspense>
             )}
         </>
     )

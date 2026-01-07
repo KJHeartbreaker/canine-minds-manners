@@ -71,8 +71,9 @@ const paytoneOne = Paytone_One({
 const kalam = Kalam({
   variable: '--font-kalam',
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional', // Less critical font (only used for dog names), won't block rendering
   weight: ['400'],
+  preload: false, // Don't preload since it's not critical for initial render
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
