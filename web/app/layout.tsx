@@ -84,7 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang="en"
       className={`${montserrat.variable} ${paytoneOne.variable} ${kalam.variable} bg-white text-black`}
     >
-      <body>
+      <body suppressHydrationWarning>
         {/* Analytics scripts - loads after page is interactive */}
         <Analytics />
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
