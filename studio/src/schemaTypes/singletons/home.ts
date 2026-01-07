@@ -62,42 +62,15 @@ export const home = defineType({
 			title: 'Page sections',
 			description: 'Add, edit, and reorder sections',
 			of: [
-				defineArrayMember({
-					name: 'Hero Banner',
-					type: 'heroBanner',
-				}),
-				defineArrayMember({
-					name: 'Single Column Content Block',
-					type: 'singleColumnContentBlock',
-				}),
-				defineArrayMember({
-					name: 'Content Rows',
-					type: 'rowContainer',
-				}),
-				defineArrayMember({
-					name: 'Product Grid',
-					type: 'productGridContainer',
-				}),
-				defineArrayMember({
-					name: 'Programs Grid',
-					type: 'programsGridContainer',
-				}),
-				defineArrayMember({
-					name: 'Trainers Grid',
-					type: 'trainersGridContainer',
-				}),
-				defineArrayMember({
-					name: 'Testimonials',
-					type: 'testimonialGridContainer',
-				}),
-				defineArrayMember({
-					name: 'Custom Component',
-					type: 'customComponent',
-				}),
-				defineArrayMember({
-					name: 'Class Row',
-					type: 'classRowsContainer',
-				}),
+				defineArrayMember({type: 'heroBanner'}),
+				defineArrayMember({type: 'singleColumnContentBlock'}),
+				defineArrayMember({type: 'rowContainer'}),
+				defineArrayMember({type: 'productGridContainer'}),
+				defineArrayMember({type: 'programsGridContainer'}),
+				defineArrayMember({type: 'trainersGridContainer'}),
+				defineArrayMember({type: 'testimonialGridContainer'}),
+				defineArrayMember({type: 'customComponent'}),
+				defineArrayMember({type: 'classRowsContainer'}),
 			],
 		}),
 	],

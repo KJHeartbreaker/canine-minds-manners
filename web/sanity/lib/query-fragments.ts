@@ -113,13 +113,34 @@ export const postProjection = `
   _updatedAt
 `
 
+// Program card projection (for Programs Grid)
+export const programCardProjection = `
+  _id,
+  name,
+  trainingType,
+  dogName,
+  namePlacement,
+  slug {
+    current
+  },
+  parentPage -> {
+    slug {
+      current
+    }
+  },
+  cardImage {
+    ${imageProjection}
+  }
+`
+
 // Settings/navigation projection
 export const settingsProjection = `
   _id,
   title,
   description,
   ogImage {
-    ${imageProjection}
+    ${imageProjection},
+    metadataBase
   },
   menuItems[] {
     _key,

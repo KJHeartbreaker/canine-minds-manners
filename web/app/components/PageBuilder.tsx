@@ -1,13 +1,13 @@
 'use client'
 
-import {SanityDocument} from 'next-sanity'
-import {useOptimistic} from 'next-sanity/hooks'
+import { SanityDocument } from 'next-sanity'
+import { useOptimistic } from 'next-sanity/hooks'
 import Link from 'next/link'
 
 import BlockRenderer from '@/app/components/BlockRenderer'
-import {GetPageQueryResult} from '@/sanity.types'
-import {dataAttr} from '@/sanity/lib/utils'
-import {studioUrl} from '@/sanity/lib/api'
+import { GetPageQueryResult } from '@/sanity.types'
+import { dataAttr } from '@/sanity/lib/utils'
+import { studioUrl } from '@/sanity/lib/api'
 
 type PageBuilderPageProps = {
   page: GetPageQueryResult
@@ -16,6 +16,7 @@ type PageBuilderPageProps = {
 type PageBuilderSection = {
   _key: string
   _type: string
+  disabled?: boolean
 }
 
 type PageData = {
@@ -32,6 +33,9 @@ function renderSections(pageBuilderSections: PageBuilderSection[], page: GetPage
   if (!page) {
     return null
   }
+  // Filter out disabled components, similar to the old getContent function
+  const enabledSections = pageBuilderSections.filter((section) => !section.disabled)
+
   return (
     <div
       data-sanity={dataAttr({
@@ -40,7 +44,7 @@ function renderSections(pageBuilderSections: PageBuilderSection[], page: GetPage
         path: `content`,
       }).toString()}
     >
-      {pageBuilderSections.map((block: any, index: number) => (
+      {enabledSections.map((block: any, index: number) => (
         <BlockRenderer
           key={block._key}
           index={index}
@@ -77,7 +81,7 @@ function renderEmptyState(page: GetPageQueryResult) {
   )
 }
 
-export default function PageBuilder({page}: PageBuilderPageProps) {
+export default function PageBuilder({ page }: PageBuilderPageProps) {
   const pageBuilderSections = useOptimistic<
     PageBuilderSection[] | undefined,
     SanityDocument<PageData>

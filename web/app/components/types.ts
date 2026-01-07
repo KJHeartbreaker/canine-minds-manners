@@ -4,7 +4,6 @@
  * may not always be accurate
  */
 
-import {PortableTextBlock} from 'next-sanity'
 
 // Sanity Image Type - should match SanityImageAsset structure
 export type SanityImage = {
@@ -41,7 +40,7 @@ export type MenuItem = {
     landingPageRoute?: {
       _id: string
       slug: string
-      name?: string
+      title?: string
       _type: string
     } | null
   } | null
@@ -50,7 +49,7 @@ export type MenuItem = {
     landingPageRoute?: {
       _id: string
       slug: string
-      name?: string
+      title?: string
       _type: string
     } | null
   }> | null

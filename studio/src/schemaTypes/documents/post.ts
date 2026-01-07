@@ -27,6 +27,7 @@ export const post = defineType({
 			title: 'Title',
 			type: 'string',
 			group: 'postSettings',
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: 'slug',
@@ -74,6 +75,7 @@ export const post = defineType({
 			type: 'reference',
 			to: [{type: 'trainer'}],
 			group: 'postSettings',
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: 'excerpt',
@@ -103,6 +105,7 @@ export const post = defineType({
 			title: 'Body',
 			type: 'mainPortableText',
 			group: 'postContent',
+			validation: (Rule) => Rule.required(),
 		}),
 	],
 	preview: {

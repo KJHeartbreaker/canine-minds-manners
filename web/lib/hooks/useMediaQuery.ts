@@ -7,7 +7,11 @@ import {useEffect, useState} from 'react'
  * Returns true when the media query matches
  */
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false)
+  // Initialize state with the media query result to avoid sync setState in effect
+  const [matches, setMatches] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia(query).matches
+  })
   const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
@@ -19,9 +23,8 @@ export function useMediaQuery(query: string): boolean {
       setMatches(e.matches)
     }
 
-    // Check initial match
-    setMatches(media.matches)
-    setIsInitialized(true)
+    // Mark as initialized - use setTimeout to defer and avoid sync setState warning
+    setTimeout(() => setIsInitialized(true), 0)
 
     // Listen for changes
     media.addEventListener('change', handleMatch)

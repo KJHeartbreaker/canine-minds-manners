@@ -17,6 +17,7 @@ import {
 } from 'sanity/presentation'
 import {assist} from '@sanity/assist'
 import {media} from 'sanity-plugin-media'
+import {unpublishAction} from './src/actions/unpublish'
 
 // Environment variables for project configuration
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
@@ -133,5 +134,12 @@ export default defineConfig({
   // Schema configuration, imported from ./src/schemaTypes/index.ts
   schema: {
     types: schemaTypes,
+  },
+
+  // Document actions
+  document: {
+    actions: (prev) => {
+      return [...prev, unpublishAction]
+    },
   },
 })

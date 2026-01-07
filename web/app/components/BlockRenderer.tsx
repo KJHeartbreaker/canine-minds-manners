@@ -1,6 +1,22 @@
 import React from 'react'
 
-import {dataAttr} from '@/sanity/lib/utils'
+import { dataAttr } from '@/sanity/lib/utils'
+import HeroBannerBlock from './blocks/HeroBannerBlock'
+import {
+  TrainersGridBlock,
+  ProgramsGridBlock,
+  PostsGridBlock,
+  ProductGridBlock,
+  TestimonialsGridBlock,
+  RelatedResourcesGridBlock,
+} from './blocks/GridBlocks'
+import {
+  SingleColumnContentBlock,
+  ContentRowsBlock,
+} from './blocks/ContentBlocks'
+import MapBannerBlock from './blocks/MapBannerBlock'
+import TrainingRowBlock from './blocks/TrainingRowBlock'
+import CustomComponentBlock from './blocks/CustomComponentBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -19,13 +35,24 @@ type BlockProps = {
 }
 
 const Blocks: BlocksType = {
-  // Add your block components here as you build them
+  'heroBanner': HeroBannerBlock,
+  'singleColumnContentBlock': SingleColumnContentBlock,
+  'rowContainer': ContentRowsBlock,
+  'productGridContainer': ProductGridBlock,
+  'programsGridContainer': ProgramsGridBlock,
+  'postsGridContainer': PostsGridBlock,
+  'trainersGridContainer': TrainersGridBlock,
+  'testimonialGridContainer': TestimonialsGridBlock,
+  'customComponent': CustomComponentBlock,
+  'classRowsContainer': TrainingRowBlock,
+  'relatedResourcesRow': RelatedResourcesGridBlock,
+  'contactPageMap': MapBannerBlock,
 }
 
 /**
  * Used by the <PageBuilder>, this component renders a the component that matches the block type.
  */
-export default function BlockRenderer({block, index, pageId, pageType}: BlockProps) {
+export default function BlockRenderer({ block, index, pageId, pageType }: BlockProps) {
   // Block does exist
   if (typeof Blocks[block._type] !== 'undefined') {
     return (
@@ -52,6 +79,6 @@ export default function BlockRenderer({block, index, pageId, pageType}: BlockPro
         A &ldquo;{block._type}&rdquo; block hasn&apos;t been created
       </div>
     ),
-    {key: block._key},
+    { key: block._key },
   )
 }

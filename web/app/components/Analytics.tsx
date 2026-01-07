@@ -99,6 +99,7 @@ export default function Analytics() {
 declare global {
     interface Window {
         dataLayer: any[]
+        // eslint-disable-next-line no-unused-vars
         gtag: (...args: any[]) => void
     }
 }
