@@ -3,7 +3,7 @@ import {GiCobweb, GiGraduateCap, GiSittingDog} from 'react-icons/gi'
 import {SlSpeech} from 'react-icons/sl'
 import {RiStackFill} from 'react-icons/ri'
 import {BsSignpostSplit, BsTelephone} from 'react-icons/bs'
-import {GoHome, GoMegaphone} from 'react-icons/go'
+import {GoHome, GoMegaphone, GoArrowSwitch} from 'react-icons/go'
 import {GiSettingsKnobs} from 'react-icons/gi'
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
@@ -52,6 +52,12 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
         .title('Posts')
         .icon(BsSignpostSplit)
         .child(S.documentTypeList('post').title('Posts')),
+
+      // Redirects
+      S.listItem()
+        .title('Redirects')
+        .icon(GoArrowSwitch)
+        .child(S.documentTypeList('redirect').title('Redirects')),
       // Divider
       S.divider(),
       // Our Team

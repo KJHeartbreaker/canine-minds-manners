@@ -8,6 +8,7 @@ import {page} from './documents/page'
 import {post} from './documents/post'
 import {classDocument} from './documents/class'
 import {product} from './documents/product'
+import {redirect} from './documents/redirect'
 import {resource} from './documents/resource'
 import {testimonial} from './documents/testimonial'
 import {trainer} from './documents/trainer'
@@ -74,6 +75,7 @@ export const schemaTypes = [
   post,
   classDocument,
   product,
+  redirect,
   resource,
   testimonial,
   trainer,

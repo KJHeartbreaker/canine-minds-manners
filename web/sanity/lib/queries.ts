@@ -1273,3 +1273,11 @@ export const pagesSlugs = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
 `)
+
+export const redirectsQuery = defineQuery(`
+  *[_type == "redirect" && defined(source) && defined(destination)] {
+    source,
+    destination,
+    permanent
+  }
+`)
