@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 import PageBuilderPage from '@/app/components/PageBuilder'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -45,6 +46,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 export default async function Page(props: Props) {
   const params = await props.params
   const [{ data: page }] = await Promise.all([sanityFetch({ query: getPageQuery, params })])
+
+  if (!page?._id) {
+    return notFound()
+  }
 
   return <PageBuilderPage page={page as GetPageQueryResult} />
 }
