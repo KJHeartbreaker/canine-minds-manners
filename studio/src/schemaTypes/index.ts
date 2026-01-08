@@ -35,6 +35,7 @@ import {trainersGridContainer} from './objects/grids/trainersGridContainer'
 
 // Objects - Helpers
 import {dateTime} from './objects/helpers/dateTime'
+import {dateTimeV2} from './objects/helpers/dateTimeV2'
 
 // Objects - Navigation Components
 import {navCTA} from './objects/navigationComponents/navCTA'
@@ -95,6 +96,7 @@ export const schemaTypes = [
   trainersGridContainer,
   // Objects - Helpers
   dateTime,
+  dateTimeV2,
   // Objects - Navigation Components
   navCTA,
   navDropdownCTA,

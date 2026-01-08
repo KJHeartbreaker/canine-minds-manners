@@ -80,6 +80,14 @@ export const classProjection = `
     startDate,
     startTime,
     amPm
+  },
+  upcomingClasses[] {
+    _key,
+    dateTime,
+    acuityId,
+    totalSpots,
+    bookingsCount,
+    availability
   }
 `
 

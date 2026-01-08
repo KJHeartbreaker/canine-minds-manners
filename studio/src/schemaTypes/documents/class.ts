@@ -108,8 +108,17 @@ export const classDocument = defineType({
 		defineField({
 			name: 'upcoming22',
 			type: 'array',
-			title: 'Upcoming Classes',
+			title: 'Upcoming Classes (Legacy)',
+			description: 'Legacy format - use "Upcoming Classes (New)" for new entries',
 			of: [defineArrayMember({type: 'dateTime'})],
+			validation: (rule) => rule.max(8),
+		}),
+		defineField({
+			name: 'upcomingClasses',
+			type: 'array',
+			title: 'Upcoming Classes (New)',
+			description: 'New format with improved date/time picker and Acuity ID extraction',
+			of: [defineArrayMember({type: 'dateTimeV2'})],
 			validation: (rule) => rule.max(8),
 		}),
 		defineField({
