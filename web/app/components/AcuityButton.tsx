@@ -6,9 +6,11 @@ import { RiExternalLinkFill } from 'react-icons/ri'
 interface AcuityButtonProps {
     appointmentTypeId: string
     date: string
+    disabled?: boolean
+    badge?: React.ReactNode
 }
 
-export default function AcuityButton({ appointmentTypeId, date }: AcuityButtonProps) {
+export default function AcuityButton({ appointmentTypeId, date, disabled = false, badge }: AcuityButtonProps) {
     useEffect(() => {
         // Inject Acuity stylesheet and script only once
         const hasStylesheet = document.getElementById('acuity-button-styles')
@@ -31,10 +33,29 @@ export default function AcuityButton({ appointmentTypeId, date }: AcuityButtonPr
     }, [])
 
     const linkContent = (
-        <span className="whitespace-nowrap inline-flex items-center">
-            Register: {date} <RiExternalLinkFill color="var(--color-orange)" size={20} className="ml-2" />
+        <span className="whitespace-nowrap inline-flex items-center upcoming-class-link">
+            {date} <RiExternalLinkFill
+                color={disabled ? "#e2e2e2" : "var(--color-orange)"}
+                size={20}
+                className="ml-2"
+            />
+            {badge && <span className="ml-2 md:ml-5 acuity-badge">{badge}</span>}
         </span>
     )
+
+    if (disabled) {
+        return (
+            <span
+                data-component="AcuityButton"
+                className="acuity-embed-button acuity-embed-button-disabled"
+            // style={{
+            //     pointerEvents: 'none',
+            // }}
+            >
+                {linkContent}
+            </span>
+        )
+    }
 
     return (
         <a

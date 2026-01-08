@@ -16,13 +16,23 @@ interface UpcomingClass {
     availability?: 'full' | 'nearlyFull'
 }
 
+interface UpcomingClassV2 {
+    _key: string
+    dateTime: string // ISO 8601 datetime string
+    acuityId?: string
+    totalSpots?: number
+    bookingsCount?: number
+    availability?: 'open' | 'nearlyFull' | 'full'
+}
+
 interface TrainingSession {
     _id: string
     name?: string
     description?: {
         portableTextBlock?: PortableTextBlock[]
     }
-    upcoming22?: UpcomingClass[]
+    upcoming22?: UpcomingClass[] // Legacy format
+    upcomingClasses?: UpcomingClassV2[] // New format
     picture?: any
     price?: string
     takeaways?: string[]
@@ -35,6 +45,37 @@ interface TrainingSession {
 }
 
 /**
+ * Formats a date string to a readable format
+ */
+function formatDate(dateString: string): string {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    })
+}
+
+/**
+ * Formats a legacy date/time combination to a readable format
+ */
+function formatLegacyDateTime(startDate: string, startTime: string, amPm: string): string {
+    const date = new Date(startDate)
+    const [hours, minutes] = startTime.split(':').map(Number)
+    let hour24 = hours
+    if (amPm.toLowerCase() === 'pm' && hours !== 12) {
+        hour24 = hours + 12
+    } else if (amPm.toLowerCase() === 'am' && hours === 12) {
+        hour24 = 0
+    }
+    date.setHours(hour24, minutes || 0)
+    return formatDate(date.toISOString())
+}
+
+/**
  * Training Component
  * Displays individual training class information
  */
@@ -42,6 +83,7 @@ export default function TrainingComponent({
     name,
     description,
     upcoming22,
+    upcomingClasses,
     picture,
     price,
     takeaways,
@@ -85,23 +127,67 @@ export default function TrainingComponent({
                     )}
                 >
                     <div>
-                        {upcoming22 && upcoming22.length > 0 ? (
+                        {/* New format with Acuity IDs */}
+                        {upcomingClasses && upcomingClasses.length > 0 ? (
                             <>
                                 <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
-                                {/* <p className="mb-2"></p> */}
-                                {/* {upcoming22.map((uC) => (
-                                    <p key={uC._key} className="mb-2">
-                                        {formatStartDate(uC.startDate)} at {uC.startTime} {uC.amPm.toUpperCase()}
-                                        {uC.availability === 'full' && (
-                                            <span className="ml-5 font-bold text-red">FULL</span>
-                                        )}
-                                        {uC.availability === 'nearlyFull' && (
-                                            <span className="ml-5 font-bold text-yellow">FEW SPOTS LEFT</span>
-                                        )}
-                                    </p>
-                                ))} */}
-                                <AcuityButton appointmentTypeId="85581228" date="January 8th 2026 at 6:30 PM" />
-                                <AcuityButton appointmentTypeId="87062051" date="February 2nd 2026 at 6:30 PM" />
+                                {upcomingClasses.map((uC) => {
+                                    const formattedDate = uC.dateTime ? formatDate(uC.dateTime) : ''
+                                    const isFull = uC.availability === 'full'
+                                    const availabilityBadge = isFull ? (
+                                        <span className="font-bold text-red">FULL</span>
+                                    ) : uC.availability === 'nearlyFull' ? (
+                                        <span className="font-bold text-yellow">FEW SPOTS LEFT</span>
+                                    ) : (
+                                        <span className="font-bold text-green">REGISTER NOW</span>
+                                    )
+
+                                    // Show booking button (disabled if full)
+                                    if (uC.acuityId && formattedDate) {
+                                        return (
+                                            <div key={uC._key}>
+                                                <AcuityButton
+                                                    appointmentTypeId={uC.acuityId}
+                                                    date={formattedDate}
+                                                    disabled={isFull}
+                                                    badge={availabilityBadge}
+                                                />
+                                            </div>
+                                        )
+                                    } else if (formattedDate) {
+                                        // Show date with badge (or just date if open)
+                                        return (
+                                            <p key={uC._key} className="mb-2">
+                                                {formattedDate}
+                                                <span className="ml-5">{availabilityBadge}</span>
+                                            </p>
+                                        )
+                                    }
+                                    return null
+                                })}
+                            </>
+                        ) : upcoming22 && upcoming22.length > 0 ? (
+                            <>
+                                {/* Legacy format - fallback for existing data */}
+                                <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
+                                {upcoming22.map((uC) => {
+                                    const formattedDate = formatLegacyDateTime(uC.startDate, uC.startTime, uC.amPm)
+                                    const isFull = uC.availability === 'full'
+                                    const availabilityBadge = isFull ? (
+                                        <span className="ml-5 font-bold text-red">FULL</span>
+                                    ) : uC.availability === 'nearlyFull' ? (
+                                        <span className="ml-5 font-bold text-yellow">FEW SPOTS LEFT</span>
+                                    ) : (
+                                        <span className="ml-5 font-bold text-green">REGISTER NOW</span>
+                                    )
+
+                                    return (
+                                        <p key={uC._key} className="mb-2">
+                                            {formattedDate}
+                                            {availabilityBadge}
+                                        </p>
+                                    )
+                                })}
                             </>
                         ) : trainingType === 'group' ? (
                             <h2>Check back for availability</h2>
