@@ -78,6 +78,9 @@ importers:
       '@react-email/components':
         specifier: ^1.0.3
         version: 1.0.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@sanity/asset-utils':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@sanity/client':
         specifier: ^7.13.2
         version: 7.13.2(debug@4.4.3)
