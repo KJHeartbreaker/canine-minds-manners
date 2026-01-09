@@ -21,6 +21,7 @@ import CTAButton from '@/app/components/CTAButton'
 import HorizontalRule from '@/app/components/HorizontalRule'
 import YouTubePlayer from '@/app/components/YouTubePlayer'
 import LogoRow from '../rows/LogoRow'
+import ContactInfo from '@/app/components/ContactInfo'
 
 interface CustomPortableTextProps {
   className?: string
@@ -165,6 +166,18 @@ export default function CustomPortableText({
         return <YouTubePlayer videoId={id} />
       },
       logoRow: ({ value }: { value: { logoRow?: any[] } }) => <LogoRow logos={value?.logoRow || []} />,
+      contactInfo: ({ value }: { value: any }) => (
+        <div className="my-2 sm:my-6">
+          <ContactInfo
+            headline={value?.headline}
+            phoneNumber={value?.phoneNumber}
+            phoneLabel={value?.phoneLabel}
+            email={value?.email}
+            textColor={value?.textColor || 'blue'}
+            showHeadline={!!value?.headline}
+          />
+        </div>
+      ),
     },
   }
 

@@ -22,6 +22,7 @@ import {classRowsContainer} from './objects/classes/classRowsContainer'
 
 // Objects - Custom Components
 import {aboutUsContainer} from './objects/customComponents/aboutUsContainer'
+import {contactInfo} from './objects/customComponents/contactInfo'
 import {contactPageMap} from './objects/customComponents/contactPageMap'
 import {customComponent} from './objects/customComponents/customComponent'
 import {galleryGrid} from './objects/customComponents/galleryGrid'
@@ -86,6 +87,7 @@ export const schemaTypes = [
   classRowsContainer,
   // Objects - Custom Components
   aboutUsContainer,
+  contactInfo,
   contactPageMap,
   customComponent,
   galleryGrid,
