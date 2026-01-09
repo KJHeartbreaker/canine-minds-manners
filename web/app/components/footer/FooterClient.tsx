@@ -7,8 +7,8 @@ import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import { cn } from '@/lib/utils'
 import NavbarDropdown from '../header/NavbarDropdown'
 import LogoRow from '../rows/LogoRow'
-import FooterIcon from './FooterIcon'
 import { MenuItem, FooterLogo } from '../types'
+import { FaEnvelope, FaPhoneAlt } from 'react-icons/fa'
 
 interface FooterClientProps {
     menuItems: MenuItem[]
@@ -45,27 +45,37 @@ export default function FooterClient({ menuItems, logos }: FooterClientProps) {
         <footer className="flex justify-center items-center bg-grey-44">
             <div className="flex justify-center items-center flex-col max-w-[767px] w-full min-h-[300px] py-[35px] px-5 sm:py-[35px] sm:px-0">
                 {/* Contact Info Row */}
-                <div
-                    className={cn(
-                        'flex flex-col justify-center items-center place-items-center w-full',
-                        'sm:grid sm:grid-cols-[40%_20%_40%]'
-                    )}
-                >
-                    <h5 className="my-[5px] text-white text-base order-1 sm:order-0 sm:mt-0 mt-2.5">
-                        Phone:{' '}
-                        <Link href="tel:4038165629" className="text-orange hover:text-orange-hover">
-                            Kirsten Rose (403) 816-5629
-                        </Link>
-                    </h5>
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                    {/* Phone Section */}
+                    <div className="flex items-center justify-start gap-3">
+                        <div className="shrink-0 w-10 h-10 rounded-full bg-orange flex items-center justify-center">
+                            <FaPhoneAlt className="text-white text-lg" />
+                        </div>
+                        <div className="flex flex-col">
+                            <Link
+                                href={`tel:${4038165629}`}
+                                className={cn('font-bold text-md text-white hover:text-blue-22 transition-color')}
+                            >
+                                (403) 816-5629
+                            </Link>
+                            <span className={cn('text-sm font-bold text-white uppercase')}>(Call or TXT)</span>
+                        </div>
+                    </div>
 
-                    <FooterIcon className="w-10 text-white order-0 sm:order-0" />
-
-                    <h5 className="my-[5px] text-white text-base order-2 sm:order-0">
-                        Email:{' '}
-                        <Link href="mailto:cmm_info@shaw.ca" className="text-orange hover:text-orange-hover">
-                            cmm_info@shaw.ca
-                        </Link>
-                    </h5>
+                    {/* Email Section */}
+                    <div className="flex items-center justify-start gap-3">
+                        <div className="shrink-0 w-10 h-10 rounded-full bg-orange flex items-center justify-center">
+                            <FaEnvelope className="text-white text-lg" />
+                        </div>
+                        <div className="flex flex-col">
+                            <Link
+                                href={`mailto:cmm_info@shaw.ca`}
+                                className={cn('font-bold text-md text-white hover:text-blue-22 transition-color')}
+                            >
+                                cmm_info@shaw.ca
+                            </Link>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Desktop Menu */}

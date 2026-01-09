@@ -50,9 +50,9 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
     }
 
     return (
-        <header className="sticky top-0 left-0 right-0 z-[100] bg-blue-44">
+        <header className="sticky top-0 left-0 right-0 z-100 bg-blue-44">
             <nav className="grid grid-rows-[75px] grid-cols-1">
-                <div className="flex items-center justify-between max-w-full w-full mx-auto px-3 z-[100] lg:max-w-[1280px] xl:max-w-[1440px] xxl:max-w-[1600px]">
+                <div className="flex items-center justify-between max-w-full w-full mx-auto px-3 z-100 lg:max-w-[1280px] xl:max-w-[1440px] xxl:max-w-[1600px]">
                     {/* Logo */}
                     <div className="flex max-w-[120px]">
                         <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center justify-center">
@@ -181,7 +181,7 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
                         )}
                         <div
                             className={cn(
-                                'absolute top-[75px] left-0 right-0 p-5 h-[calc(100vh-75px)] overflow-y-auto bg-grey-44 flex flex-col items-center text-center z-[100]',
+                                'absolute top-[75px] left-0 right-0 p-5 h-[calc(100vh-75px)] overflow-y-auto bg-grey-44 flex flex-col items-center text-center z-100',
                                 menuOpen ? 'flex' : 'hidden'
                             )}
                         >

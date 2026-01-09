@@ -181,6 +181,11 @@ export const mainPortableText = defineType({
 					type: 'logoRow',
 				}),
 				defineArrayMember({
+					name: 'contactInfo',
+					title: 'Contact Information',
+					type: 'contactInfo',
+				}),
+				defineArrayMember({
 					type: 'image',
 					fields: [
 						{
