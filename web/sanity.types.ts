@@ -778,6 +778,11 @@ export type PagesSlugsResult = Array<{
   slug: string
 }>
 
+// Source: sanity/lib/queries.ts
+// Variable: redirectsQuery
+// Query: *[_type == "redirect" && defined(source) && defined(destination)] {    source,    destination,    permanent  }
+export type RedirectsQueryResult = Array<never>
+
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
@@ -793,5 +798,6 @@ declare module '@sanity/client' {
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    _id,\n    title,\n    subheader,\n    slug {\n      current\n    },\n    excerpt {\n      portableTextBlock[] {\n        ...,\n        markDefs[] {\n          _key,\n          _type,\n          _type == "internalLink" => {\n            item -> {\n              _id,\n              _type,\n              _type == "class" => {\n                "slug": slug.current,\n                "parentPage": parentPage-> {\n                  "parentSlug": slug.current\n                }\n              },\n              _type == \'page\' => {\n                "slug": slug.current\n              }\n            }\n          },\n          _type == \'link\' => {\n            href,\n            blank\n          },\n          _type != \'internalLink\' && _type != \'link\' => @\n        }\n      }\n    },\n    image {\n      \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n    },\n    body {\n      portableTextBlock[] {\n        ...,\n        _type == \'cta\' => {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        markDefs[] {\n          _key,\n          _type,\n          _type == "internalLink" => {\n            item -> {\n              _id,\n              _type,\n              _type == "class" => {\n                "slug": slug.current,\n                "parentPage": parentPage-> {\n                  "parentSlug": slug.current\n                }\n              },\n              _type == \'page\' => {\n                "slug": slug.current\n              }\n            }\n          },\n          _type == \'link\' => {\n            href,\n            blank\n          },\n          _type != \'internalLink\' && _type != \'link\' => @\n        }\n      }\n    },\n    author -> {\n      _id,\n      name,\n      slug {\n        current\n      },\n      picture {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    date,\n    _updatedAt\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[_type == "redirect" && defined(source) && defined(destination)] {\n    source,\n    destination,\n    permanent\n  }\n': RedirectsQueryResult
   }
 }
