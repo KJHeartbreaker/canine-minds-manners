@@ -4,7 +4,7 @@ import {AcuityIdInput} from '../../../components/DateTimeV2Input'
 import {AvailabilityCalculator} from '../../../components/AvailabilityCalculator'
 
 export const dateTimeV2 = defineType({
-  title: 'Date Time (New)',
+  title: 'Date Time',
   name: 'dateTimeV2',
   type: 'object',
   icon,
