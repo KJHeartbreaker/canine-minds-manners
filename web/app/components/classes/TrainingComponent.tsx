@@ -3,18 +3,11 @@
 import { PortableTextBlock } from 'next-sanity'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { useAcuityEmbed } from '@/lib/hooks/useAcuityEmbed'
 import SimplePortableText from '../portableText/SimplePortableText'
 import SanityImage from '../SanityImage'
 import { SanityIcon } from '../SanityImage'
 import AcuityButton from '../AcuityButton'
-
-interface UpcomingClass {
-    _key: string
-    startDate: string
-    startTime: string
-    amPm: string
-    availability?: 'full' | 'nearlyFull'
-}
 
 interface UpcomingClassV2 {
     _key: string
@@ -31,8 +24,7 @@ interface TrainingSession {
     description?: {
         portableTextBlock?: PortableTextBlock[]
     }
-    upcoming22?: UpcomingClass[] // Legacy format
-    upcomingClasses?: UpcomingClassV2[] // New format
+    upcomingClasses?: UpcomingClassV2[]
     picture?: any
     price?: string
     takeaways?: string[]
@@ -41,7 +33,7 @@ interface TrainingSession {
     slug?: {
         current: string
     }
-    cta?: any
+    acuityCategoryUrl?: string
 }
 
 /**
@@ -60,29 +52,12 @@ function formatDate(dateString: string): string {
 }
 
 /**
- * Formats a legacy date/time combination to a readable format
- */
-function formatLegacyDateTime(startDate: string, startTime: string, amPm: string): string {
-    const date = new Date(startDate)
-    const [hours, minutes] = startTime.split(':').map(Number)
-    let hour24 = hours
-    if (amPm.toLowerCase() === 'pm' && hours !== 12) {
-        hour24 = hours + 12
-    } else if (amPm.toLowerCase() === 'am' && hours === 12) {
-        hour24 = 0
-    }
-    date.setHours(hour24, minutes || 0)
-    return formatDate(date.toISOString())
-}
-
-/**
  * Training Component
  * Displays individual training class information
  */
 export default function TrainingComponent({
     name,
     description,
-    upcoming22,
     upcomingClasses,
     picture,
     price,
@@ -90,14 +65,18 @@ export default function TrainingComponent({
     trainingType,
     customTrainingTitle,
     slug,
-    cta,
+    acuityCategoryUrl,
 }: TrainingSession) {
+    // Load Acuity embed scripts if needed
+    useAcuityEmbed()
+
     // Don't render if name is missing
     if (!name) {
         return null
     }
 
     const type = trainingType === 'group' ? 'Group Class' : 'Private Training'
+    const hasUpcomingClasses = upcomingClasses && upcomingClasses.length > 0
 
     return (
         <ContentContainer
@@ -123,12 +102,13 @@ export default function TrainingComponent({
                 )}
                 <div
                     className={cn(
-                        'border-2 border-yellow rounded-[20px] flex p-3 w-fit mb-6 md:p-4',
+                        'flex w-fit',
+                        hasUpcomingClasses && 'p-3 mb-6 md:p-4 border-2 border-yellow rounded-[20px]',
                     )}
                 >
                     <div>
                         {/* New format with Acuity IDs */}
-                        {upcomingClasses && upcomingClasses.length > 0 ? (
+                        {hasUpcomingClasses ? (
                             <>
                                 <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
                                 {upcomingClasses.map((uC) => {
@@ -166,34 +146,11 @@ export default function TrainingComponent({
                                     return null
                                 })}
                             </>
-                        ) : upcoming22 && upcoming22.length > 0 ? (
-                            <>
-                                {/* Legacy format - fallback for existing data */}
-                                <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
-                                {upcoming22.map((uC) => {
-                                    const formattedDate = formatLegacyDateTime(uC.startDate, uC.startTime, uC.amPm)
-                                    const isFull = uC.availability === 'full'
-                                    const availabilityBadge = isFull ? (
-                                        <span className="ml-5 font-bold text-red">FULL</span>
-                                    ) : uC.availability === 'nearlyFull' ? (
-                                        <span className="ml-5 font-bold text-blue">FEW SPOTS LEFT</span>
-                                    ) : (
-                                        <span className="ml-5 font-bold text-green">REGISTER NOW</span>
-                                    )
-
-                                    return (
-                                        <p key={uC._key} className="mb-2">
-                                            {formattedDate}
-                                            {availabilityBadge}
-                                        </p>
-                                    )
-                                })}
-                            </>
                         ) : trainingType === 'group' ? (
-                            <h4 className="text-bold text-orange hover:text-orange-hover">Check back for availability</h4>
+                            <h4 className="text-bold text-orange mb-6">Check back for availability</h4>
                         ) : (
                             <Link href="/contact">
-                                <h4 className="text-bold text-orange hover:text-orange-hover">Contact for more information</h4>
+                                <h4 className="text-bold text-orange hover:text-orange-hover mb-6">Contact for more information</h4>
                             </Link>
                         )}
                     </div>
@@ -201,32 +158,52 @@ export default function TrainingComponent({
                 {description?.portableTextBlock && (
                     <SimplePortableText value={description.portableTextBlock} />
                 )}
-                {cta && (
-                    <>
-                        <a
-                            href="https://app.acuityscheduling.com/schedule.php?owner=28298110&appointmentType=category:Outdoor%20and%20Advanced%20Classes&ref=booking_button"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="acuity-embed-button mt-10"
-                            style={{
-                                background: 'var(--color-orange) !important',
-                                color: '#fff',
-                                padding: '8px 12px',
-                                border: '0px',
-                                WebkitBoxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
-                                MozBoxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
-                                boxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
-                                borderRadius: '4px',
-                                textDecoration: 'none',
-                                display: 'inline-block',
-                            }}
-                        >
-                            See all available classes
-                        </a>
-                        <link rel="stylesheet" href="https://embed.acuityscheduling.com/embed/button/28298110.css" id="acuity-button-styles" />
-                        <script src="https://embed.acuityscheduling.com/embed/button/28298110.js" async />
-                    </>
-                )}
+                {/* Conditional CTA Buttons */}
+                <div className={cn('mt-10', trainingType === 'group' && hasUpcomingClasses && acuityCategoryUrl && 'flex gap-4 flex-wrap')}>
+                    {/* Private class: "Book an appointment" */}
+                    {trainingType === 'private' && (
+                        <Link href="/contact" className="button">
+                            Book an appointment
+                        </Link>
+                    )}
+                    {/* Group class, no upcoming classes: "Contact Us" */}
+                    {trainingType === 'group' && !hasUpcomingClasses && (
+                        <Link href="/contact" className="button">
+                            Contact Us
+                        </Link>
+                    )}
+                    {/* Group class, with upcoming classes: "See All Upcoming Classes" + "Contact Us" */}
+                    {trainingType === 'group' && hasUpcomingClasses && (
+                        <>
+                            {acuityCategoryUrl && (
+                                <a
+                                    href={acuityCategoryUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="acuity-embed-button"
+                                    style={{
+                                        background: 'var(--color-orange) !important',
+                                        color: '#fff',
+                                        padding: '8px 12px',
+                                        border: '0px',
+                                        WebkitBoxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
+                                        MozBoxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
+                                        boxShadow: '0 -2px 0 rgba(0,0,0,0.15) inset',
+                                        borderRadius: '4px',
+                                        textDecoration: 'none',
+                                        display: 'inline-block',
+                                        margin: '10px 0',
+                                    }}
+                                >
+                                    See All Upcoming Classes
+                                </a>
+                            )}
+                            <Link href="/contact" className="button">
+                                Contact Us
+                            </Link>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* Second Column */}

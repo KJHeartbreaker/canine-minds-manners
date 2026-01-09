@@ -71,16 +71,7 @@ export const classProjection = `
   picture {
     ${imageProjection}
   },
-  cta {
-    ${ctaProjection}
-  },
-  upcoming22[] {
-    _key,
-    availability,
-    startDate,
-    startTime,
-    amPm
-  },
+  acuityCategoryUrl,
   upcomingClasses[] {
     _key,
     dateTime,
