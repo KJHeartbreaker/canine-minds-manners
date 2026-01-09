@@ -374,7 +374,7 @@
 
     > span {
       cursor: pointer !important;
-      color: var(--color-blue-33) !important;
+      color: var(--color-blue-44) !important;
       font-weight: 600 !important;
       font-family: var(--font-montserrat), sans-serif !important;
       font-size: var(--font-small-size) !important;
@@ -382,7 +382,7 @@
     }
 
     span.upcoming-class-link:hover {
-      color: var(--color-blue-22) !important;
+      color: var(--color-blue-33) !important;
 
       svg {
         color: var(--color-orange-hover) !important;
@@ -392,8 +392,8 @@
         color: var(--color-green-hover) !important;
       }
 
-      & span.acuity-badge span.text-yellow {
-        color: var(--color-yellow-hover) !important;
+      & span.acuity-badge span.text-blue {
+        color: var(--color-blue-22) !important;
       }
     }
 
@@ -416,8 +416,8 @@
         color: var(--color-green) !important;
       }
 
-      &.text-yellow {
-        color: var(--color-yellow) !important;
+      &.text-blue {
+        color: var(--color-blue-33) !important;
       }
     }
 

@@ -137,7 +137,7 @@ export default function TrainingComponent({
                                     const availabilityBadge = isFull ? (
                                         <span className="font-bold text-red">FULL</span>
                                     ) : uC.availability === 'nearlyFull' ? (
-                                        <span className="font-bold text-yellow">FEW SPOTS LEFT</span>
+                                        <span className="font-bold text-blue">FEW SPOTS LEFT</span>
                                     ) : (
                                         <span className="font-bold text-green">REGISTER NOW</span>
                                     )
@@ -176,7 +176,7 @@ export default function TrainingComponent({
                                     const availabilityBadge = isFull ? (
                                         <span className="ml-5 font-bold text-red">FULL</span>
                                     ) : uC.availability === 'nearlyFull' ? (
-                                        <span className="ml-5 font-bold text-yellow">FEW SPOTS LEFT</span>
+                                        <span className="ml-5 font-bold text-blue">FEW SPOTS LEFT</span>
                                     ) : (
                                         <span className="ml-5 font-bold text-green">REGISTER NOW</span>
                                     )
@@ -190,10 +190,10 @@ export default function TrainingComponent({
                                 })}
                             </>
                         ) : trainingType === 'group' ? (
-                            <h2>Check back for availability</h2>
+                            <h4 className="text-bold text-orange hover:text-orange-hover">Check back for availability</h4>
                         ) : (
                             <Link href="/contact">
-                                <h2>Contact for more information</h2>
+                                <h4 className="text-bold text-orange hover:text-orange-hover">Contact for more information</h4>
                             </Link>
                         )}
                     </div>
@@ -204,7 +204,7 @@ export default function TrainingComponent({
                 {cta && (
                     <>
                         <a
-                            href="https://app.acuityscheduling.com/schedule.php?owner=28298110&ref=booking_button"
+                            href="https://app.acuityscheduling.com/schedule.php?owner=28298110&appointmentType=category:Outdoor%20and%20Advanced%20Classes&ref=booking_button"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="acuity-embed-button mt-10"
