@@ -58,6 +58,7 @@ export const page = defineType({
       description: 'Add, edit, and reorder sections',
       of: [
         defineArrayMember({type: 'heroBanner'}),
+        defineArrayMember({type: 'heroTwoPanel'}),
         defineArrayMember({type: 'singleColumnContentBlock'}),
         defineArrayMember({type: 'rowContainer'}),
         defineArrayMember({type: 'productGridContainer'}),

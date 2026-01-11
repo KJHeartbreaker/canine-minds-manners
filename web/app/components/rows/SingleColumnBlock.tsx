@@ -28,6 +28,7 @@ export default function SingleColumnContentBlock({
                 <CustomPortableText
                     value={portableTextBlock}
                     className={centerContent ? 'w-full' : undefined}
+                    centered={centerContent}
                 />
             )}
         </ContentContainer>

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { dataAttr } from '@/sanity/lib/utils'
 import HeroBannerBlock from './blocks/HeroBannerBlock'
+import HeroTwoPanelBlock from './blocks/HeroTwoPanelBlock'
 import {
   TrainersGridBlock,
   ProgramsGridBlock,
@@ -36,6 +37,7 @@ type BlockProps = {
 
 const Blocks: BlocksType = {
   'heroBanner': HeroBannerBlock,
+  'heroTwoPanel': HeroTwoPanelBlock,
   'singleColumnContentBlock': SingleColumnContentBlock,
   'rowContainer': ContentRowsBlock,
   'productGridContainer': ProductGridBlock,

@@ -136,6 +136,58 @@ export const getHomePageQuery = defineQuery(`
         },
         disabled
       },
+      _type == 'heroTwoPanel' => {
+        size,
+        backgroundColor,
+        centerText,
+        image {
+          ${imageProjection}
+        },
+        mainPortableText {
+          portableTextBlock[] {
+            ...,
+            _type == 'cta' => {
+              title,
+              arrow,
+              kind,
+              link,
+              fileDownload {
+                ${fileDownloadProjection}
+              },
+              landingPageRoute-> {
+                _id,
+                "slug": slug.current,
+                _type
+              }
+            },
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -607,6 +659,59 @@ export const blogLandingPageQuery = defineQuery(`
         },
         disabled
       },
+      _type == 'heroTwoPanel' => {
+        _key,
+        _type,
+        size,
+        backgroundColor,
+        image {
+          ${imageProjection}
+        },
+        mainPortableText {
+          portableTextBlock[] {
+            ...,
+            _type == 'cta' => {
+              title,
+              arrow,
+              kind,
+              link,
+              fileDownload {
+                ${fileDownloadProjection}
+              },
+              landingPageRoute-> {
+                _id,
+                "slug": slug.current,
+                _type
+              }
+            },
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -731,6 +836,58 @@ export const getPageQuery = defineQuery(`
             _id,
             "slug": slug.current,
             _type
+          }
+        },
+        disabled
+      },
+      _type == 'heroTwoPanel' => {
+        size,
+        backgroundColor,
+        centerText,
+        image {
+          ${imageProjection}
+        },
+        mainPortableText {
+          portableTextBlock[] {
+            ...,
+            _type == 'cta' => {
+              title,
+              arrow,
+              kind,
+              link,
+              fileDownload {
+                ${fileDownloadProjection}
+              },
+              landingPageRoute-> {
+                _id,
+                "slug": slug.current,
+                _type
+              }
+            },
+            markDefs[] {
+              _key,
+              _type,
+              _type == "internalLink" => {
+                item -> {
+                  _id,
+                  _type,
+                  _type == "class" => {
+                    "slug": slug.current,
+                    "parentPage": parentPage-> {
+                      "parentSlug": slug.current
+                    }
+                  },
+                  _type == 'page' => {
+                    "slug": slug.current
+                  }
+                }
+              },
+              _type == 'link' => {
+                href,
+                blank
+              },
+              _type != 'internalLink' && _type != 'link' => @
+            }
           }
         },
         disabled

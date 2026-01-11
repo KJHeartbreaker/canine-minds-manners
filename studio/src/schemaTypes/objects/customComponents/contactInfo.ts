@@ -51,6 +51,21 @@ export const contactInfo = defineType({
       },
       initialValue: 'blue',
     }),
+    defineField({
+      name: 'size',
+      type: 'string',
+      title: 'Size',
+      description: 'Size of the contact information. Large increases icon and text sizes.',
+      options: {
+        list: [
+          {title: 'Normal', value: 'normal'},
+          {title: 'Large', value: 'large'},
+        ],
+        layout: 'radio',
+        direction: 'horizontal',
+      },
+      initialValue: 'normal',
+    }),
   ],
   preview: {
     select: {

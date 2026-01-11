@@ -22,17 +22,20 @@ import HorizontalRule from '@/app/components/HorizontalRule'
 import YouTubePlayer from '@/app/components/YouTubePlayer'
 import LogoRow from '../rows/LogoRow'
 import ContactInfo from '@/app/components/ContactInfo'
+import { cn } from '@/lib/utils'
 
 interface CustomPortableTextProps {
   className?: string
   value: PortableTextBlock[]
   paragraphClasses?: string
+  centered?: boolean
 }
 
 export default function CustomPortableText({
   className,
   value,
   paragraphClasses,
+  centered = false,
 }: CustomPortableTextProps) {
   const components: PortableTextComponents = {
     block: {
@@ -43,54 +46,12 @@ export default function CustomPortableText({
         }
         return <p className={paragraphClasses || className}>{children}</p>
       },
-      h1: ({ children, value }) => (
-        <h1 className="group relative">
-          {children}
-          <a
-            href={`#${value?._key}`}
-            className="absolute left-0 top-0 bottom-0 -ml-6 flex items-center opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-              />
-            </svg>
-          </a>
-        </h1>
-      ),
-      h2: ({ children, value }) => (
-        <h2 className="group relative">
-          {children}
-          <a
-            href={`#${value?._key}`}
-            className="absolute left-0 top-0 bottom-0 -ml-6 flex items-center opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-              />
-            </svg>
-          </a>
-        </h2>
-      ),
+      h1: ({ children }) => <h1>{children}</h1>,
+      h2: ({ children }) => <h2>{children}</h2>,
+      h3: ({ children }) => <h3>{children}</h3>,
+      h4: ({ children }) => <h4>{children}</h4>,
+      h5: ({ children }) => <h5>{children}</h5>,
+      blockquote: ({ children }) => <blockquote>{children}</blockquote>,
     },
     marks: {
       link: ({ children, value: link }) => {
@@ -167,7 +128,7 @@ export default function CustomPortableText({
       },
       logoRow: ({ value }: { value: { logoRow?: any[] } }) => <LogoRow logos={value?.logoRow || []} />,
       contactInfo: ({ value }: { value: any }) => (
-        <div className="my-2 sm:my-6">
+        <div className={cn('my-2 sm:my-6', centered && 'flex justify-center')}>
           <ContactInfo
             headline={value?.headline}
             phoneNumber={value?.phoneNumber}
@@ -175,6 +136,8 @@ export default function CustomPortableText({
             email={value?.email}
             textColor={value?.textColor || 'blue'}
             showHeadline={!!value?.headline}
+            size={value?.size || 'normal'}
+            centered={centered}
           />
         </div>
       ),

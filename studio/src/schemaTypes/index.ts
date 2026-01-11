@@ -49,6 +49,7 @@ import {carousel} from './objects/pageElements/carousel'
 import {cta} from './objects/pageElements/cta'
 import {form} from './objects/pageElements/form'
 import {heroBanner} from './objects/pageElements/heroBanner'
+import {heroTwoPanel} from './objects/pageElements/heroTwoPanel'
 import {icon} from './objects/pageElements/icon'
 import {logo} from './objects/pageElements/logo'
 import {logoRow} from './objects/pageElements/logoRowContainer'
@@ -110,6 +111,7 @@ export const schemaTypes = [
   cta,
   form,
   heroBanner,
+  heroTwoPanel,
   icon,
   logo,
   logoRow,
