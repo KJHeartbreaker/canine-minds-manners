@@ -602,6 +602,17 @@
   .cmmWhite {
     color: var(--color-white);
   }
+
+  /* Hero Two Panel - Background color on desktop, transparent on mobile */
+  .hero-copy-panel {
+    background-color: transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-copy-panel {
+      background-color: var(--hero-bg-color);
+    }
+  }
 }
 
 /* Carousel/Swiper Styles */

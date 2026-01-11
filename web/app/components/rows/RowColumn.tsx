@@ -108,7 +108,7 @@ export default function RowColumn(panel: RowColumnProps) {
             {_type === 'mainPortableText' && portableTextBlock && portableTextBlock.length > 0 && (
                 <div className={cn('flex flex-col justify-center w-full', condensedCopy && 'sm:items-center')}>
                     <div className={cn('copy-block', centerCopy && 'text-center')}>
-                        <CustomPortableText value={portableTextBlock} />
+                        <CustomPortableText value={portableTextBlock} centered={centerCopy} />
                     </div>
                 </div>
             )}
