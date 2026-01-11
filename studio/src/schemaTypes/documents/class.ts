@@ -1,6 +1,7 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {AcuityCategoryInput} from '../../components/AcuityCategoryInput'
+import {BulletPointsInput} from '../../components/BulletPointsInput'
 
 export const classDocument = defineType({
   name: 'class',
@@ -132,6 +133,18 @@ export const classDocument = defineType({
       type: 'array',
       of: [{type: 'string'}],
       validation: (Rule) => Rule.max(4),
+    }),
+    defineField({
+      title: 'Card Takeaways',
+      name: 'cardTakeaways',
+      type: 'array',
+      of: [{type: 'string'}],
+      validation: (Rule) => Rule.max(4),
+      description:
+        'Paste your bullet points from Google Docs here. These will be displayed on the card component (separate from Key Takeaways). The component will automatically extract and clean up to 4 bullet points.',
+      components: {
+        input: BulletPointsInput,
+      },
     }),
     defineField({
       name: 'description',
