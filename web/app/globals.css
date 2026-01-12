@@ -706,3 +706,17 @@ div[data-component="YouTubePlayer"] {
     left: 0 !important;
   }
 }
+
+/* Enhanced Program Card Acuity Button - ensure border is visible */
+div[data-component="EnhancedProgramCard"] a.acuity-embed-button.acuity-embed-rounded {
+  background-color: var(--color-orange) !important;
+  border: 2px solid #fff !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  &:hover {
+    background-color: var(--color-orange-hover) !important;
+  }
+}

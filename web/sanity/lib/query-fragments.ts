@@ -129,6 +129,17 @@ export const programCardProjection = `
   },
   cardImage {
     ${imageProjection}
+  },
+  cardTakeaways,
+  takeaways,
+  acuityCategoryUrl,
+  upcomingClasses[] {
+    _key,
+    dateTime,
+    acuityId,
+    totalSpots,
+    bookingsCount,
+    availability
   }
 `
 

@@ -3,6 +3,7 @@
 import ContentBlock from './ContentBlock'
 import TrainersGrid from '../grids/TrainersGrid'
 import ProgramsGrid from '../grids/ProgramsGrid'
+import EnhancedProgramsGrid from '../grids/EnhancedProgramsGrid'
 import PostsGrid from '../grids/PostsGrid'
 import ProductGrid from '../grids/ProductGrid'
 import TestimonialsGrid from '../grids/TestimonialsGrid'
@@ -46,7 +47,7 @@ export function TrainersGridBlock({ block }: BaseGridBlockProps) {
  * Programs Grid Block
  */
 export function ProgramsGridBlock({ block }: BaseGridBlockProps) {
-    const { programs, backgroundColor, removeBottomPadding, skinny } = block as any
+    const { programs, backgroundColor, removeBottomPadding, skinny, enhanced } = block as any
 
     return (
         <ContentBlock
@@ -56,7 +57,11 @@ export function ProgramsGridBlock({ block }: BaseGridBlockProps) {
             removeBottomPadding={removeBottomPadding}
             skinny={skinny}
         >
-            <ProgramsGrid programsArr={programs || []} />
+            {enhanced ? (
+                <EnhancedProgramsGrid programsArr={programs || []} />
+            ) : (
+                <ProgramsGrid programsArr={programs || []} />
+            )}
         </ContentBlock>
     )
 }
