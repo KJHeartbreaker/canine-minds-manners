@@ -64,6 +64,7 @@ import {simplePortableText} from './objects/portableText/simplePortableText'
 import {relatedResourcesRow} from './objects/rows/relatedResourcesRow'
 import {rowContainer} from './objects/rows/rowContainer'
 import {singleColumnContentBlock} from './objects/rows/singleColumnContentBlock'
+import {successStoriesBlock} from './objects/rows/successStoriesBlock'
 
 // Export an array of all the schema types.  This is used in the Sanity Studio configuration. https://www.sanity.io/docs/schema-types
 
@@ -124,4 +125,5 @@ export const schemaTypes = [
   relatedResourcesRow,
   rowContainer,
   singleColumnContentBlock,
+  successStoriesBlock,
 ]

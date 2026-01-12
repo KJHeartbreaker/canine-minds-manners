@@ -18,6 +18,7 @@ import {
 import MapBannerBlock from './blocks/MapBannerBlock'
 import TrainingRowBlock from './blocks/TrainingRowBlock'
 import CustomComponentBlock from './blocks/CustomComponentBlock'
+import SuccessStoriesBlock from './blocks/SuccessStoriesBlock'
 
 type BlocksType = {
   [key: string]: React.FC<any>
@@ -39,6 +40,7 @@ const Blocks: BlocksType = {
   'heroBanner': HeroBannerBlock,
   'heroTwoPanel': HeroTwoPanelBlock,
   'singleColumnContentBlock': SingleColumnContentBlock,
+  'successStoriesBlock': SuccessStoriesBlock,
   'rowContainer': ContentRowsBlock,
   'productGridContainer': ProductGridBlock,
   'programsGridContainer': ProgramsGridBlock,
