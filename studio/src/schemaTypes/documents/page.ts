@@ -60,6 +60,7 @@ export const page = defineType({
         defineArrayMember({type: 'heroBanner'}),
         defineArrayMember({type: 'heroTwoPanel'}),
         defineArrayMember({type: 'singleColumnContentBlock'}),
+        defineArrayMember({type: 'successStoriesBlock'}),
         defineArrayMember({type: 'rowContainer'}),
         defineArrayMember({type: 'productGridContainer'}),
         defineArrayMember({type: 'programsGridContainer'}),

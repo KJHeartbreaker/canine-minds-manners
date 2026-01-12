@@ -650,6 +650,52 @@
   }
 }
 
+/* Success Stories Background Color Variables - defined globally */
+:root {
+  --success-stories-bg-yellow: var(--color-yellow);
+  --success-stories-bg-orange: var(--color-orange);
+  --success-stories-bg-lightBlue: var(--color-blue-33);
+  --success-stories-bg-navy: var(--color-blue-55);
+}
+
+/* Success Stories Carousel Styles */
+div[data-component="SuccessStoriesBlock"] {
+  /* Default: white text and white pagination (for orange, lightBlue, navy) */
+  h3, p {
+    color: var(--color-white);
+  }
+
+  .successStoriesSwiper {
+    .swiper-pagination-bullet {
+      background: var(--color-white) !important;
+      opacity: 0.4 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--color-white) !important;
+      opacity: 1 !important;
+    }
+  }
+
+  /* Yellow background: override to navy text and navy pagination */
+  &[data-bg-color="yellow"] {
+    h3, p {
+      color: var(--color-blue-55);
+    }
+
+    .successStoriesSwiper {
+      .swiper-pagination-bullet {
+        background: var(--color-blue-55) !important;
+      }
+
+      .swiper-pagination-bullet-active {
+        background: var(--color-blue-55) !important;
+      }
+    }
+  }
+}
+
+
 /* YouTube Player iframe styling */
 div[data-component="YouTubePlayer"] {
   iframe {
