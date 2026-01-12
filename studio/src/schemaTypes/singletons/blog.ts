@@ -70,6 +70,18 @@ export const blogLandingPage = defineType({
       type: 'array',
       title: 'Page sections',
       description: 'Add, edit, and reorder sections',
+      options: {
+        insertMenu: {
+          views: [
+            {
+              name: 'grid',
+              previewImageUrl: (schemaTypeName: string) =>
+                `/static/page-builder-thumbnails/${schemaTypeName}.png`,
+            },
+            {name: 'list'},
+          ],
+        },
+      },
       of: [
         defineArrayMember({type: 'heroBanner'}),
         defineArrayMember({type: 'heroTwoPanel'}),
