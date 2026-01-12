@@ -54,16 +54,18 @@ export const successStoriesBlock = defineType({
   preview: {
     select: {
       stories: 'stories',
+      disabled: 'disabled',
     },
-    prepare({stories}) {
+    prepare({stories, disabled}) {
       const storyCount = Array.isArray(stories) ? stories.length : 0
       const story0 = stories?.[0]?.portableTextBlock?.[0]?.children?.[0]?.text
       const preview = story0
         ? `${story0.substring(0, 50)}${story0.length > 50 ? '...' : ''}`
         : 'No stories'
       return {
-        title: 'Success Stories',
+        title: disabled ? '*** DISABLED *** Success Stories' : 'Success Stories',
         subtitle: `${storyCount} ${storyCount === 1 ? 'story' : 'stories'}${preview !== 'No stories' ? `: ${preview}` : ''}`,
+        media: icon,
       }
     },
   },

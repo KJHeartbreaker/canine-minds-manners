@@ -103,14 +103,17 @@ export const heroTwoPanel = defineType({
     select: {
       blocks: 'mainPortableText.portableTextBlock',
       photo: 'image',
+      disabled: 'disabled',
     },
-    prepare({blocks, photo}) {
+    prepare({blocks, photo, disabled}) {
       const displayTitle =
         blocks?.[0]?._type === 'youtube'
           ? `Youtube Embed: ${blocks[0].url}`
           : blocks?.[0]?.children?.[0]?.text || 'Hero Two Panel'
       return {
-        title: `Hero Two Panel: ${displayTitle}`,
+        title: disabled
+          ? `*** DISABLED *** Hero Two Panel: ${displayTitle}`
+          : `Hero Two Panel: ${displayTitle}`,
         subtitle: blocks?.[0]?.children?.[0]?.text,
         media: photo,
       }

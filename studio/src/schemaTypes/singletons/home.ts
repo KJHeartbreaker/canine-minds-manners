@@ -61,18 +61,32 @@ export const home = defineType({
       type: 'array',
       title: 'Page sections',
       description: 'Add, edit, and reorder sections',
+      options: {
+        insertMenu: {
+          views: [
+            {
+              name: 'grid',
+              previewImageUrl: (schemaTypeName: string) =>
+                `/static/page-builder-thumbnails/${schemaTypeName}.png`,
+            },
+            {name: 'list'},
+          ],
+        },
+      },
       of: [
         defineArrayMember({type: 'heroBanner'}),
         defineArrayMember({type: 'heroTwoPanel'}),
         defineArrayMember({type: 'singleColumnContentBlock'}),
         defineArrayMember({type: 'successStoriesBlock'}),
         defineArrayMember({type: 'rowContainer'}),
-        defineArrayMember({type: 'productGridContainer'}),
         defineArrayMember({type: 'programsGridContainer'}),
         defineArrayMember({type: 'trainersGridContainer'}),
         defineArrayMember({type: 'testimonialGridContainer'}),
-        defineArrayMember({type: 'customComponent'}),
         defineArrayMember({type: 'classRowsContainer'}),
+        defineArrayMember({type: 'relatedResourcesRow'}),
+        defineArrayMember({type: 'contactPageMap'}),
+        defineArrayMember({type: 'customComponent'}),
+        defineArrayMember({type: 'productGridContainer'}),
       ],
     }),
   ],
