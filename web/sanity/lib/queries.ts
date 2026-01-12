@@ -231,6 +231,7 @@ export const getHomePageQuery = defineQuery(`
           ${programCardProjection}
         }
       }[_type != 'reference' || @->._id != null],
+      enhanced,
       "trainers": trainers[]{
         _type == 'reference' => @-> {
           ${authorProjection}
@@ -970,6 +971,7 @@ export const getPageQuery = defineQuery(`
           ${programCardProjection}
         }
       }[_type != 'reference' || @->._id != null],
+      enhanced,
       "trainers": trainers[]{
         _type == 'reference' => @-> {
           ${authorProjection}

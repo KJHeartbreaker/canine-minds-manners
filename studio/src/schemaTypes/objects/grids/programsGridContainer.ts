@@ -39,6 +39,13 @@ export const programsGridContainer = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'enhanced',
+      title: 'Enhanced Grid',
+      type: 'boolean',
+      description: 'Enable enhanced card layout with bullet points and action buttons',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {
