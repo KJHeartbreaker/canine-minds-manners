@@ -47,7 +47,11 @@ export function TrainersGridBlock({ block }: BaseGridBlockProps) {
  * Programs Grid Block
  */
 export function ProgramsGridBlock({ block }: BaseGridBlockProps) {
-    const { programs, backgroundColor, removeBottomPadding, skinny, enhanced } = block as any
+    const { programs, backgroundColor, removeBottomPadding, skinny, enhanced, description, centerContent } = block as any
+
+    // Apply skinny top padding when enhanced grid has a description
+    const hasDescription = enhanced && description?.portableTextBlock && description.portableTextBlock.length > 0
+    const skinnyTop = hasDescription
 
     return (
         <ContentBlock
@@ -56,9 +60,10 @@ export function ProgramsGridBlock({ block }: BaseGridBlockProps) {
             overlay="noOverlay"
             removeBottomPadding={removeBottomPadding}
             skinny={skinny}
+            skinnyTop={skinnyTop}
         >
             {enhanced ? (
-                <EnhancedProgramsGrid programsArr={programs || []} />
+                <EnhancedProgramsGrid programsArr={programs || []} description={description} centerContent={centerContent} />
             ) : (
                 <ProgramsGrid programsArr={programs || []} />
             )}

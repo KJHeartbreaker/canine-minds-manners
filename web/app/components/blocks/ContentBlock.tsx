@@ -11,6 +11,7 @@ interface ContentBlockProps {
     overlay?: 'noOverlay' | 'darkOverlay' | 'blueOverlay'
     removeBottomPadding?: boolean
     skinny?: boolean
+    skinnyTop?: boolean
     children: ReactNode
     className?: string
     id?: string
@@ -26,6 +27,7 @@ export default function ContentBlock({
     overlay = 'noOverlay',
     removeBottomPadding = false,
     skinny = false,
+    skinnyTop = false,
     children,
     className,
     id,
@@ -51,6 +53,7 @@ export default function ContentBlock({
         <Section
             data-component="ContentBlock"
             skinny={skinny}
+            skinnyTop={skinnyTop}
             hasBg={hasBg}
             short={removeBottomPadding}
             className={cn(
