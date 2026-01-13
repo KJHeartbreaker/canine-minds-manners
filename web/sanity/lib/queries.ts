@@ -232,6 +232,50 @@ export const getHomePageQuery = defineQuery(`
         }
       }[_type != 'reference' || @->._id != null],
       enhanced,
+      centerContent,
+      description {
+        portableTextBlock[] {
+          ...,
+          _type == 'cta' => {
+            title,
+            arrow,
+            kind,
+            link,
+            fileDownload {
+              ${fileDownloadProjection}
+            },
+            landingPageRoute-> {
+              _id,
+              "slug": slug.current,
+              _type
+            }
+          },
+          markDefs[] {
+            _key,
+            _type,
+            _type == "internalLink" => {
+              item -> {
+                _id,
+                _type,
+                _type == "class" => {
+                  "slug": slug.current,
+                  "parentPage": parentPage-> {
+                    "parentSlug": slug.current
+                  }
+                },
+                _type == 'page' => {
+                  "slug": slug.current
+                }
+              }
+            },
+            _type == 'link' => {
+              href,
+              blank
+            },
+            _type != 'internalLink' && _type != 'link' => @
+          }
+        }
+      },
       "trainers": trainers[]{
         _type == 'reference' => @-> {
           ${authorProjection}
@@ -972,6 +1016,50 @@ export const getPageQuery = defineQuery(`
         }
       }[_type != 'reference' || @->._id != null],
       enhanced,
+      centerContent,
+      description {
+        portableTextBlock[] {
+          ...,
+          _type == 'cta' => {
+            title,
+            arrow,
+            kind,
+            link,
+            fileDownload {
+              ${fileDownloadProjection}
+            },
+            landingPageRoute-> {
+              _id,
+              "slug": slug.current,
+              _type
+            }
+          },
+          markDefs[] {
+            _key,
+            _type,
+            _type == "internalLink" => {
+              item -> {
+                _id,
+                _type,
+                _type == "class" => {
+                  "slug": slug.current,
+                  "parentPage": parentPage-> {
+                    "parentSlug": slug.current
+                  }
+                },
+                _type == 'page' => {
+                  "slug": slug.current
+                }
+              }
+            },
+            _type == 'link' => {
+              href,
+              blank
+            },
+            _type != 'internalLink' && _type != 'link' => @
+          }
+        }
+      },
       "trainers": trainers[]{
         _type == 'reference' => @-> {
           ${authorProjection}
