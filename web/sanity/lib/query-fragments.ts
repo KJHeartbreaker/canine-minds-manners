@@ -116,6 +116,7 @@ export const postProjection = `
 export const programCardProjection = `
   _id,
   name,
+  enhancedCardTitle,
   trainingType,
   dogName,
   namePlacement,

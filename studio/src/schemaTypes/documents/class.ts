@@ -189,6 +189,13 @@ export const classDocument = defineType({
       options: {hotspot: true},
       fieldset: 'gridParams',
     }),
+    defineField({
+      name: 'enhancedCardTitle',
+      title: 'Enhanced Card Title',
+      type: 'string',
+      description:
+        'Optional title to display on enhanced program cards. If not provided, the class name will be used.',
+    }),
   ],
   preview: {
     select: {

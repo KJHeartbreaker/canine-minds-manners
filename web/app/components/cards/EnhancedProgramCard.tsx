@@ -8,6 +8,7 @@ import { useAcuityEmbed } from '@/lib/hooks/useAcuityEmbed'
 
 export interface EnhancedProgramCardProps {
     name: string
+    enhancedCardTitle?: string | null
     parentPage?: {
         slug?: {
             current?: string
@@ -37,6 +38,7 @@ export interface EnhancedProgramCardProps {
  */
 export default function EnhancedProgramCard({
     name,
+    enhancedCardTitle,
     parentPage,
     slug,
     cardImage,
@@ -51,15 +53,18 @@ export default function EnhancedProgramCard({
             ? `/${slug.current}`
             : '#'
 
+    // Load Acuity embed scripts if needed
+    useAcuityEmbed()
+
+    // Use enhancedCardTitle if available, otherwise fall back to name
+    const displayTitle = enhancedCardTitle || name
+
     // Use cardTakeaways if available, otherwise fall back to takeaways
     const displayTakeaways = (cardTakeaways && cardTakeaways.length > 0)
         ? cardTakeaways
         : (takeaways && takeaways.length > 0)
             ? takeaways
             : null
-
-    // Load Acuity embed scripts if needed
-    useAcuityEmbed()
 
     // Determine orange button text and link based on upcomingClasses and acuityCategoryUrl
     const hasUpcomingClasses = upcomingClasses && upcomingClasses.length > 0
@@ -92,7 +97,7 @@ export default function EnhancedProgramCard({
 
             {/* Title Bar - Light Blue */}
             <div className="bg-blue-22 px-5 py-3">
-                <h4 className="mb-0 text-white text-center font-bold">{name}</h4>
+                <h4 className="mb-0 text-white text-center font-bold">{displayTitle}</h4>
             </div>
             <div className="bg-blue-55 px-5 py-4 flex-1 flex flex-col">
                 {/* Content Body - Dark Blue with Bullet Points */}

@@ -23,6 +23,7 @@ export default function EnhancedProgramsGrid({ programsArr }: EnhancedProgramsGr
                 <EnhancedProgramCard
                     key={getStableKey({ _id: program.slug?.current, _key: program.slug?.current }, i)}
                     name={program.name}
+                    enhancedCardTitle={program.enhancedCardTitle}
                     parentPage={program.parentPage}
                     slug={program.slug}
                     cardImage={program.cardImage}
