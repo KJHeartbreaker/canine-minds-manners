@@ -24,14 +24,12 @@ export default function EnhancedProgramsGrid({ programsArr, description, centerC
         return null
     }
 
-    const hasDescription = description?.portableTextBlock && description.portableTextBlock.length > 0
-
     return (
         <ContentContainer
             data-component="EnhancedProgramsGrid"
             className="w-full"
         >
-            {hasDescription && (
+            {description?.portableTextBlock && description.portableTextBlock.length > 0 && (
                 <div className={cn('mb-8', centerContent && 'text-center')}>
                     <CustomPortableText value={description.portableTextBlock} centered={centerContent} />
                 </div>
