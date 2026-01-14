@@ -223,6 +223,110 @@ export const getHomePageQuery = defineQuery(`
         },
         disabled
       },
+      _type == 'singleColumnContentBlock' => {
+        _key,
+        _type,
+        backgroundColor,
+        removeBottomPadding,
+        skinny,
+        centerContent,
+        "contentBlock": contentBlock {
+          contentType,
+          "portableTextBlock": portableTextBlock {
+            portableTextBlock[] {
+              ...,
+              _type == 'cta' => {
+                title,
+                arrow,
+                kind,
+                link,
+                fileDownload {
+                  ${fileDownloadProjection}
+                },
+                landingPageRoute-> {
+                  _id,
+                  "slug": slug.current,
+                  _type
+                }
+              },
+              markDefs[] {
+                _key,
+                _type,
+                _type == "internalLink" => {
+                  item -> {
+                    _id,
+                    _type,
+                    _type == "class" => {
+                      "slug": slug.current,
+                      "parentPage": parentPage-> {
+                        "parentSlug": slug.current
+                      }
+                    },
+                    _type == 'page' => {
+                      "slug": slug.current
+                    }
+                  }
+                },
+                _type == 'link' => {
+                  href,
+                  blank
+                },
+                _type != 'internalLink' && _type != 'link' => @
+              }
+            }
+          },
+          "faq": faq {
+            "items": items[] {
+              _key,
+              question,
+              "answer": answer {
+                portableTextBlock[] {
+                  ...,
+                  _type == 'cta' => {
+                    title,
+                    arrow,
+                    kind,
+                    link,
+                    fileDownload {
+                      ${fileDownloadProjection}
+                    },
+                    landingPageRoute-> {
+                      _id,
+                      "slug": slug.current,
+                      _type
+                    }
+                  },
+                  markDefs[] {
+                    _key,
+                    _type,
+                    _type == "internalLink" => {
+                      item -> {
+                        _id,
+                        _type,
+                        _type == "class" => {
+                          "slug": slug.current,
+                          "parentPage": parentPage-> {
+                            "parentSlug": slug.current
+                          }
+                        },
+                        _type == 'page' => {
+                          "slug": slug.current
+                        }
+                      }
+                    },
+                    _type == 'link' => {
+                      href,
+                      blank
+                    },
+                    _type != 'internalLink' && _type != 'link' => @
+                  }
+                }
+              }
+            }
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -649,6 +753,55 @@ export const getHomePageQuery = defineQuery(`
           },
           carouselImages[] {
             ${imageProjection}
+          },
+          _type == 'faq' => {
+            "items": items[] {
+              _key,
+              question,
+              "answer": answer {
+                portableTextBlock[] {
+                  ...,
+                  _type == 'cta' => {
+                    title,
+                    arrow,
+                    kind,
+                    link,
+                    fileDownload {
+                      ${fileDownloadProjection}
+                    },
+                    landingPageRoute-> {
+                      _id,
+                      "slug": slug.current,
+                      _type
+                    }
+                  },
+                  markDefs[] {
+                    _key,
+                    _type,
+                    _type == "internalLink" => {
+                      item -> {
+                        _id,
+                        _type,
+                        _type == "class" => {
+                          "slug": slug.current,
+                          "parentPage": parentPage-> {
+                            "parentSlug": slug.current
+                          }
+                        },
+                        _type == 'page' => {
+                          "slug": slug.current
+                        }
+                      }
+                    },
+                    _type == 'link' => {
+                      href,
+                      blank
+                    },
+                    _type != 'internalLink' && _type != 'link' => @
+                  }
+                }
+              }
+            }
           }
         },
         "trainers": trainers[]{
@@ -1007,6 +1160,110 @@ export const getPageQuery = defineQuery(`
         },
         disabled
       },
+      _type == 'singleColumnContentBlock' => {
+        _key,
+        _type,
+        backgroundColor,
+        removeBottomPadding,
+        skinny,
+        centerContent,
+        "contentBlock": contentBlock {
+          contentType,
+          "portableTextBlock": portableTextBlock {
+            portableTextBlock[] {
+              ...,
+              _type == 'cta' => {
+                title,
+                arrow,
+                kind,
+                link,
+                fileDownload {
+                  ${fileDownloadProjection}
+                },
+                landingPageRoute-> {
+                  _id,
+                  "slug": slug.current,
+                  _type
+                }
+              },
+              markDefs[] {
+                _key,
+                _type,
+                _type == "internalLink" => {
+                  item -> {
+                    _id,
+                    _type,
+                    _type == "class" => {
+                      "slug": slug.current,
+                      "parentPage": parentPage-> {
+                        "parentSlug": slug.current
+                      }
+                    },
+                    _type == 'page' => {
+                      "slug": slug.current
+                    }
+                  }
+                },
+                _type == 'link' => {
+                  href,
+                  blank
+                },
+                _type != 'internalLink' && _type != 'link' => @
+              }
+            }
+          },
+          "faq": faq {
+            "items": items[] {
+              _key,
+              question,
+              "answer": answer {
+                portableTextBlock[] {
+                  ...,
+                  _type == 'cta' => {
+                    title,
+                    arrow,
+                    kind,
+                    link,
+                    fileDownload {
+                      ${fileDownloadProjection}
+                    },
+                    landingPageRoute-> {
+                      _id,
+                      "slug": slug.current,
+                      _type
+                    }
+                  },
+                  markDefs[] {
+                    _key,
+                    _type,
+                    _type == "internalLink" => {
+                      item -> {
+                        _id,
+                        _type,
+                        _type == "class" => {
+                          "slug": slug.current,
+                          "parentPage": parentPage-> {
+                            "parentSlug": slug.current
+                          }
+                        },
+                        _type == 'page' => {
+                          "slug": slug.current
+                        }
+                      }
+                    },
+                    _type == 'link' => {
+                      href,
+                      blank
+                    },
+                    _type != 'internalLink' && _type != 'link' => @
+                  }
+                }
+              }
+            }
+          }
+        },
+        disabled
+      },
       image {
         ${imageProjection}
       },
@@ -1433,6 +1690,55 @@ export const getPageQuery = defineQuery(`
           },
           carouselImages[] {
             ${imageProjection}
+          },
+          _type == 'faq' => {
+            "items": items[] {
+              _key,
+              question,
+              "answer": answer {
+                portableTextBlock[] {
+                  ...,
+                  _type == 'cta' => {
+                    title,
+                    arrow,
+                    kind,
+                    link,
+                    fileDownload {
+                      ${fileDownloadProjection}
+                    },
+                    landingPageRoute-> {
+                      _id,
+                      "slug": slug.current,
+                      _type
+                    }
+                  },
+                  markDefs[] {
+                    _key,
+                    _type,
+                    _type == "internalLink" => {
+                      item -> {
+                        _id,
+                        _type,
+                        _type == "class" => {
+                          "slug": slug.current,
+                          "parentPage": parentPage-> {
+                            "parentSlug": slug.current
+                          }
+                        },
+                        _type == 'page' => {
+                          "slug": slug.current
+                        }
+                      }
+                    },
+                    _type == 'link' => {
+                      href,
+                      blank
+                    },
+                    _type != 'internalLink' && _type != 'link' => @
+                  }
+                }
+              }
+            }
           }
         },
         "trainers": trainers[]{

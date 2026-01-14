@@ -74,8 +74,43 @@ export const singleColumnContentBlock = defineType({
     }),
     defineField({
       name: 'contentBlock',
-      type: 'mainPortableText',
+      type: 'object',
       title: 'Content',
+      fields: [
+        defineField({
+          name: 'contentType',
+          type: 'string',
+          title: 'Content Type',
+          description: 'Choose the type of content to display',
+          options: {
+            list: [
+              {title: 'Portable Text', value: 'mainPortableText'},
+              {title: 'FAQ', value: 'faq'},
+            ],
+            layout: 'radio',
+            direction: 'horizontal',
+          },
+          initialValue: 'mainPortableText',
+        }),
+        defineField({
+          name: 'portableTextBlock',
+          type: 'mainPortableText',
+          title: 'Portable Text',
+          hidden: ({parent}) => {
+            const contentType = parent?.contentType || 'mainPortableText'
+            return contentType !== 'mainPortableText'
+          },
+        }),
+        defineField({
+          name: 'faq',
+          type: 'faq',
+          title: 'FAQ',
+          hidden: ({parent}) => {
+            const contentType = parent?.contentType || 'mainPortableText'
+            return contentType !== 'faq'
+          },
+        }),
+      ],
     }),
     defineField({
       name: 'disabled',
@@ -87,17 +122,51 @@ export const singleColumnContentBlock = defineType({
   preview: {
     select: {
       title: 'title',
-      content: 'contentBlock',
+      contentType: 'contentBlock.contentType',
+      portableTextBlock: 'contentBlock.portableTextBlock.portableTextBlock',
+      faqItems: 'contentBlock.faq.items',
       disabled: 'disabled',
     },
-    prepare({title, disabled, ...contentBlock}) {
-      const subs = Object.values(contentBlock).filter(Boolean)
-      const subtitle = subs[0]?.portableTextBlock?.[0]?.children?.[0]?.text
+    prepare({title, disabled, contentType, portableTextBlock, faqItems}) {
       const baseTitle = title ? `Single Column Block: ${title}` : `Single Column Block`
+
+      let subtitle = 'Please add content'
+
+      if (contentType === 'faq' && faqItems && Array.isArray(faqItems)) {
+        const itemCount = faqItems.length
+        if (itemCount > 0) {
+          // Show first question as preview
+          const firstQuestion = faqItems[0]?.question
+          subtitle =
+            itemCount === 1
+              ? `FAQ: ${firstQuestion || '1 item'}`
+              : `FAQ: ${firstQuestion || `${itemCount} items`} (${itemCount} items)`
+        } else {
+          subtitle = 'FAQ: No items yet'
+        }
+      } else if (
+        contentType === 'mainPortableText' &&
+        portableTextBlock &&
+        Array.isArray(portableTextBlock)
+      ) {
+        // Extract text from first block
+        const firstBlock = portableTextBlock[0]
+        if (firstBlock?._type === 'block' && firstBlock.children) {
+          subtitle = firstBlock.children[0]?.text || 'Portable Text'
+        } else if (firstBlock?._type === 'youtube') {
+          subtitle = 'YouTube Embed'
+        } else if (firstBlock?._type === 'image') {
+          subtitle = 'Image'
+        } else if (firstBlock?._type === 'cta') {
+          subtitle = `CTA: ${firstBlock.title || 'Button'}`
+        } else {
+          subtitle = 'Portable Text'
+        }
+      }
 
       return {
         title: disabled ? `*** DISABLED *** ${baseTitle}` : baseTitle,
-        subtitle: subtitle || 'Please add content',
+        subtitle,
         media: icon,
       }
     },

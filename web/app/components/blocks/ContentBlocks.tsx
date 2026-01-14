@@ -16,7 +16,19 @@ interface BaseContentBlockProps {
         skinny?: boolean
         centerContent?: boolean
         contentBlock?: {
-            portableTextBlock: PortableTextBlock[]
+            contentType?: 'mainPortableText' | 'faq'
+            portableTextBlock?: {
+                portableTextBlock: PortableTextBlock[]
+            }
+            faq?: {
+                items: Array<{
+                    _key: string
+                    question: string
+                    answer: {
+                        portableTextBlock: PortableTextBlock[]
+                    }
+                }>
+            }
         }
         rowContent?: any[]
         row?: 'twoColumn' | 'threeColumn'
@@ -40,6 +52,7 @@ export function SingleColumnContentBlock({ block }: BaseContentBlockProps) {
         skinny,
         centerContent,
         contentBlock,
+        contentType,
     } = block as any
 
     return (
@@ -51,7 +64,10 @@ export function SingleColumnContentBlock({ block }: BaseContentBlockProps) {
             skinny={skinny}
         >
             {contentBlock && (
-                <SingleColumnBlock centerContent={centerContent} content={contentBlock} />
+                <SingleColumnBlock
+                    centerContent={centerContent}
+                    content={contentBlock}
+                />
             )}
         </ContentBlock>
     )

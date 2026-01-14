@@ -9,6 +9,7 @@ import SanityImage from '../SanityImage'
 import ImageButtonCard from '../cards/ImageButtonCard'
 import CustomPortableText from '../portableText/PortableText'
 import ContactFormPanel from '../forms/ContactFormPanel'
+import FAQ from '../FAQ'
 
 // Dynamically import Carousel to reduce initial bundle size (Swiper is ~200KB+)
 const Carousel = dynamic(() => import('../Carousel'), {
@@ -39,6 +40,13 @@ interface PanelContent {
     image?: any
     centerCopy?: boolean
     carouselImages?: any[]
+    items?: Array<{
+        _key: string
+        question: string
+        answer: {
+            portableTextBlock: PortableTextBlock[]
+        }
+    }>
 }
 
 interface RowColumnProps extends PanelContent {
@@ -64,6 +72,7 @@ export default function RowColumn(panel: RowColumnProps) {
         centerCopy,
         carouselImages,
         condensedCopy,
+        items,
     } = panel
 
     return (
@@ -112,6 +121,7 @@ export default function RowColumn(panel: RowColumnProps) {
                     </div>
                 </div>
             )}
+            {_type === 'faq' && items && items.length > 0 && <FAQ items={items} />}
         </div>
     )
 }
