@@ -167,6 +167,7 @@ export const rowContainer = defineType({
         }),
         defineArrayMember({type: 'imageButtonCard'}),
         defineArrayMember({type: 'mainPortableText'}),
+        defineArrayMember({type: 'faq'}),
       ],
     }),
 

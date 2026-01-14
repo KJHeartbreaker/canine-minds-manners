@@ -47,6 +47,7 @@ import {navDropdownCTA} from './objects/navigationComponents/navDropdownCTA'
 import {acuityForm} from './objects/pageElements/acuityForm'
 import {carousel} from './objects/pageElements/carousel'
 import {cta} from './objects/pageElements/cta'
+import {faq} from './objects/pageElements/faq'
 import {form} from './objects/pageElements/form'
 import {heroBanner} from './objects/pageElements/heroBanner'
 import {heroTwoPanel} from './objects/pageElements/heroTwoPanel'
@@ -110,6 +111,7 @@ export const schemaTypes = [
   acuityForm,
   carousel,
   cta,
+  faq,
   form,
   heroBanner,
   heroTwoPanel,
