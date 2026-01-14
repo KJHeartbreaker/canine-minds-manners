@@ -12,6 +12,7 @@ export const classDocument = defineType({
     {
       name: 'acuity',
       title: 'Acuity',
+      default: true,
     },
   ],
   fieldsets: [

@@ -73,9 +73,16 @@ export const getHomePageQuery = defineQuery(`
   *[_type == 'home'][0]{
     _id,
     _type,
-    name,
-    heading,
-    subheading,
+    title,
+    seo {
+      seoTitle,
+      seoDescription,
+      noindex,
+      canonicalUrl,
+      ogImage {
+        ${imageProjection}
+      }
+    },
     "content": content[]{
       _key,
       _type,
@@ -832,6 +839,15 @@ export const blogLandingPageQuery = defineQuery(`
     title,
     slug,
     overview,
+    seo {
+      seoTitle,
+      seoDescription,
+      noindex,
+      canonicalUrl,
+      ogImage {
+        ${imageProjection}
+      }
+    },
     "content": content[]{
       ...,
       _type == 'heroBanner' => {
@@ -1009,10 +1025,17 @@ export const getPageQuery = defineQuery(`
   *[_type == 'page' && slug.current == $slug][0]{
     _id,
     _type,
-    name,
+    title,
     slug,
-    heading,
-    subheading,
+    seo {
+      seoTitle,
+      seoDescription,
+      noindex,
+      canonicalUrl,
+      ogImage {
+        ${imageProjection}
+      }
+    },
     "content": content[]{
       _key,
       _type,
@@ -1766,7 +1789,11 @@ export const sitemapData = defineQuery(`
   *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {
     "slug": slug.current,
     _type,
+    _id,
     _updatedAt,
+    seo {
+      noindex
+    }
   }
 `)
 
@@ -1796,6 +1823,15 @@ export const postQuery = defineQuery(`
     subheader,
     slug {
       current
+    },
+    seo {
+      seoTitle,
+      seoDescription,
+      noindex,
+      canonicalUrl,
+      ogImage {
+        ${imageProjection}
+      }
     },
     excerpt {
       portableTextBlock[] {
@@ -1883,6 +1919,7 @@ export const postQuery = defineQuery(`
       }
     },
     date,
+    _createdAt,
     _updatedAt
   }
 `)

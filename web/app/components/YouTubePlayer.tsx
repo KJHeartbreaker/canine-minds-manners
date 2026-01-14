@@ -1,9 +1,15 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import YouTube, { YouTubeEvent } from 'react-youtube'
+import dynamic from 'next/dynamic'
+import { YouTubeEvent } from 'react-youtube'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
+
+// Dynamically import YouTube player to reduce initial bundle size (~50KB)
+const YouTube = dynamic(() => import('react-youtube').then((mod) => mod.default), {
+    ssr: false,
+})
 
 interface YouTubePlayerProps {
     videoId: string

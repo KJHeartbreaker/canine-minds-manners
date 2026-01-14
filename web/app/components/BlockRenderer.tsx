@@ -1,27 +1,51 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
 import { dataAttr } from '@/sanity/lib/utils'
+// Keep hero blocks static - they're above the fold and critical for LCP
 import HeroBannerBlock from './blocks/HeroBannerBlock'
 import HeroTwoPanelBlock from './blocks/HeroTwoPanelBlock'
-import {
-  TrainersGridBlock,
-  ProgramsGridBlock,
-  PostsGridBlock,
-  ProductGridBlock,
-  TestimonialsGridBlock,
-  RelatedResourcesGridBlock,
-} from './blocks/GridBlocks'
-import {
-  SingleColumnContentBlock,
-  ContentRowsBlock,
-} from './blocks/ContentBlocks'
-import MapBannerBlock from './blocks/MapBannerBlock'
-import TrainingRowBlock from './blocks/TrainingRowBlock'
-import CustomComponentBlock from './blocks/CustomComponentBlock'
-import SuccessStoriesBlock from './blocks/SuccessStoriesBlock'
+
+// Dynamically import all other blocks to reduce initial bundle size
+const SingleColumnContentBlock = dynamic(() => import('./blocks/ContentBlocks').then((mod) => mod.SingleColumnContentBlock), {
+  ssr: true,
+})
+const ContentRowsBlock = dynamic(() => import('./blocks/ContentBlocks').then((mod) => mod.ContentRowsBlock), {
+  ssr: true,
+})
+const SuccessStoriesBlock = dynamic(() => import('./blocks/SuccessStoriesBlock'), {
+  ssr: true,
+})
+const ProductGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.ProductGridBlock), {
+  ssr: true,
+})
+const ProgramsGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.ProgramsGridBlock), {
+  ssr: true,
+})
+const PostsGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.PostsGridBlock), {
+  ssr: true,
+})
+const TrainersGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.TrainersGridBlock), {
+  ssr: true,
+})
+const TestimonialsGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.TestimonialsGridBlock), {
+  ssr: true,
+})
+const RelatedResourcesGridBlock = dynamic(() => import('./blocks/GridBlocks').then((mod) => mod.RelatedResourcesGridBlock), {
+  ssr: true,
+})
+const CustomComponentBlock = dynamic(() => import('./blocks/CustomComponentBlock'), {
+  ssr: true,
+})
+const TrainingRowBlock = dynamic(() => import('./blocks/TrainingRowBlock'), {
+  ssr: true,
+})
+const MapBannerBlock = dynamic(() => import('./blocks/MapBannerBlock'), {
+  ssr: true,
+})
 
 type BlocksType = {
-  [key: string]: React.FC<any>
+  [key: string]: React.ComponentType<any>
 }
 
 type BlockType = {

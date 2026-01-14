@@ -1,11 +1,20 @@
 import {GrDocument as icon} from 'react-icons/gr'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {BsSearch} from 'react-icons/bs'
 
 export const page = defineType({
   type: 'document',
   name: 'page',
   title: 'Page',
   icon,
+  groups: [
+    {
+      name: 'seo',
+      title: 'SEO',
+      icon: BsSearch,
+      default: true,
+    },
+  ],
   fields: [
     defineField({
       type: 'string',
@@ -21,6 +30,13 @@ export const page = defineType({
         source: 'title',
       },
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'seo',
+      type: 'seo',
+      title: 'SEO Settings',
+      description: 'Configure how this page appears in search engines',
+      group: 'seo',
     }),
     defineField({
       name: 'overview',

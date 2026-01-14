@@ -12,9 +12,11 @@ import Analytics from '@/app/components/Analytics'
 import DraftModeToast from '@/app/components/DraftModeToast'
 import Footer from '@/app/components/footer/Footer'
 import Header from '@/app/components/header/Header'
+import { OrganizationSchema } from '@/app/components/StructuredData'
 import * as demo from '@/sanity/lib/demo'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { settingsQuery } from '@/sanity/lib/queries'
+import { getSiteUrl } from '@/sanity/lib/site-url'
 import { resolveOpenGraphImage } from '@/sanity/lib/utils'
 import { handleError } from './client-utils'
 
@@ -40,6 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
   } catch {
     // ignore
   }
+
   return {
     metadataBase,
     title: {
@@ -47,6 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
       default: title,
     },
     description: toPlainText(description),
+    // Icons are handled by file-based metadata (icon.png, apple-icon.png in app directory)
     openGraph: {
       images: ogImage ? [ogImage] : [],
     },
@@ -78,6 +82,12 @@ const kalam = Kalam({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled: isDraftMode } = await draftMode()
+  const { data: settings } = await sanityFetch({
+    query: settingsQuery,
+    stega: false,
+  })
+
+  const siteUrl = await getSiteUrl()
 
   return (
     <html
@@ -85,6 +95,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${montserrat.variable} ${paytoneOne.variable} ${kalam.variable} bg-white text-black`}
     >
       <body suppressHydrationWarning>
+        {/* Organization structured data - appears on all pages */}
+        <OrganizationSchema
+          name={settings?.title || 'Canine Minds & Manners'}
+          url={siteUrl}
+          logo={(settings?.ogImage?.asset as any) || null}
+          logoUrl={`${siteUrl}/images/CMMPDT_Logo-type.png`}
+          phone="+1-403-816-5629"
+          email="cmm_info@shaw.ca"
+          address={{
+            streetAddress: '3131 68 St NW',
+            addressLocality: 'Calgary',
+            addressRegion: 'AB',
+            postalCode: 'T3B 2J4',
+            addressCountry: 'CA',
+          }}
+        />
         {/* Analytics scripts - loads after page is interactive */}
         <Analytics />
         {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}

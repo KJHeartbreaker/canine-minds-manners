@@ -1,9 +1,15 @@
 'use client'
 
 import { PortableTextBlock } from 'next-sanity'
+import dynamic from 'next/dynamic'
 import SimplePortableText from '../portableText/SimplePortableText'
-import ContactForm from './ContactForm'
 import AcuityEmbed from './AcuityEmbed'
+
+// Dynamically import ContactForm to reduce initial bundle size (Formik + dependencies)
+const ContactForm = dynamic(() => import('./ContactForm'), {
+    ssr: false,
+    loading: () => <div className="w-full p-5 bg-gray-100 animate-pulse rounded">Loading form...</div>,
+})
 
 interface FormPanel {
     title?: string
