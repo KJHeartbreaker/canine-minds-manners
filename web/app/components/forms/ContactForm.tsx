@@ -4,10 +4,9 @@ import { useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'sonner'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { validationSchema, type FormValues } from '@/lib/validations'
-import 'react-toastify/dist/ReactToastify.css'
 
 // Dynamically import Confetti only when needed (reduces initial bundle by ~30KB)
 const Confetti = dynamic(() => import('react-confetti'), {
@@ -152,18 +151,6 @@ export default function ContactForm() {
                     />
                 </Form>
             </Formik>
-            <ToastContainer
-                position="bottom-left"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
             {showConfetti && typeof window !== 'undefined' && (
                 <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} />
             )}

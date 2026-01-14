@@ -30,3 +30,9 @@ export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2025-09
  * Used to configure edit intent links, for Presentation Mode, as well as to configure where the Studio is mounted in the router.
  */
 export const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'http://localhost:3333'
+
+/**
+ * Site URL for canonical URLs, sitemaps, and SEO metadata
+ * Prefer environment variable, fallback to headers for dynamic generation
+ */
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL

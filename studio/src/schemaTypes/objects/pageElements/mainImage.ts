@@ -31,7 +31,16 @@ export const mainImage = defineType({
 			name: 'alt',
 			type: 'string',
 			title: 'Alternative text',
-			description: 'Important for SEO and accessiblity.',
+			description: 'Important for SEO and accessibility. Describe what the image shows.',
+			validation: (Rule) =>
+				Rule.custom((alt, context) => {
+					// Check if parent image has an asset reference
+					const parent = context.parent as {asset?: {_ref?: string}} | undefined
+					if (parent?.asset?._ref && !alt) {
+						return 'Alternative text is required for SEO and accessibility.'
+					}
+					return true
+				}),
 		}),
 	],
 	preview: {

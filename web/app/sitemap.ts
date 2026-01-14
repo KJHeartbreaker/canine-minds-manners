@@ -1,7 +1,7 @@
 import {MetadataRoute} from 'next'
 import {sanityFetch} from '@/sanity/lib/live'
 import {sitemapData, homepageSitemap} from '@/sanity/lib/queries'
-import {headers} from 'next/headers'
+import {getSiteUrl} from '@/sanity/lib/site-url'
 
 /**
  * This file creates a sitemap (sitemap.xml) for the application. Learn more about sitemaps in Next.js here: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
@@ -10,14 +10,21 @@ import {headers} from 'next/headers'
 
 type ChangeFrequency = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
+type SitemapItem = {
+  slug: string
+  _type: string
+  _updatedAt: string
+  _id?: string
+  seo?: {
+    noindex?: boolean
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const headersList = await headers()
-  const host = headersList.get('host')
-  const protocol = headersList.get('x-forwarded-proto') || 'https'
-  const domain = `${protocol}://${host}`
+  const domain = await getSiteUrl()
 
   let homepage: Array<{_id: string; _updatedAt: string}> = []
-  let pagesAndPosts: Array<{slug: string; _type: string; _updatedAt: string; _id?: string}> = []
+  let pagesAndPosts: Array<SitemapItem> = []
 
   try {
     // Fetch homepage and pages/posts in parallel
@@ -27,7 +34,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ])
 
     homepage = homepageResult?.data || []
-    pagesAndPosts = pagesAndPostsResult?.data || []
+    // Type assertion: seo can be null in generated types, but we handle it as optional object
+    pagesAndPosts = (pagesAndPostsResult?.data || []) as SitemapItem[]
   } catch (error) {
     console.error('Error fetching sitemap data:', error)
     // Return minimal sitemap with just homepage if queries fail
@@ -64,9 +72,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   }
 
-  // Filter out drafts from pages and posts
+  // Filter out drafts and noindex pages from pages and posts
   const filteredPagesAndPosts = pagesAndPosts.filter(
-    (item) => !item._id?.startsWith('drafts.') && item.slug,
+    (item) => !item._id?.startsWith('drafts.') && item.slug && !item.seo?.noindex, // Exclude pages with noindex: true
   )
 
   // Add pages and posts
@@ -83,7 +91,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         break
       case 'post':
         priority = 0.5
-        changeFrequency = 'never'
+        changeFrequency = 'weekly'
         url = `${domain}/blog/${item.slug}`
         break
       default:
@@ -92,7 +100,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     sitemap.push({
       url,
-      lastModified: item._updatedAt ? new Date(item._updatedAt).toISOString() : new Date().toISOString(),
+      lastModified: item._updatedAt
+        ? new Date(item._updatedAt).toISOString()
+        : new Date().toISOString(),
       priority,
       changeFrequency,
     })

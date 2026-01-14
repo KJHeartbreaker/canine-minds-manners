@@ -1,10 +1,16 @@
 'use client'
 
 import { PortableTextBlock } from 'next-sanity'
+import dynamic from 'next/dynamic'
 import SimplePortableText from '../portableText/SimplePortableText'
-import ContactForm from '../forms/ContactForm'
 import CTAButton from '../CTAButton'
 import IconCard, { IconCardProps } from '../cards/IconCard'
+
+// Dynamically import ContactForm to reduce initial bundle size (Formik + dependencies)
+const ContactForm = dynamic(() => import('../forms/ContactForm'), {
+    ssr: false,
+    loading: () => <div className="w-full p-5 bg-gray-100 animate-pulse rounded">Loading form...</div>,
+})
 
 interface MapBannerBlockProps {
     block: {
