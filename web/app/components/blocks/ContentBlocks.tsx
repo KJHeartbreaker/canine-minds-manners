@@ -52,7 +52,6 @@ export function SingleColumnContentBlock({ block }: BaseContentBlockProps) {
         skinny,
         centerContent,
         contentBlock,
-        contentType,
     } = block as any
 
     return (
