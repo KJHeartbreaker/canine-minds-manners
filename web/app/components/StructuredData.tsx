@@ -1,6 +1,6 @@
-import {getSiteUrl} from '@/sanity/lib/site-url'
-import {urlForImage} from '@/sanity/lib/utils'
-import type {SanityImageAsset} from '@/sanity.types'
+import { getSiteUrl } from '@/sanity/lib/site-url'
+import { urlForImage } from '@/sanity/lib/utils'
+import type { SanityImageAsset } from '@/sanity.types'
 
 /**
  * Organization JSON-LD Schema
@@ -73,18 +73,18 @@ export async function OrganizationSchema({
   if (address) {
     schema.address = {
       '@type': 'PostalAddress',
-      ...(address.streetAddress && {streetAddress: address.streetAddress}),
-      ...(address.addressLocality && {addressLocality: address.addressLocality}),
-      ...(address.addressRegion && {addressRegion: address.addressRegion}),
-      ...(address.postalCode && {postalCode: address.postalCode}),
-      ...(address.addressCountry && {addressCountry: address.addressCountry}),
+      ...(address.streetAddress && { streetAddress: address.streetAddress }),
+      ...(address.addressLocality && { addressLocality: address.addressLocality }),
+      ...(address.addressRegion && { addressRegion: address.addressRegion }),
+      ...(address.postalCode && { postalCode: address.postalCode }),
+      ...(address.addressCountry && { addressCountry: address.addressCountry }),
     }
   }
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -142,18 +142,18 @@ export async function LocalBusinessSchema({
   if (address) {
     schema.address = {
       '@type': 'PostalAddress',
-      ...(address.streetAddress && {streetAddress: address.streetAddress}),
-      ...(address.addressLocality && {addressLocality: address.addressLocality}),
-      ...(address.addressRegion && {addressRegion: address.addressRegion}),
-      ...(address.postalCode && {postalCode: address.postalCode}),
-      ...(address.addressCountry && {addressCountry: address.addressCountry}),
+      ...(address.streetAddress && { streetAddress: address.streetAddress }),
+      ...(address.addressLocality && { addressLocality: address.addressLocality }),
+      ...(address.addressRegion && { addressRegion: address.addressRegion }),
+      ...(address.postalCode && { postalCode: address.postalCode }),
+      ...(address.addressCountry && { addressCountry: address.addressCountry }),
     }
   }
 
   if (serviceArea) {
     schema.areaServed = {
       '@type': 'City',
-      ...(serviceArea.addressLocality && {name: serviceArea.addressLocality}),
+      ...(serviceArea.addressLocality && { name: serviceArea.addressLocality }),
       ...(serviceArea.addressRegion && {
         containedIn: {
           '@type': 'State',
@@ -178,7 +178,7 @@ export async function LocalBusinessSchema({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -230,7 +230,7 @@ export async function ServiceSchema({
   if (areaServed) {
     schema.areaServed = {
       '@type': 'City',
-      ...(areaServed.addressLocality && {name: areaServed.addressLocality}),
+      ...(areaServed.addressLocality && { name: areaServed.addressLocality }),
       ...(areaServed.addressRegion && {
         containedIn: {
           '@type': 'State',
@@ -243,7 +243,7 @@ export async function ServiceSchema({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -300,7 +300,7 @@ export async function ArticleSchema({
     schema.author = {
       '@type': 'Person',
       name: author.name,
-      ...(author.url && {url: author.url.startsWith('http') ? author.url : `${siteUrl}${author.url}`}),
+      ...(author.url && { url: author.url.startsWith('http') ? author.url : `${siteUrl}${author.url}` }),
     }
   }
 
@@ -322,7 +322,7 @@ export async function ArticleSchema({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -381,7 +381,7 @@ export async function BreadcrumbListSchemaComponent({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
