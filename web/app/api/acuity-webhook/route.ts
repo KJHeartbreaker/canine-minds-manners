@@ -34,7 +34,7 @@ const writeClient = createClient({
  * - Verify the request is from Acuity using HMAC-SHA256 signature verification (production only)
  * - Find the class session by appointmentTypeID (matches acuityId)
  * - Update the bookingsCount field (increment for scheduled, decrement for canceled)
- * - Automatically recalculate availability (open/nearlyFull/full)
+ * - Automatically recalculate availability (open/full)
  * - Changes are reflected immediately via next-sanity/live automatic revalidation
  *
  * Production Setup:
@@ -148,16 +148,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate new availability based on spots
-    let newAvailability: 'open' | 'nearlyFull' | 'full' = 'open'
-    if (totalSpots && totalSpots > 0) {
-      const remaining = totalSpots - newBookingsCount
-      const percentage = (newBookingsCount / totalSpots) * 100
-
-      if (remaining <= 0) {
-        newAvailability = 'full'
-      } else if (remaining <= 2 || percentage >= 80) {
-        newAvailability = 'nearlyFull'
-      }
+    let newAvailability: 'open' | 'full' = 'open'
+    if (totalSpots && totalSpots > 0 && newBookingsCount >= totalSpots) {
+      newAvailability = 'full'
     }
 
     // Update the document with both bookingsCount and availability

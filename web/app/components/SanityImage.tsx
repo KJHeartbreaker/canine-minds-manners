@@ -198,6 +198,26 @@ export function SanityIcon({
         return null
     }
 
+    // Sanity's image URL builder adds transform query params (w/h/auto=format).
+    // Many SVG assets don't play nicely with those transforms, so for SVGs we
+    // use the raw asset URL (strip query params) and render with a plain <img>.
+    const builtUrl = imageUrl.url()
+    const isSvg = /\.svg(\?|$)/i.test(builtUrl)
+    if (isSvg) {
+        const rawUrl = builtUrl.split('?')[0]
+        return (
+            <img
+                src={rawUrl}
+                alt={alt}
+                width={size}
+                height={size}
+                className={className}
+                loading="eager"
+                decoding="async"
+            />
+        )
+    }
+
     return (
         <Image
             src={imageUrl.width(size).height(size).url()}

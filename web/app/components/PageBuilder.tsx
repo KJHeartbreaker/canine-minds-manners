@@ -16,7 +16,7 @@ type PageBuilderPageProps = {
 type PageBuilderSection = {
   _key: string
   _type: string
-  disabled?: boolean
+  disabled?: boolean | null
 }
 
 type PageData = {

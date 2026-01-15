@@ -77,6 +77,8 @@ export default function TrainingComponent({
 
     const type = trainingType === 'group' ? 'Group Class' : 'Private Training'
     const hasUpcomingClasses = upcomingClasses && upcomingClasses.length > 0
+    const isGroupClass = trainingType === 'group'
+    const isPrivateTraining = trainingType === 'private'
 
     return (
         <ContentContainer
@@ -95,73 +97,69 @@ export default function TrainingComponent({
                 <h2>{name}</h2>
                 {price ? (
                     <h4 className="text-blue-33 mb-5">${price}</h4>
-                ) : (
-                    <Link href="/contact">
-                        <h4 className="text-blue-33 mb-5 hover:text-blue-22">Contact Us</h4>
-                    </Link>
-                )}
-                <div
-                    className={cn(
-                        'flex w-fit',
-                        hasUpcomingClasses && 'p-3 mb-6 md:p-4 border-2 border-yellow rounded-[20px]',
-                    )}
-                >
-                    <div>
-                        {/* New format with Acuity IDs */}
-                        {hasUpcomingClasses ? (
-                            <>
-                                <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
-                                {upcomingClasses.map((uC) => {
-                                    const formattedDate = uC.dateTime ? formatDate(uC.dateTime) : ''
-                                    const isFull = uC.availability === 'full'
-                                    const availabilityBadge = isFull ? (
-                                        <span className="font-bold text-red">FULL</span>
-                                    ) : uC.availability === 'nearlyFull' ? (
-                                        <span className="font-bold text-blue">FEW SPOTS LEFT</span>
-                                    ) : (
-                                        <span className="font-bold text-green">REGISTER NOW</span>
-                                    )
+                ) : isGroupClass ? (
+                    <h4 className="text-blue-33 mb-5">Contact for pricing</h4>
+                ) : null}
 
-                                    // Show booking button (disabled if full)
-                                    if (uC.acuityId && formattedDate) {
-                                        return (
-                                            <div key={uC._key}>
-                                                <AcuityButton
-                                                    appointmentTypeId={uC.acuityId}
-                                                    date={formattedDate}
-                                                    disabled={isFull}
-                                                    badge={availabilityBadge}
-                                                />
-                                            </div>
-                                        )
-                                    } else if (formattedDate) {
-                                        // Show date with badge (or just date if open)
-                                        return (
-                                            <p key={uC._key} className="mb-2">
-                                                {formattedDate}
-                                                <span className="ml-5">{availabilityBadge}</span>
-                                            </p>
-                                        )
-                                    }
-                                    return null
-                                })}
-                            </>
-                        ) : trainingType === 'group' ? (
-                            <h4 className="text-bold text-orange mb-6">Check back for availability</h4>
-                        ) : (
-                            <Link href="/contact">
-                                <h4 className="text-bold text-orange hover:text-orange-hover mb-6">Contact for more information</h4>
-                            </Link>
+                {/* Group classes only: show availability/Acuity booking UI */}
+                {isGroupClass && (
+                    <div
+                        className={cn(
+                            'flex w-fit',
+                            hasUpcomingClasses && 'p-3 mb-6 md:p-4 border-2 border-yellow rounded-[20px]',
                         )}
+                    >
+                        <div>
+                            {/* New format with Acuity IDs */}
+                            {hasUpcomingClasses ? (
+                                <>
+                                    <h4 className="text-orange mb-2">Book your spot for one of our upcoming classes:</h4>
+                                    {upcomingClasses?.map((uC) => {
+                                        const formattedDate = uC.dateTime ? formatDate(uC.dateTime) : ''
+                                        const isFull = uC.availability === 'full'
+                                        const availabilityBadge = isFull ? (
+                                            <span className="font-bold text-red">FULL</span>
+                                        ) : (
+                                            <span className="font-bold text-green">REGISTER NOW</span>
+                                        )
+
+                                        // Show booking button (disabled if full)
+                                        if (uC.acuityId && formattedDate) {
+                                            return (
+                                                <div key={uC._key}>
+                                                    <AcuityButton
+                                                        appointmentTypeId={uC.acuityId}
+                                                        date={formattedDate}
+                                                        disabled={isFull}
+                                                        badge={availabilityBadge}
+                                                    />
+                                                </div>
+                                            )
+                                        } else if (formattedDate) {
+                                            // Show date with badge (or just date if open)
+                                            return (
+                                                <p key={uC._key} className="mb-2">
+                                                    {formattedDate}
+                                                    <span className="ml-5">{availabilityBadge}</span>
+                                                </p>
+                                            )
+                                        }
+                                        return null
+                                    })}
+                                </>
+                            ) : (
+                                <h4 className="text-bold text-orange mb-6">Check back for availability</h4>
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
                 {description?.portableTextBlock && (
                     <SimplePortableText value={description.portableTextBlock} />
                 )}
                 {/* Conditional CTA Buttons */}
                 <div className={cn('mt-10', trainingType === 'group' && hasUpcomingClasses && acuityCategoryUrl && 'flex gap-4 flex-wrap')}>
                     {/* Private class: "Book an appointment" */}
-                    {trainingType === 'private' && (
+                    {isPrivateTraining && (
                         <Link href="/contact" className="button">
                             Book an appointment
                         </Link>
@@ -233,7 +231,7 @@ export default function TrainingComponent({
                                         <SanityIcon
                                             image={{
                                                 asset: {
-                                                    _ref: 'image-aa1c3dc3394745974c4261e5fe59e9f9ea60cd96-63x63-svg',
+                                                    _ref: 'image-6f48ada1eadf765cab7954c7de49c1e8b02c26e3-95x95-svg',
                                                     _type: 'reference',
                                                 },
                                             }}

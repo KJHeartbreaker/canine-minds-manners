@@ -30,7 +30,8 @@ export const rowContainer = defineType({
     overlay: 'noOverlay',
     centerTitle: false,
     hideTitle: false,
-    titleColor: 'Dark Grey',
+    // Must match the allowed `options.list` values (hex codes).
+    titleColor: '#333333',
     condensedCopy: false,
     centerCopy: false,
   },
@@ -226,6 +227,10 @@ export const rowContainer = defineType({
 
           case 'form':
             conditionalSub = sub.title ? `Form Title: ${sub.title}` : 'Update this!'
+            break
+
+          case 'faq':
+            conditionalSub = 'FAQ'
             break
 
           default:
