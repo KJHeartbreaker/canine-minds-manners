@@ -1,6 +1,7 @@
 'use client'
 
 import { RiExternalLinkFill } from 'react-icons/ri'
+import { trackDataLayerEvent } from '@/lib/gtm'
 import { useAcuityEmbed } from '@/lib/hooks/useAcuityEmbed'
 
 interface AcuityButtonProps {
@@ -45,6 +46,13 @@ export default function AcuityButton({ appointmentTypeId, date, disabled = false
             target="_blank"
             rel="noopener noreferrer"
             className="acuity-embed-button"
+            onClick={() =>
+                trackDataLayerEvent('acuity_book_click', {
+                    appointmentTypeId,
+                    date,
+                    href: `https://app.acuityscheduling.com/schedule.php?owner=28298110&appointmentType=${appointmentTypeId}&ref=booking_button`,
+                })
+            }
         >
             {linkContent}
         </a>

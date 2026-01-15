@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { FaPhoneAlt, FaEnvelope } from 'react-icons/fa'
+import { trackDataLayerEvent } from '@/lib/gtm'
 import { cn } from '@/lib/utils'
 
 interface ContactInfoProps {
@@ -59,6 +60,12 @@ export default function ContactInfo({
 						<Link
 							href={`tel:${phoneLink}`}
 							className={cn('font-bold hover:opacity-80 transition-opacity', textColorClass, textSize)}
+							onClick={() =>
+								trackDataLayerEvent('phone_click', {
+									location: 'contact_info',
+									phone: phoneLink,
+								})
+							}
 						>
 							{phoneNumber}
 						</Link>
@@ -77,6 +84,12 @@ export default function ContactInfo({
 						<Link
 							href={`mailto:${email}`}
 							className={cn('font-bold hover:opacity-80 transition-opacity', textColorClass, textSize)}
+							onClick={() =>
+								trackDataLayerEvent('email_click', {
+									location: 'contact_info',
+									email,
+								})
+							}
 						>
 							{email}
 						</Link>
