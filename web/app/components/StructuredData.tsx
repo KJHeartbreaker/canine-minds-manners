@@ -41,20 +41,33 @@ export async function OrganizationSchema({
   }
 
   if (logoUrl) {
-    schema.logo = logoUrl
+    // Logo as ImageObject is more robust for validation
+    schema.logo = {
+      '@type': 'ImageObject',
+      url: logoUrl,
+    }
   }
 
-  if (phone || email || address) {
-    schema.contactPoint = {}
+  // Build contactPoint array (must be array, not object)
+  const contactPoints: any[] = []
+  if (phone || email) {
+    const contactPoint: any = {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+    }
     if (phone) {
       schema.telephone = phone
-      schema.contactPoint.telephone = phone
-      schema.contactPoint.contactType = 'customer service'
+      contactPoint.telephone = phone
     }
     if (email) {
       schema.email = email
-      schema.contactPoint.email = email
+      contactPoint.email = email
     }
+    contactPoints.push(contactPoint)
+  }
+
+  if (contactPoints.length > 0) {
+    schema.contactPoint = contactPoints
   }
 
   if (address) {
@@ -119,7 +132,11 @@ export async function LocalBusinessSchema({
   }
 
   if (logoUrl) {
-    schema.logo = logoUrl
+    // Logo as ImageObject for better validation
+    schema.logo = {
+      '@type': 'ImageObject',
+      url: logoUrl,
+    }
   }
 
   if (address) {
@@ -269,8 +286,14 @@ export async function ArticleSchema({
   }
 
   if (image) {
-    // Image URLs from Sanity are already full URLs
-    schema.image = image.startsWith('http') ? image : `${siteUrl}${image.startsWith('/') ? '' : '/'}${image}`
+    // Image should be an array of ImageObject or URL strings
+    const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image.startsWith('/') ? '' : '/'}${image}`
+    schema.image = [
+      {
+        '@type': 'ImageObject',
+        url: imageUrl,
+      },
+    ]
   }
 
   if (author) {
