@@ -45,7 +45,7 @@ export async function OrganizationSchema({
   const siteUrl = await getSiteUrl()
   // Use provided logoUrl, or generate from Sanity image, or use default
   const logoUrl = logoUrlProp || (logo ? urlForImage(logo)?.url() : undefined) || joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png')
-  
+
   // Image URL - can be a business photo (facility, team, etc.) separate from logo
   const businessImageUrl = imageUrl || (image ? urlForImage(image)?.url() : undefined)
 
