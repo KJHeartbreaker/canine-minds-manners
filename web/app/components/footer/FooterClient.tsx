@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import { cn } from '@/lib/utils'
+import { trackDataLayerEvent } from '@/lib/gtm'
 import NavbarDropdown from '../header/NavbarDropdown'
 import LogoRow from '../rows/LogoRow'
 import { MenuItem, FooterLogo } from '../types'
@@ -55,6 +56,12 @@ export default function FooterClient({ menuItems, logos }: FooterClientProps) {
                             <Link
                                 href={`tel:${4038165629}`}
                                 className={cn('font-bold text-md text-white hover:text-blue-22 transition-color')}
+                                onClick={() =>
+                                    trackDataLayerEvent('phone_click', {
+                                        location: 'footer',
+                                        phone: '4038165629',
+                                    })
+                                }
                             >
                                 (403) 816-5629
                             </Link>
@@ -71,6 +78,12 @@ export default function FooterClient({ menuItems, logos }: FooterClientProps) {
                             <Link
                                 href={`mailto:cmm_info@shaw.ca`}
                                 className={cn('font-bold text-md text-white hover:text-blue-22 transition-color')}
+                                onClick={() =>
+                                    trackDataLayerEvent('email_click', {
+                                        location: 'footer',
+                                        email: 'cmm_info@shaw.ca',
+                                    })
+                                }
                             >
                                 cmm_info@shaw.ca
                             </Link>

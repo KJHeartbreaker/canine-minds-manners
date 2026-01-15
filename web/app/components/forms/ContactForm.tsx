@@ -6,6 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { toast } from 'sonner'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { trackDataLayerEvent } from '@/lib/gtm'
 import { validationSchema, type FormValues } from '@/lib/validations'
 
 // Dynamically import Confetti only when needed (reduces initial bundle by ~30KB)
@@ -20,8 +21,12 @@ const Confetti = dynamic(() => import('react-confetti'), {
 export default function ContactForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [showConfetti, setShowConfetti] = useState(false)
-    // Use environment variable, fallback to hardcoded key for backwards compatibility
-    const recaptchaKey = process.env.GOOGLE_RECAPTCHA_PUBLIC_KEY || '6LdeJvcmAAAAAKZAOPDgWXgWfq3OPdHcrVtjEj6P'
+    /**
+     * reCAPTCHA site key must be available on the client, so it MUST be a NEXT_PUBLIC_ env var.
+     * Keep multiple names for compatibility with older deployments.
+     */
+    const recaptchaSiteKey =
+        process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_PUBLIC_KEY || ''
     const recaptchaRef = useRef<ReCAPTCHA>(null)
 
     const handleSubmit = async (
@@ -33,6 +38,11 @@ export default function ContactForm() {
         },
     ) => {
         try {
+            if (!recaptchaSiteKey) {
+                toast.error('Contact form is temporarily unavailable (reCAPTCHA is not configured).')
+                return
+            }
+
             setIsLoading(true)
 
             // Execute invisible reCAPTCHA before submitting
@@ -55,6 +65,10 @@ export default function ContactForm() {
                 const errorMessage = errorData.error || 'Failed to send message'
                 throw new Error(errorMessage)
             }
+
+            trackDataLayerEvent('contact_submit_success', {
+                form: 'contact',
+            })
 
             // Reset the form
             resetForm()
@@ -146,7 +160,7 @@ export default function ContactForm() {
 
                     <ReCAPTCHA
                         ref={recaptchaRef}
-                        sitekey={recaptchaKey}
+                        sitekey={recaptchaSiteKey}
                         size="invisible"
                     />
                 </Form>

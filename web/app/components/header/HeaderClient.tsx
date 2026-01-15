@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FaFacebook, FaInstagram, FaPhone, FaEnvelope } from 'react-icons/fa'
+import { trackDataLayerEvent } from '@/lib/gtm'
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import { cn } from '@/lib/utils'
 import NavbarDropdown from './NavbarDropdown'
@@ -76,6 +77,12 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
                             href="tel:4038165629"
                             aria-label="Call us at 403-816-5629"
                             className="flex items-center justify-center w-10 h-10 bg-orange rounded-full transition-colors hover:bg-orange-hover"
+                            onClick={() =>
+                                trackDataLayerEvent('phone_click', {
+                                    location: 'header_mobile_icons',
+                                    phone: '4038165629',
+                                })
+                            }
                         >
                             <FaPhone size={24} className="text-white" />
                         </Link>
@@ -83,6 +90,12 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
                             href="mailto:cmm_info@shaw.ca"
                             aria-label="Email us at cmm_info@shaw.ca"
                             className="flex items-center justify-center w-10 h-10 bg-orange rounded-full transition-colors hover:bg-orange-hover"
+                            onClick={() =>
+                                trackDataLayerEvent('email_click', {
+                                    location: 'header_mobile_icons',
+                                    email: 'cmm_info@shaw.ca',
+                                })
+                            }
                         >
                             <FaEnvelope size={24} className="text-white" />
                         </Link>
@@ -232,7 +245,16 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
                             </div>
 
                             {/* Mobile Contact Button */}
-                            <Link href="tel:4038165629" className="block mt-4">
+                            <Link
+                                href="tel:4038165629"
+                                className="block mt-4"
+                                onClick={() =>
+                                    trackDataLayerEvent('phone_click', {
+                                        location: 'header_mobile_menu',
+                                        phone: '4038165629',
+                                    })
+                                }
+                            >
                                 <button
                                     type="button"
                                     className="bg-blue-22 py-1.5 px-2.5 rounded text-white"

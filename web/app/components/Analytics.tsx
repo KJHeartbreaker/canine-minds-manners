@@ -4,6 +4,8 @@ import Script from 'next/script'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
 
+import { trackDataLayerEvent } from '@/lib/gtm'
+
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || ''
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
 
@@ -27,6 +29,29 @@ function AnalyticsTracker() {
                 page_path: url,
             })
         }
+    }, [pathname, searchParams])
+
+    return null
+}
+
+/**
+ * Pushes a virtual page view event to GTM on client-side route changes.
+ * This makes SPA navigation visible in Tag Assistant and available for GTM triggers.
+ */
+function GtmVirtualPageViewTracker() {
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    useEffect(() => {
+        if (!GTM_ID) return
+
+        const pagePath = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+
+        trackDataLayerEvent('virtual_page_view', {
+            page_path: pagePath,
+            page_location: typeof window !== 'undefined' ? window.location.href : undefined,
+            page_title: typeof document !== 'undefined' ? document.title : undefined,
+        })
     }, [pathname, searchParams])
 
     return null
@@ -108,16 +133,13 @@ export default function Analytics() {
                     <AnalyticsTracker />
                 </Suspense>
             )}
+
+            {/* GTM SPA navigation tracking - wrapped in Suspense for useSearchParams */}
+            {GTM_ID && (
+                <Suspense fallback={null}>
+                    <GtmVirtualPageViewTracker />
+                </Suspense>
+            )}
         </>
     )
 }
-
-// Extend Window interface for TypeScript
-declare global {
-    interface Window {
-        dataLayer: any[]
-        // eslint-disable-next-line no-unused-vars
-        gtag: (...args: any[]) => void
-    }
-}
-
