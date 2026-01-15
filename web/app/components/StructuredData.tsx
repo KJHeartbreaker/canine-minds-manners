@@ -20,6 +20,8 @@ export async function OrganizationSchema({
   url,
   logo,
   logoUrl: logoUrlProp,
+  image,
+  imageUrl,
   phone,
   email,
   address,
@@ -28,6 +30,8 @@ export async function OrganizationSchema({
   url: string
   logo?: SanityImageAsset | null
   logoUrl?: string
+  image?: SanityImageAsset | null
+  imageUrl?: string
   phone?: string
   email?: string
   address?: {
@@ -41,6 +45,9 @@ export async function OrganizationSchema({
   const siteUrl = await getSiteUrl()
   // Use provided logoUrl, or generate from Sanity image, or use default
   const logoUrl = logoUrlProp || (logo ? urlForImage(logo)?.url() : undefined) || joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png')
+  
+  // Image URL - can be a business photo (facility, team, etc.) separate from logo
+  const businessImageUrl = imageUrl || (image ? urlForImage(image)?.url() : undefined)
 
   const schema: any = {
     '@context': 'https://schema.org',
@@ -54,6 +61,14 @@ export async function OrganizationSchema({
     schema.logo = {
       '@type': 'ImageObject',
       url: logoUrl,
+    }
+  }
+
+  if (businessImageUrl) {
+    // Image field - represents the business (facility, team photo, etc.)
+    schema.image = {
+      '@type': 'ImageObject',
+      url: businessImageUrl,
     }
   }
 

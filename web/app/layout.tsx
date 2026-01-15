@@ -101,6 +101,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           url={siteUrl}
           logo={(settings?.ogImage?.asset as any) || null}
           logoUrl={`${siteUrl}/images/CMMPDT_Logo-type.png`}
+          image={(settings?.ogImage?.asset as any) || null}
           phone="+1-403-816-5629"
           email="cmm_info@shaw.ca"
           address={{
