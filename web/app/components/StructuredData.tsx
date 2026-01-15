@@ -1,6 +1,15 @@
-import {getSiteUrl} from '@/sanity/lib/site-url'
-import {urlForImage} from '@/sanity/lib/utils'
-import type {SanityImageAsset} from '@/sanity.types'
+import { getSiteUrl } from '@/sanity/lib/site-url'
+import { urlForImage } from '@/sanity/lib/utils'
+import type { SanityImageAsset } from '@/sanity.types'
+
+/**
+ * Helper to join URL paths without double slashes
+ */
+function joinUrl(base: string, path: string): string {
+  const baseClean = base.replace(/\/+$/, '') // Remove trailing slashes
+  const pathClean = path.replace(/^\/+/, '') // Remove leading slashes
+  return `${baseClean}/${pathClean}`
+}
 
 /**
  * Organization JSON-LD Schema
@@ -31,7 +40,7 @@ export async function OrganizationSchema({
 }) {
   const siteUrl = await getSiteUrl()
   // Use provided logoUrl, or generate from Sanity image, or use default
-  const logoUrl = logoUrlProp || (logo ? urlForImage(logo)?.url() : undefined) || `${siteUrl}/images/CMMPDT_Logo-type.png`
+  const logoUrl = logoUrlProp || (logo ? urlForImage(logo)?.url() : undefined) || joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png')
 
   const schema: any = {
     '@context': 'https://schema.org',
@@ -73,18 +82,18 @@ export async function OrganizationSchema({
   if (address) {
     schema.address = {
       '@type': 'PostalAddress',
-      ...(address.streetAddress && {streetAddress: address.streetAddress}),
-      ...(address.addressLocality && {addressLocality: address.addressLocality}),
-      ...(address.addressRegion && {addressRegion: address.addressRegion}),
-      ...(address.postalCode && {postalCode: address.postalCode}),
-      ...(address.addressCountry && {addressCountry: address.addressCountry}),
+      ...(address.streetAddress && { streetAddress: address.streetAddress }),
+      ...(address.addressLocality && { addressLocality: address.addressLocality }),
+      ...(address.addressRegion && { addressRegion: address.addressRegion }),
+      ...(address.postalCode && { postalCode: address.postalCode }),
+      ...(address.addressCountry && { addressCountry: address.addressCountry }),
     }
   }
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -142,18 +151,18 @@ export async function LocalBusinessSchema({
   if (address) {
     schema.address = {
       '@type': 'PostalAddress',
-      ...(address.streetAddress && {streetAddress: address.streetAddress}),
-      ...(address.addressLocality && {addressLocality: address.addressLocality}),
-      ...(address.addressRegion && {addressRegion: address.addressRegion}),
-      ...(address.postalCode && {postalCode: address.postalCode}),
-      ...(address.addressCountry && {addressCountry: address.addressCountry}),
+      ...(address.streetAddress && { streetAddress: address.streetAddress }),
+      ...(address.addressLocality && { addressLocality: address.addressLocality }),
+      ...(address.addressRegion && { addressRegion: address.addressRegion }),
+      ...(address.postalCode && { postalCode: address.postalCode }),
+      ...(address.addressCountry && { addressCountry: address.addressCountry }),
     }
   }
 
   if (serviceArea) {
     schema.areaServed = {
       '@type': 'City',
-      ...(serviceArea.addressLocality && {name: serviceArea.addressLocality}),
+      ...(serviceArea.addressLocality && { name: serviceArea.addressLocality }),
       ...(serviceArea.addressRegion && {
         containedIn: {
           '@type': 'State',
@@ -178,7 +187,7 @@ export async function LocalBusinessSchema({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -216,6 +225,22 @@ export async function ServiceSchema({
       '@type': 'LocalBusiness',
       name: provider.name,
       url: provider.url || siteUrl,
+      // LocalBusiness requires address and recommended fields
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '3131 68 St NW',
+        addressLocality: 'Calgary',
+        addressRegion: 'AB',
+        postalCode: 'T3B 2J4',
+        addressCountry: 'CA',
+      },
+      telephone: '+1-403-816-5629',
+      email: 'cmm_info@shaw.ca',
+      priceRange: '$$',
+      logo: {
+        '@type': 'ImageObject',
+        url: joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png'),
+      },
     },
   }
 
@@ -230,7 +255,7 @@ export async function ServiceSchema({
   if (areaServed) {
     schema.areaServed = {
       '@type': 'City',
-      ...(areaServed.addressLocality && {name: areaServed.addressLocality}),
+      ...(areaServed.addressLocality && { name: areaServed.addressLocality }),
       ...(areaServed.addressRegion && {
         containedIn: {
           '@type': 'State',
@@ -243,7 +268,7 @@ export async function ServiceSchema({
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -272,7 +297,7 @@ export async function ArticleSchema({
   dateModified?: string
 }) {
   const siteUrl = await getSiteUrl()
-  const fullUrl = url.startsWith('http') ? url : `${siteUrl}${url}`
+  const fullUrl = url.startsWith('http') ? url : joinUrl(siteUrl, url)
 
   const schema: any = {
     '@context': 'https://schema.org',
@@ -287,7 +312,7 @@ export async function ArticleSchema({
 
   if (image) {
     // Image should be an array of ImageObject or URL strings
-    const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image.startsWith('/') ? '' : '/'}${image}`
+    const imageUrl = image.startsWith('http') ? image : joinUrl(siteUrl, image)
     schema.image = [
       {
         '@type': 'ImageObject',
@@ -300,7 +325,7 @@ export async function ArticleSchema({
     schema.author = {
       '@type': 'Person',
       name: author.name,
-      ...(author.url && {url: author.url.startsWith('http') ? author.url : `${siteUrl}${author.url}`}),
+      ...(author.url && { url: author.url.startsWith('http') ? author.url : joinUrl(siteUrl, author.url) }),
     }
   }
 
@@ -312,17 +337,31 @@ export async function ArticleSchema({
     schema.dateModified = dateModified
   }
 
-  // Publisher (Organization)
+  // Publisher (Organization) - must include address if detected as LocalBusiness
   schema.publisher = {
     '@type': 'Organization',
     name: 'Canine Minds & Manners',
     url: siteUrl,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '3131 68 St NW',
+      addressLocality: 'Calgary',
+      addressRegion: 'AB',
+      postalCode: 'T3B 2J4',
+      addressCountry: 'CA',
+    },
+    telephone: '+1-403-816-5629',
+    email: 'cmm_info@shaw.ca',
+    logo: {
+      '@type': 'ImageObject',
+      url: joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png'),
+    },
   }
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
@@ -374,14 +413,14 @@ export async function BreadcrumbListSchemaComponent({
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.url.startsWith('http') ? item.url : `${siteUrl}${item.url}`,
+      item: item.url.startsWith('http') ? item.url : joinUrl(siteUrl, item.url),
     })),
   }
 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   )
 }
