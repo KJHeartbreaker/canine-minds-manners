@@ -118,8 +118,6 @@ export const programCardProjection = `
   name,
   enhancedCardTitle,
   trainingType,
-  dogName,
-  namePlacement,
   slug {
     current
   },

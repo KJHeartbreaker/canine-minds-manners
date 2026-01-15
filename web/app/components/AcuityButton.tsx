@@ -15,12 +15,15 @@ export default function AcuityButton({ appointmentTypeId, date, disabled = false
 
     const linkContent = (
         <span className="whitespace-nowrap inline-flex items-center upcoming-class-link">
-            {date} <RiExternalLinkFill
-                color={disabled ? "#e2e2e2" : "var(--color-orange)"}
-                size={20}
-                className="ml-2"
-            />
+            {date}
             {badge && <span className="ml-2 md:ml-5 acuity-badge">{badge}</span>}
+            {!disabled && (
+                <RiExternalLinkFill
+                    color="var(--color-green)"
+                    size={20}
+                    className="ml-2 upcoming-class-arrow"
+                />
+            )}
         </span>
     )
 

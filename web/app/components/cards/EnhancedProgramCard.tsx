@@ -34,7 +34,6 @@ export interface EnhancedProgramCardProps {
 /**
  * Enhanced Program Card Component
  * Displays training program with image, title bar, bullet points, and action buttons
- * No dogName or namePlacement - designed for enhanced programs grid
  */
 export default function EnhancedProgramCard({
     name,
@@ -96,8 +95,8 @@ export default function EnhancedProgramCard({
             )}
 
             {/* Title Bar - Light Blue */}
-            <div className="bg-blue-22 px-5 py-3">
-                <h4 className="mb-0 text-white text-center font-bold">{displayTitle}</h4>
+            <div className="bg-blue-22 h-[76px] px-5 flex items-center justify-center">
+                <h5 className="mb-0 text-white text-center font-bold">{displayTitle}</h5>
             </div>
             <div className="bg-blue-55 px-5 py-4 flex-1 flex flex-col">
                 {/* Content Body - Dark Blue with Bullet Points */}

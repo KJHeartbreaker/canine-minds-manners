@@ -25,10 +25,8 @@ export default function ProgramsGrid({ programsArr }: ProgramsGridProps) {
                     name={program.name}
                     parentPage={program.parentPage}
                     slug={program.slug}
-                    dogName={program.dogName}
                     cardImage={program.cardImage}
                     trainingType={program.trainingType}
-                    namePlacement={program.namePlacement}
                 />
             ))}
         </ContentContainer>

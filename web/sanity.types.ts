@@ -13,38 +13,116 @@
  */
 
 // Source: ../studio/schema.json
-export type CallToAction = {
-  _type: 'callToAction'
-  heading: string
-  text?: string
-  buttonText?: string
-  link?: Link
+export type ContentBlock = {
+  contentType?: 'mainPortableText' | 'faq'
+  portableTextBlock?: MainPortableText
+  faq?: Faq
 }
 
-export type Link = {
-  _type: 'link'
-  linkType?: 'href' | 'page' | 'post'
-  href?: string
-  page?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'page'
-  }
-  post?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'post'
-  }
-  openInNewTab?: boolean
+export type SuccessStoriesBlock = {
+  _type: 'successStoriesBlock'
+  backgroundColor?: 'yellow' | 'orange' | 'lightBlue' | 'navy'
+  stories?: Array<
+    {
+      _key: string
+    } & SimplePortableText
+  >
+  disabled?: boolean
 }
 
-export type InfoSection = {
-  _type: 'infoSection'
-  heading?: string
-  subheading?: string
-  content?: Array<{
+export type SingleColumnContentBlock = {
+  _type: 'singleColumnContentBlock'
+  title?: string
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#013b63' | '#feca2d'
+  removeBottomPadding?: boolean
+  skinny?: boolean
+  centerContent?: boolean
+  contentBlock?: ContentBlock
+  disabled?: boolean
+}
+
+export type RowContainer = {
+  _type: 'rowContainer'
+  title?: string
+  hideTitle?: boolean
+  centerTitle?: boolean
+  titleColor?: '#333333' | '#16abcc' | '#ee6d08' | '#feca2d' | '#ffffff'
+  row?: 'twoColumn' | 'threeColumn'
+  removeBottomPadding?: boolean
+  condensedCopy?: boolean
+  centerCopy?: boolean
+  image?: MainImage
+  overlay?: 'noOverlay' | 'darkOverlay' | 'blueOverlay'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#16abcc' | '#ee6d08' | '#feca2d'
+  rowContent?: Array<
+    | ({
+        _key: string
+      } & AcuityForm)
+    | ({
+        _key: string
+      } & Carousel)
+    | ({
+        _key: string
+      } & Form)
+    | ({
+        _key: string
+      } & IconCard)
+    | ({
+        _key: string
+      } & MainImage)
+    | ({
+        _key: string
+      } & ImageButtonCard)
+    | ({
+        _key: string
+      } & MainPortableText)
+    | ({
+        _key: string
+      } & Faq)
+  >
+  disabled?: boolean
+}
+
+export type PostReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'post'
+}
+
+export type ResourceReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'resource'
+}
+
+export type RelatedResourcesRow = {
+  _type: 'relatedResourcesRow'
+  title?: string
+  titleColor?: '#ee6d08' | '#333333' | '#16abcc' | '#feca2d' | '#ffffff'
+  backgroundColor?: '#e2e2e2' | '#ffffff' | '#16abcc' | '#ee6d08' | '#feca2d'
+  relatedResources?: ArrayOf<PostReference | ResourceReference>
+  disabled?: boolean
+}
+
+export type PageReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'page'
+}
+
+export type ClassReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'class'
+}
+
+export type SimplePortableText = {
+  _type: 'simplePortableText'
+  portableTextBlock?: Array<{
     children?: Array<{
       marks?: Array<string>
       text?: string
@@ -53,137 +131,483 @@ export type InfoSection = {
     }>
     style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
     listItem?: 'bullet' | 'number'
-    markDefs?: Array<{
-      linkType?: 'href' | 'page' | 'post'
-      href?: string
-      page?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'page'
-      }
-      post?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'post'
-      }
-      openInNewTab?: boolean
-      _type: 'link'
-      _key: string
-    }>
+    markDefs?: Array<
+      | {
+          href?: string
+          blank?: boolean
+          _type: 'link'
+          _key: string
+        }
+      | {
+          item?: PageReference | ClassReference
+          _type: 'internalLink'
+          _key: string
+        }
+    >
     level?: number
     _type: 'block'
     _key: string
   }>
 }
 
-export type BlockContent = Array<{
-  children?: Array<{
-    marks?: Array<string>
-    text?: string
-    _type: 'span'
-    _key: string
-  }>
-  style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
-  listItem?: 'bullet' | 'number'
-  markDefs?: Array<{
-    linkType?: 'href' | 'page' | 'post'
-    href?: string
-    page?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'page'
-    }
-    post?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'post'
-    }
-    openInNewTab?: boolean
-    _type: 'link'
-    _key: string
-  }>
-  level?: number
-  _type: 'block'
-  _key: string
-}>
+export type SanityImageAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
 
-export type Settings = {
-  _id: string
-  _type: 'settings'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
+export type MainPortableText = {
+  _type: 'mainPortableText'
+  portableTextBlock?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'blockquote'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<
+          | {
+              href?: string
+              blank?: boolean
+              _type: 'link'
+              _key: string
+            }
+          | {
+              item?: PageReference | ClassReference
+              _type: 'internalLink'
+              _key: string
+            }
+        >
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | ({
+        _key: string
+      } & Cta)
+    | ({
+        _key: string
+      } & Youtube)
+    | {
+        hr?: string
+        size?: string
+        width?: string
+        _type: 'hr'
+        _key: string
+      }
+    | ({
+        _key: string
+      } & LogoRow)
+    | ({
+        _key: string
+      } & ContactInfo)
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt?: string
+        _type: 'image'
+        _key: string
+      }
+  >
+}
+
+export type Youtube = {
+  _type: 'youtube'
+  url?: string
+}
+
+export type MainImage = {
+  _type: 'mainImage'
+  asset?: SanityImageAssetReference
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  width?: number
+  height?: number
+  alt?: string
+}
+
+export type LogoRow = {
+  _type: 'logoRow'
+  logoRow?: Array<
+    {
+      _key: string
+    } & Logo
+  >
+}
+
+export type Logo = {
+  _type: 'logo'
+  asset?: SanityImageAssetReference
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  logo?: string
+  alt: string
+}
+
+export type Icon = {
+  _type: 'icon'
+  asset?: SanityImageAssetReference
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  alt: string
+}
+
+export type HeroTwoPanel = {
+  _type: 'heroTwoPanel'
+  size?: 'standard' | 'x-large'
+  image?: MainImage
+  backgroundColor?: '#16abcc' | '#ee6d08' | '#feca2d' | '#ffffff' | '#323943'
+  mainPortableText?: MainPortableText
+  centerText?: boolean
+  disabled?: boolean
+}
+
+export type HeroBanner = {
+  _type: 'heroBanner'
+  size?: 'standard' | 'x-large'
+  subheading?: string
+  subHeadingColor?: 'white' | 'orange' | 'blue' | 'yellow' | 'grey33'
+  heading: string
+  headingColor?: 'white' | 'orange' | 'blue' | 'yellow' | 'grey33'
+  copy?: SimplePortableText
+  copyColor?: 'white' | 'orange' | 'blue' | 'yellow' | 'grey33'
+  image?: MainImage
+  overlay?: 'noOverlay' | 'darkOverlay' | 'blueOverlay'
+  cta?: Cta
+  disabled?: boolean
+}
+
+export type Form = {
+  _type: 'form'
   title: string
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      linkType?: 'href' | 'page' | 'post'
-      href?: string
-      page?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'page'
-      }
-      post?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'post'
-      }
-      openInNewTab?: boolean
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
+  copy?: SimplePortableText
+}
+
+export type Faq = {
+  _type: 'faq'
+  items?: Array<{
+    question: string
+    answer: MainPortableText
+    _type: 'faqItem'
     _key: string
   }>
+}
+
+export type SanityFileAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.fileAsset'
+}
+
+export type Cta = {
+  _type: 'cta'
+  title?: string
+  kind?: 'button' | 'link'
+  arrow?: boolean
+  landingPageRoute?: PageReference | PostReference
+  link?: string
+  anchor?: string
+  fileDownload?: {
+    asset?: SanityFileAssetReference
+    media?: unknown
+    _type: 'file'
+  }
+}
+
+export type Carousel = {
+  _type: 'carousel'
+  carouselImages?: Array<
+    {
+      _key: string
+    } & MainImage
+  >
+}
+
+export type AcuityForm = {
+  _type: 'acuityForm'
+  title: string
+  copy?: SimplePortableText
+}
+
+export type NavDropdownCTA = {
+  _type: 'navDropdownCTA'
+  cta?: Cta
+  subnav?: Array<
+    {
+      _key: string
+    } & Cta
+  >
+}
+
+export type NavCTA = {
+  _type: 'navCTA'
+  cta?: Cta
+}
+
+export type Seo = {
+  _type: 'seo'
+  seoTitle?: string
+  seoDescription?: string
+  noindex?: boolean
+  canonicalUrl?: string
   ogImage?: {
-    asset?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-    }
+    asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
     crop?: SanityImageCrop
     alt?: string
-    metadataBase?: string
     _type: 'image'
   }
 }
 
-export type Page = {
+export type DateTimeV2 = {
+  _type: 'dateTimeV2'
+  dateTime: string
+  acuityId?: string
+  totalSpots?: number
+  bookingsCount?: number
+  availability?: 'open' | 'nearlyFull' | 'full'
+}
+
+export type DateTime = {
+  _type: 'dateTime'
+  startDate?: string
+  startTime?: string
+  amPm: 'am' | 'pm'
+  availability?: 'open' | 'nearlyFull' | 'full'
+}
+
+export type TrainerReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'trainer'
+}
+
+export type TrainersGridContainer = {
+  _type: 'trainersGridContainer'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d'
+  trainers?: Array<
+    {
+      _key: string
+    } & TrainerReference
+  >
+}
+
+export type TestimonialReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'testimonial'
+}
+
+export type TestimonialGridContainer = {
+  _type: 'testimonialGridContainer'
+  title?: string
+  titleColor?: '#ee6d08' | '#333333' | '#16abcc' | '#feca2d' | '#ffffff'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d'
+  skinny?: boolean
+  testimonialsArr?: Array<
+    {
+      _key: string
+    } & TestimonialReference
+  >
+  disabled?: boolean
+}
+
+export type ProgramsGridContainer = {
+  _type: 'programsGridContainer'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d'
+  programs?: Array<
+    {
+      _key: string
+    } & ClassReference
+  >
+  enhanced?: boolean
+  description?: MainPortableText
+  centerContent?: boolean
+}
+
+export type ProductReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'product'
+}
+
+export type ProductGridContainer = {
+  _type: 'productGridContainer'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d'
+  productsArr?: Array<
+    {
+      _key: string
+    } & ProductReference
+  >
+  disabled?: boolean
+}
+
+export type PostsGridContainer = {
+  _type: 'postsGridContainer'
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d'
+  posts?: Array<
+    {
+      _key: string
+    } & PostReference
+  >
+}
+
+export type TrainerRows = {
+  _type: 'trainerRows'
+  trainers?: Array<
+    {
+      _key: string
+    } & TrainerReference
+  >
+}
+
+export type GalleryGrid = {
+  _type: 'galleryGrid'
+  galleryArr?: Array<
+    {
+      _key: string
+    } & MainImage
+  >
+}
+
+export type CustomComponent = {
+  _type: 'customComponent'
+  title?: string
+  backgroundColor?: '#ffffff' | '#e2e2e2' | '#61c8e9' | '#feca2d' | '#ee6d08'
+  rows?: Array<
+    | ({
+        _key: string
+      } & TrainerRows)
+    | ({
+        _key: string
+      } & GalleryGrid)
+    | ({
+        _key: string
+      } & AboutUsContainer)
+  >
+  disabled?: boolean
+}
+
+export type ContactPageMap = {
+  _type: 'contactPageMap'
+  map: string
+  mapLink: string
+  copy?: MainPortableText
+  iconCards?: Array<
+    {
+      _key: string
+    } & IconCard
+  >
+}
+
+export type ContactInfo = {
+  _type: 'contactInfo'
+  headline?: string
+  phoneNumber: string
+  phoneLabel?: string
+  email: string
+  textColor?: 'white' | 'blue'
+  size?: 'normal' | 'large'
+}
+
+export type AboutUsContainer = {
+  _type: 'aboutUsContainer'
+  copy?: MainPortableText
+  iconCards?: Array<
+    {
+      _key: string
+    } & IconCard
+  >
+}
+
+export type ClassRowsContainer = {
+  _type: 'classRowsContainer'
+  classRefs?: Array<
+    {
+      _key: string
+    } & ClassReference
+  >
+}
+
+export type ImageButtonCard = {
+  _type: 'imageButtonCard'
+  image?: MainImage
+  heading: string
+  copy?: SimplePortableText
+  landingPageRoute?: PageReference
+}
+
+export type IconCard = {
+  _type: 'iconCard'
+  icon?: Icon
+  heading: string
+  copy?: SimplePortableText
+  cta?: Cta
+}
+
+export type Testimonial = {
   _id: string
-  _type: 'page'
+  _type: 'testimonial'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  name: string
-  slug: Slug
+  heading?: string
+  copy?: SimplePortableText
+}
+
+export type Resource = {
+  _id: string
+  _type: 'resource'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  fileDownload?: {
+    asset?: SanityFileAssetReference
+    media?: unknown
+    _type: 'file'
+  }
+  ctaTitle?: string
+  excerpt?: SimplePortableText
+  image?: MainImage
+}
+
+export type Redirect = {
+  _id: string
+  _type: 'redirect'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  source: string
+  destination: string
+  permanent?: boolean
+  description?: string
+}
+
+export type Product = {
+  _id: string
+  _type: 'product'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
   heading: string
-  subheading?: string
-  pageBuilder?: Array<
-    | ({
-        _key: string
-      } & CallToAction)
-    | ({
-        _key: string
-      } & InfoSection)
-  >
+  price: number
+  image?: MainImage
+  cta?: Cta
 }
 
 export type Post = {
@@ -194,51 +618,302 @@ export type Post = {
   _rev: string
   title: string
   slug: Slug
-  content?: BlockContent
-  excerpt?: string
-  coverImage: {
-    asset?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-    }
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt?: string
-    _type: 'image'
-  }
-  date?: string
-  author?: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'person'
-  }
+  seo?: Seo
+  overview?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: null
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  author: TrainerReference
+  excerpt?: SimplePortableText
+  image?: MainImage
+  subheader?: string
+  body: MainPortableText
 }
 
-export type Person = {
+export type Trainer = {
   _id: string
-  _type: 'person'
+  _type: 'trainer'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  firstName: string
-  lastName: string
-  picture: {
-    asset?: {
-      _ref: string
-      _type: 'reference'
-      _weak?: boolean
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
-    }
+  name: string
+  slug: Slug
+  picture: MainImage
+  role?: string
+  bio?: SimplePortableText
+  certifications?: SimplePortableText
+}
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
+export type Home = {
+  _id: string
+  _type: 'home'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  overview: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  seo?: Seo
+  content?: Array<
+    | ({
+        _key: string
+      } & HeroBanner)
+    | ({
+        _key: string
+      } & HeroTwoPanel)
+    | ({
+        _key: string
+      } & SingleColumnContentBlock)
+    | ({
+        _key: string
+      } & SuccessStoriesBlock)
+    | ({
+        _key: string
+      } & RowContainer)
+    | ({
+        _key: string
+      } & ProgramsGridContainer)
+    | ({
+        _key: string
+      } & TrainersGridContainer)
+    | ({
+        _key: string
+      } & TestimonialGridContainer)
+    | ({
+        _key: string
+      } & ClassRowsContainer)
+    | ({
+        _key: string
+      } & RelatedResourcesRow)
+    | ({
+        _key: string
+      } & ContactPageMap)
+    | ({
+        _key: string
+      } & CustomComponent)
+    | ({
+        _key: string
+      } & ProductGridContainer)
+  >
+}
+
+export type BlogLandingPage = {
+  _id: string
+  _type: 'blogLandingPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  seo?: Seo
+  overview: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  content?: Array<
+    | ({
+        _key: string
+      } & HeroBanner)
+    | ({
+        _key: string
+      } & HeroTwoPanel)
+    | ({
+        _key: string
+      } & SingleColumnContentBlock)
+    | ({
+        _key: string
+      } & SuccessStoriesBlock)
+    | ({
+        _key: string
+      } & PostsGridContainer)
+  >
+}
+
+export type Settings = {
+  _id: string
+  _type: 'settings'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  menuItems?: Array<
+    | ({
+        _key: string
+      } & NavCTA)
+    | ({
+        _key: string
+      } & NavDropdownCTA)
+    | ({
+        _key: string
+      } & BlogLandingPage)
+  >
+  footerLogos?: Array<
+    {
+      _key: string
+    } & Logo
+  >
+  ogImage?: {
+    asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
     crop?: SanityImageCrop
     alt?: string
+    metadataBase?: string
     _type: 'image'
   }
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+export type Page = {
+  _id: string
+  _type: 'page'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  seo?: Seo
+  overview?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: null
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  content?: Array<
+    | ({
+        _key: string
+      } & HeroBanner)
+    | ({
+        _key: string
+      } & HeroTwoPanel)
+    | ({
+        _key: string
+      } & SingleColumnContentBlock)
+    | ({
+        _key: string
+      } & SuccessStoriesBlock)
+    | ({
+        _key: string
+      } & RowContainer)
+    | ({
+        _key: string
+      } & ProgramsGridContainer)
+    | ({
+        _key: string
+      } & TrainersGridContainer)
+    | ({
+        _key: string
+      } & TestimonialGridContainer)
+    | ({
+        _key: string
+      } & ClassRowsContainer)
+    | ({
+        _key: string
+      } & RelatedResourcesRow)
+    | ({
+        _key: string
+      } & ContactPageMap)
+    | ({
+        _key: string
+      } & CustomComponent)
+    | ({
+        _key: string
+      } & ProductGridContainer)
+  >
+}
+
+export type Class = {
+  _id: string
+  _type: 'class'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name: string
+  parentPage?: PageReference
+  slug: Slug
+  trainingType: 'group' | 'private' | 'onDemand'
+  customTrainingTitle?: string
+  price?: string
+  upcomingClasses?: Array<
+    {
+      _key: string
+    } & DateTimeV2
+  >
+  acuityCategoryUrl?: string
+  takeaways?: Array<string>
+  cardTakeaways?: Array<string>
+  description?: SimplePortableText
+  picture?: MainImage
+  cardImage?: MainImage
+  enhancedCardTitle?: string
 }
 
 export type SanityAssistInstructionTask = {
@@ -279,14 +954,16 @@ export type SanityAssistOutputField = {
   path?: string
 }
 
+export type AssistInstructionContextReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'assist.instruction.context'
+}
+
 export type SanityAssistInstructionContext = {
   _type: 'sanity.assist.instruction.context'
-  reference: {
-    _ref: string
-    _type: 'reference'
-    _weak?: boolean
-    [internalGroqTypeReferenceTo]?: 'assist.instruction.context'
-  }
+  reference: AssistInstructionContextReference
 }
 
 export type AssistInstructionContext = {
@@ -376,6 +1053,15 @@ export type SanityAssistSchemaTypeField = {
   >
 }
 
+export type MediaTag = {
+  _id: string
+  _type: 'media.tag'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: Slug
+}
+
 export type SanityImagePaletteSwatch = {
   _type: 'sanity.imagePaletteSwatch'
   background?: string
@@ -397,25 +1083,21 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
   _type: 'sanity.imageDimensions'
-  height?: number
-  width?: number
-  aspectRatio?: number
+  height: number
+  width: number
+  aspectRatio: number
 }
 
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x?: number
-  y?: number
-  height?: number
-  width?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
+export type SanityImageMetadata = {
+  _type: 'sanity.imageMetadata'
+  location?: Geopoint
+  dimensions?: SanityImageDimensions
+  palette?: SanityImagePalette
+  lqip?: string
+  blurHash?: string
+  thumbHash?: string
+  hasAlpha?: boolean
+  isOpaque?: boolean
 }
 
 export type SanityFileAsset = {
@@ -438,6 +1120,13 @@ export type SanityFileAsset = {
   path?: string
   url?: string
   source?: SanityAssetSourceData
+}
+
+export type SanityAssetSourceData = {
+  _type: 'sanity.assetSourceData'
+  name?: string
+  id?: string
+  url?: string
 }
 
 export type SanityImageAsset = {
@@ -463,17 +1152,6 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData
 }
 
-export type SanityImageMetadata = {
-  _type: 'sanity.imageMetadata'
-  location?: Geopoint
-  dimensions?: SanityImageDimensions
-  palette?: SanityImagePalette
-  lqip?: string
-  blurHash?: string
-  hasAlpha?: boolean
-  isOpaque?: boolean
-}
-
 export type Geopoint = {
   _type: 'geopoint'
   lat?: number
@@ -481,33 +1159,74 @@ export type Geopoint = {
   alt?: number
 }
 
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
-}
-
-export type SanityAssetSourceData = {
-  _type: 'sanity.assetSourceData'
-  name?: string
-  id?: string
-  url?: string
-}
-
 export type AllSanitySchemaTypes =
-  | CallToAction
-  | Link
-  | InfoSection
-  | BlockContent
-  | Settings
-  | Page
+  | ContentBlock
+  | SuccessStoriesBlock
+  | SingleColumnContentBlock
+  | RowContainer
+  | PostReference
+  | ResourceReference
+  | RelatedResourcesRow
+  | PageReference
+  | ClassReference
+  | SimplePortableText
+  | SanityImageAssetReference
+  | MainPortableText
+  | Youtube
+  | MainImage
+  | LogoRow
+  | Logo
+  | Icon
+  | HeroTwoPanel
+  | HeroBanner
+  | Form
+  | Faq
+  | SanityFileAssetReference
+  | Cta
+  | Carousel
+  | AcuityForm
+  | NavDropdownCTA
+  | NavCTA
+  | Seo
+  | DateTimeV2
+  | DateTime
+  | TrainerReference
+  | TrainersGridContainer
+  | TestimonialReference
+  | TestimonialGridContainer
+  | ProgramsGridContainer
+  | ProductReference
+  | ProductGridContainer
+  | PostsGridContainer
+  | TrainerRows
+  | GalleryGrid
+  | CustomComponent
+  | ContactPageMap
+  | ContactInfo
+  | AboutUsContainer
+  | ClassRowsContainer
+  | ImageButtonCard
+  | IconCard
+  | Testimonial
+  | Resource
+  | Redirect
+  | Product
   | Post
-  | Person
+  | Trainer
+  | Slug
+  | Home
+  | BlogLandingPage
+  | Settings
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Page
+  | Class
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
   | SanityAssistOutputType
   | SanityAssistOutputField
+  | AssistInstructionContextReference
   | SanityAssistInstructionContext
   | AssistInstructionContext
   | SanityAssistInstructionUserInput
@@ -515,17 +1234,15 @@ export type AllSanitySchemaTypes =
   | SanityAssistInstructionFieldRef
   | SanityAssistInstruction
   | SanityAssistSchemaTypeField
+  | MediaTag
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
-  | SanityImageHotspot
-  | SanityImageCrop
-  | SanityFileAsset
-  | SanityImageAsset
   | SanityImageMetadata
-  | Geopoint
-  | Slug
+  | SanityFileAsset
   | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint
 
 export declare const internalGroqTypeReferenceTo: unique symbol
 
@@ -540,39 +1257,8 @@ type ArrayOf<T> = Array<
 // Query: *[_type == "settings"][0] {      _id,  title,  description,  ogImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  },    metadataBase  },  menuItems[] {    _key,    _type,    title,    cta {        title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }    },    subnav[] {      _key,      landingPageRoute -> {        _id,        "slug": slug.current,        title,        _type      }    }  },  footerLogos[] {    _key,    alt,    asset -> {      _id,      metadata {        lqip      }    }  }  }
 export type SettingsQueryResult = {
   _id: string
-  title: string
-  description: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      linkType?: 'href' | 'page' | 'post'
-      href?: string
-      page?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'page'
-      }
-      post?: {
-        _ref: string
-        _type: 'reference'
-        _weak?: boolean
-        [internalGroqTypeReferenceTo]?: 'post'
-      }
-      openInNewTab?: boolean
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }> | null
+  title: null
+  description: null
   ogImage: {
     alt: string | null
     crop: SanityImageCrop | null
@@ -583,9 +1269,9 @@ export type SettingsQueryResult = {
       url: string | null
       metadata: {
         dimensions: {
-          width: number | null
-          height: number | null
-          aspectRatio: number | null
+          width: number
+          height: number
+          aspectRatio: number
         } | null
         lqip: string | null
         palette: {
@@ -597,30 +1283,4708 @@ export type SettingsQueryResult = {
     } | null
     metadataBase: string | null
   } | null
-  menuItems: null
-  footerLogos: null
+  menuItems: Array<
+    | {
+        _key: string
+        _type: null
+        title: null
+        cta: null
+        subnav: null
+      }
+    | {
+        _key: string
+        _type: 'navCTA'
+        title: null
+        cta: {
+          title: string | null
+          arrow: boolean | null
+          kind: 'button' | 'link' | null
+          link: string | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+        } | null
+        subnav: null
+      }
+    | {
+        _key: string
+        _type: 'navDropdownCTA'
+        title: null
+        cta: {
+          title: string | null
+          arrow: boolean | null
+          kind: 'button' | 'link' | null
+          link: string | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+        } | null
+        subnav: Array<{
+          _key: string
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                title: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                title: string
+                _type: 'post'
+              }
+            | null
+        }> | null
+      }
+  > | null
+  footerLogos: Array<{
+    _key: string
+    alt: string
+    asset: {
+      _id: string
+      metadata: {
+        lqip: string | null
+      } | null
+    } | null
+  }> | null
 } | null
 
 // Source: sanity/lib/queries.ts
 // Variable: getHomePageQuery
-// Query: *[_type == 'home'][0]{    _id,    _type,    title,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  dogName,  namePlacement,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
-export type GetHomePageQueryResult = null
+// Query: *[_type == 'home'][0]{    _id,    _type,    title,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
+export type GetHomePageQueryResult = {
+  _id: string
+  _type: 'home'
+  title: string
+  seo: {
+    seoTitle: string | null
+    seoDescription: string | null
+    noindex: boolean | null
+    canonicalUrl: string | null
+    ogImage: {
+      alt: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        url: string | null
+        metadata: {
+          dimensions: {
+            width: number
+            height: number
+            aspectRatio: number
+          } | null
+          lqip: string | null
+          palette: {
+            dominant: {
+              background: string | null
+            } | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  content: Array<
+    | {
+        _key: string
+        _type: 'classRowsContainer'
+        classRefs: Array<{
+          _id: string
+          name: string
+          trainingType: 'group' | 'onDemand' | 'private'
+          customTrainingTitle: string | null
+          price: string | null
+          slug: {
+            current: string
+          }
+          description: SimplePortableText | null
+          takeaways: Array<string> | null
+          picture: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          acuityCategoryUrl: string | null
+          upcomingClasses: Array<{
+            _key: string
+            dateTime: string
+            acuityId: string | null
+            totalSpots: number | null
+            bookingsCount: number | null
+            availability: 'full' | 'nearlyFull' | 'open' | null
+          }> | null
+        }> | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'contactPageMap'
+        map: string
+        mapLink: string
+        copy?: MainPortableText
+        iconCards?: Array<
+          {
+            _key: string
+          } & IconCard
+        >
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'customComponent'
+        title?: string
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        rows: Array<
+          | {
+              _type: 'aboutUsContainer'
+              _key: string
+              copy: {
+                portableTextBlock: Array<
+                  | {
+                      children?: Array<{
+                        marks?: Array<string>
+                        text?: string
+                        _type: 'span'
+                        _key: string
+                      }>
+                      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                      listItem?: 'bullet' | 'number'
+                      markDefs: Array<
+                        | {
+                            _key: string
+                            _type: 'internalLink'
+                            item:
+                              | {
+                                  _id: string
+                                  _type: 'class'
+                                  slug: string
+                                  parentPage: {
+                                    parentSlug: string
+                                  } | null
+                                }
+                              | {
+                                  _id: string
+                                  _type: 'page'
+                                  slug: string
+                                }
+                              | null
+                          }
+                        | {
+                            _key: string
+                            _type: 'link'
+                            href: string | null
+                            blank: boolean | null
+                          }
+                      > | null
+                      level?: number
+                      _type: 'block'
+                      _key: string
+                    }
+                  | {
+                      _key: string
+                      _type: 'contactInfo'
+                      headline?: string
+                      phoneNumber: string
+                      phoneLabel?: string
+                      email: string
+                      textColor?: 'blue' | 'white'
+                      size?: 'large' | 'normal'
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'cta'
+                      title: string | null
+                      kind: 'button' | 'link' | null
+                      arrow: boolean | null
+                      landingPageRoute:
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'page'
+                          }
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'post'
+                          }
+                        | null
+                      link: string | null
+                      anchor?: string
+                      fileDownload: {
+                        _type: 'file'
+                        asset: {
+                          _id: string
+                          _type: 'sanity.fileAsset'
+                          url: string | null
+                        } | null
+                      } | null
+                      markDefs: null
+                    }
+                  | {
+                      hr?: string
+                      size?: string
+                      width?: string
+                      _type: 'hr'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      asset?: SanityImageAssetReference
+                      media?: unknown
+                      hotspot?: SanityImageHotspot
+                      crop?: SanityImageCrop
+                      alt?: string
+                      _type: 'image'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'logoRow'
+                      logoRow?: Array<
+                        {
+                          _key: string
+                        } & Logo
+                      >
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'youtube'
+                      url?: string
+                      markDefs: null
+                    }
+                > | null
+              } | null
+              iconCards: Array<{
+                heading: string
+                icon: {
+                  alt: string
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+                copy: {
+                  portableTextBlock: Array<{
+                    children?: Array<{
+                      marks?: Array<string>
+                      text?: string
+                      _type: 'span'
+                      _key: string
+                    }>
+                    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                    listItem?: 'bullet' | 'number'
+                    markDefs: Array<
+                      | {
+                          _key: string
+                          _type: 'internalLink'
+                          item:
+                            | {
+                                _id: string
+                                _type: 'class'
+                                slug: string
+                                parentPage: {
+                                  parentSlug: string
+                                } | null
+                              }
+                            | {
+                                _id: string
+                                _type: 'page'
+                                slug: string
+                              }
+                            | null
+                        }
+                      | {
+                          _key: string
+                          _type: 'link'
+                          href: string | null
+                          blank: boolean | null
+                        }
+                    > | null
+                    level?: number
+                    _type: 'block'
+                    _key: string
+                  }> | null
+                } | null
+                cta: {
+                  title: string | null
+                  arrow: boolean | null
+                  kind: 'button' | 'link' | null
+                  link: string | null
+                  fileDownload: {
+                    _type: 'file'
+                    asset: {
+                      _id: string
+                      _type: 'sanity.fileAsset'
+                      url: string | null
+                    } | null
+                  } | null
+                  landingPageRoute:
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'page'
+                      }
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'post'
+                      }
+                    | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'galleryGrid'
+              _key: string
+              galleryArr: Array<{
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  metadata: {
+                    lqip: string | null
+                  } | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'trainerRows'
+              _key: string
+              trainers: Array<{
+                _id: string
+                name: string
+                firstName: null
+                lastName: null
+                slug: Slug
+                picture: {
+                  alt: string | null
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                }
+                certifications: SimplePortableText | null
+                role: string | null
+                bio: SimplePortableText | null
+              }> | null
+            }
+        > | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'heroBanner'
+        size: 'standard' | 'x-large' | null
+        subheading: string | null
+        subHeadingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        heading: string
+        headingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        copy: {
+          portableTextBlock: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+            listItem?: 'bullet' | 'number'
+            markDefs: Array<
+              | {
+                  _key: string
+                  _type: 'internalLink'
+                  item:
+                    | {
+                        _id: string
+                        _type: 'class'
+                        slug: string
+                        parentPage: {
+                          parentSlug: string
+                        } | null
+                      }
+                    | {
+                        _id: string
+                        _type: 'page'
+                        slug: string
+                      }
+                    | null
+                }
+              | {
+                  _key: string
+                  _type: 'link'
+                  href: string | null
+                  blank: boolean | null
+                }
+            > | null
+            level?: number
+            _type: 'block'
+            _key: string
+          }> | null
+        } | null
+        copyColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        overlay: 'blueOverlay' | 'darkOverlay' | 'noOverlay' | null
+        cta: {
+          title: string | null
+          arrow: boolean | null
+          kind: 'button' | 'link' | null
+          link: string | null
+          fileDownload: {
+            _type: 'file'
+            asset: {
+              _id: string
+              _type: 'sanity.fileAsset'
+              url: string | null
+            } | null
+          } | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+        } | null
+        disabled: boolean | null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'heroTwoPanel'
+        size: 'standard' | 'x-large' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        backgroundColor: '#16abcc' | '#323943' | '#ee6d08' | '#feca2d' | '#ffffff' | null
+        mainPortableText: {
+          portableTextBlock: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                listItem?: 'bullet' | 'number'
+                markDefs: Array<
+                  | {
+                      _key: string
+                      _type: 'internalLink'
+                      item:
+                        | {
+                            _id: string
+                            _type: 'class'
+                            slug: string
+                            parentPage: {
+                              parentSlug: string
+                            } | null
+                          }
+                        | {
+                            _id: string
+                            _type: 'page'
+                            slug: string
+                          }
+                        | null
+                    }
+                  | {
+                      _key: string
+                      _type: 'link'
+                      href: string | null
+                      blank: boolean | null
+                    }
+                > | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                _key: string
+                _type: 'contactInfo'
+                headline?: string
+                phoneNumber: string
+                phoneLabel?: string
+                email: string
+                textColor?: 'blue' | 'white'
+                size?: 'large' | 'normal'
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'cta'
+                title: string | null
+                kind: 'button' | 'link' | null
+                arrow: boolean | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+                link: string | null
+                anchor?: string
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                markDefs: null
+              }
+            | {
+                hr?: string
+                size?: string
+                width?: string
+                _type: 'hr'
+                _key: string
+                markDefs: null
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'logoRow'
+                logoRow?: Array<
+                  {
+                    _key: string
+                  } & Logo
+                >
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'youtube'
+                url?: string
+                markDefs: null
+              }
+          > | null
+        } | null
+        centerText: boolean | null
+        disabled: boolean | null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'productGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        productsArr: Array<{
+          _id: string
+          _key: null
+          heading: string
+          price: number
+          image: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          cta: {
+            title: string | null
+            arrow: boolean | null
+            kind: 'button' | 'link' | null
+            link: string | null
+            landingPageRoute:
+              | {
+                  _id: string
+                  slug: string
+                  _type: 'page'
+                }
+              | {
+                  _id: string
+                  slug: string
+                  _type: 'post'
+                }
+              | null
+          } | null
+        }> | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'programsGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        programs: Array<{
+          _id: string
+          name: string
+          enhancedCardTitle: string | null
+          trainingType: 'group' | 'onDemand' | 'private'
+          slug: {
+            current: string
+          }
+          parentPage: {
+            slug: {
+              current: string
+            }
+          } | null
+          cardImage: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          cardTakeaways: Array<string> | null
+          takeaways: Array<string> | null
+          acuityCategoryUrl: string | null
+          upcomingClasses: Array<{
+            _key: string
+            dateTime: string
+            acuityId: string | null
+            totalSpots: number | null
+            bookingsCount: number | null
+            availability: 'full' | 'nearlyFull' | 'open' | null
+          }> | null
+        }> | null
+        enhanced: boolean | null
+        description: {
+          portableTextBlock: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                listItem?: 'bullet' | 'number'
+                markDefs: Array<
+                  | {
+                      _key: string
+                      _type: 'internalLink'
+                      item:
+                        | {
+                            _id: string
+                            _type: 'class'
+                            slug: string
+                            parentPage: {
+                              parentSlug: string
+                            } | null
+                          }
+                        | {
+                            _id: string
+                            _type: 'page'
+                            slug: string
+                          }
+                        | null
+                    }
+                  | {
+                      _key: string
+                      _type: 'link'
+                      href: string | null
+                      blank: boolean | null
+                    }
+                > | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                _key: string
+                _type: 'contactInfo'
+                headline?: string
+                phoneNumber: string
+                phoneLabel?: string
+                email: string
+                textColor?: 'blue' | 'white'
+                size?: 'large' | 'normal'
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'cta'
+                title: string | null
+                kind: 'button' | 'link' | null
+                arrow: boolean | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+                link: string | null
+                anchor?: string
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                markDefs: null
+              }
+            | {
+                hr?: string
+                size?: string
+                width?: string
+                _type: 'hr'
+                _key: string
+                markDefs: null
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'logoRow'
+                logoRow?: Array<
+                  {
+                    _key: string
+                  } & Logo
+                >
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'youtube'
+                url?: string
+                markDefs: null
+              }
+          > | null
+        } | null
+        centerContent: boolean | null
+        image: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'relatedResourcesRow'
+        title?: string
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        backgroundColor?: '#16abcc' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        relatedResources: Array<
+          | {
+              _type: 'post'
+              _id: string
+              title: string
+              slug: string
+              author: {
+                _id: string
+                name: string
+                firstName: null
+                lastName: null
+                slug: Slug
+                picture: {
+                  alt: string | null
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                }
+                certifications: SimplePortableText | null
+                role: string | null
+                bio: SimplePortableText | null
+              }
+              excerpt: SimplePortableText | null
+              coverImage: null
+            }
+          | {
+              _type: 'resource'
+              _id: string
+              title: string | null
+              slug: null
+              excerpt: SimplePortableText | null
+              coverImage: null
+            }
+        > | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+      }
+    | {
+        _key: string
+        _type: 'rowContainer'
+        title?: string
+        hideTitle?: boolean
+        centerTitle?: boolean
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        row?: 'threeColumn' | 'twoColumn'
+        removeBottomPadding?: boolean
+        condensedCopy?: boolean
+        centerCopy?: boolean
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        overlay?: 'blueOverlay' | 'darkOverlay' | 'noOverlay'
+        backgroundColor?: '#16abcc' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        rowContent: Array<
+          | {
+              _type: 'acuityForm'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: string
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'carousel'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: Array<{
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  _type: 'sanity.imageAsset'
+                  url: string | null
+                  metadata: {
+                    dimensions: {
+                      width: number
+                      height: number
+                      aspectRatio: number
+                    } | null
+                    lqip: string | null
+                    palette: {
+                      dominant: {
+                        background: string | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'faq'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+              items: Array<{
+                _key: string
+                question: string
+                answer: {
+                  portableTextBlock: Array<
+                    | {
+                        children?: Array<{
+                          marks?: Array<string>
+                          text?: string
+                          _type: 'span'
+                          _key: string
+                        }>
+                        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                        listItem?: 'bullet' | 'number'
+                        markDefs: Array<
+                          | {
+                              _key: string
+                              _type: 'internalLink'
+                              item:
+                                | {
+                                    _id: string
+                                    _type: 'class'
+                                    slug: string
+                                    parentPage: {
+                                      parentSlug: string
+                                    } | null
+                                  }
+                                | {
+                                    _id: string
+                                    _type: 'page'
+                                    slug: string
+                                  }
+                                | null
+                            }
+                          | {
+                              _key: string
+                              _type: 'link'
+                              href: string | null
+                              blank: boolean | null
+                            }
+                        > | null
+                        level?: number
+                        _type: 'block'
+                        _key: string
+                      }
+                    | {
+                        _key: string
+                        _type: 'contactInfo'
+                        headline?: string
+                        phoneNumber: string
+                        phoneLabel?: string
+                        email: string
+                        textColor?: 'blue' | 'white'
+                        size?: 'large' | 'normal'
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'cta'
+                        title: string | null
+                        kind: 'button' | 'link' | null
+                        arrow: boolean | null
+                        landingPageRoute:
+                          | {
+                              _id: string
+                              slug: string
+                              _type: 'page'
+                            }
+                          | {
+                              _id: string
+                              slug: string
+                              _type: 'post'
+                            }
+                          | null
+                        link: string | null
+                        anchor?: string
+                        fileDownload: {
+                          _type: 'file'
+                          asset: {
+                            _id: string
+                            _type: 'sanity.fileAsset'
+                            url: string | null
+                          } | null
+                        } | null
+                        markDefs: null
+                      }
+                    | {
+                        hr?: string
+                        size?: string
+                        width?: string
+                        _type: 'hr'
+                        _key: string
+                        markDefs: null
+                      }
+                    | {
+                        asset?: SanityImageAssetReference
+                        media?: unknown
+                        hotspot?: SanityImageHotspot
+                        crop?: SanityImageCrop
+                        alt?: string
+                        _type: 'image'
+                        _key: string
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'logoRow'
+                        logoRow?: Array<
+                          {
+                            _key: string
+                          } & Logo
+                        >
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'youtube'
+                        url?: string
+                        markDefs: null
+                      }
+                  > | null
+                }
+              }> | null
+            }
+          | {
+              _type: 'form'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: string
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'iconCard'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: string
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: Icon | null
+              title: null
+              cta: {
+                title: string | null
+                arrow: boolean | null
+                kind: 'button' | 'link' | null
+                link: string | null
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+              } | null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'imageButtonCard'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: string
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: {
+                _id: string
+                slug: string
+                _type: 'page'
+              } | null
+              image: {
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  _type: 'sanity.imageAsset'
+                  url: string | null
+                  metadata: {
+                    dimensions: {
+                      width: number
+                      height: number
+                      aspectRatio: number
+                    } | null
+                    lqip: string | null
+                    palette: {
+                      dominant: {
+                        background: string | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+              } | null
+              carouselImages: null
+            }
+          | {
+              _type: 'mainImage'
+              _key: string
+              alt: string | null
+              crop: SanityImageCrop | null
+              hotspot: SanityImageHotspot | null
+              asset: {
+                _id: string
+                _type: 'sanity.imageAsset'
+                url: string | null
+                metadata: {
+                  dimensions: {
+                    width: number
+                    height: number
+                    aspectRatio: number
+                  } | null
+                  lqip: string | null
+                  palette: {
+                    dominant: {
+                      background: string | null
+                    } | null
+                  } | null
+                } | null
+              } | null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'mainPortableText'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: Array<
+                | {
+                    children?: Array<{
+                      marks?: Array<string>
+                      text?: string
+                      _type: 'span'
+                      _key: string
+                    }>
+                    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                    listItem?: 'bullet' | 'number'
+                    markDefs: Array<
+                      | {
+                          _key: string
+                          _type: 'internalLink'
+                          item:
+                            | {
+                                _id: string
+                                _type: 'class'
+                                slug: string
+                                parentPage: {
+                                  parentSlug: string
+                                } | null
+                              }
+                            | {
+                                _id: string
+                                _type: 'page'
+                                slug: string
+                              }
+                            | null
+                        }
+                      | {
+                          _key: string
+                          _type: 'link'
+                          href: string | null
+                          blank: boolean | null
+                        }
+                    > | null
+                    level?: number
+                    _type: 'block'
+                    _key: string
+                  }
+                | {
+                    _key: string
+                    _type: 'contactInfo'
+                    headline?: string
+                    phoneNumber: string
+                    phoneLabel?: string
+                    email: string
+                    textColor?: 'blue' | 'white'
+                    size?: 'large' | 'normal'
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'cta'
+                    title: string | null
+                    kind: 'button' | 'link' | null
+                    arrow: boolean | null
+                    landingPageRoute:
+                      | {
+                          _id: string
+                          slug: string
+                          _type: 'page'
+                        }
+                      | {
+                          _id: string
+                          slug: string
+                          _type: 'post'
+                        }
+                      | null
+                    link: string | null
+                    anchor?: string
+                    fileDownload: {
+                      _type: 'file'
+                      asset: {
+                        _id: string
+                        _type: 'sanity.fileAsset'
+                        url: string | null
+                      } | null
+                    } | null
+                    markDefs: null
+                  }
+                | {
+                    hr?: string
+                    size?: string
+                    width?: string
+                    _type: 'hr'
+                    _key: string
+                    markDefs: null
+                  }
+                | {
+                    asset?: SanityImageAssetReference
+                    media?: unknown
+                    hotspot?: SanityImageHotspot
+                    crop?: SanityImageCrop
+                    alt?: string
+                    _type: 'image'
+                    _key: string
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'logoRow'
+                    logoRow?: Array<
+                      {
+                        _key: string
+                      } & Logo
+                    >
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'youtube'
+                    url?: string
+                    markDefs: null
+                  }
+              > | null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+        > | null
+        disabled?: boolean
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+        galleryArr: null
+      }
+    | {
+        _key: string
+        _type: 'singleColumnContentBlock'
+        title?: string
+        backgroundColor: '#013b63' | '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff' | null
+        removeBottomPadding: boolean | null
+        skinny: boolean | null
+        centerContent: boolean | null
+        contentBlock: {
+          contentType: 'faq' | 'mainPortableText' | null
+          portableTextBlock: {
+            portableTextBlock: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }
+              | {
+                  _key: string
+                  _type: 'contactInfo'
+                  headline?: string
+                  phoneNumber: string
+                  phoneLabel?: string
+                  email: string
+                  textColor?: 'blue' | 'white'
+                  size?: 'large' | 'normal'
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'cta'
+                  title: string | null
+                  kind: 'button' | 'link' | null
+                  arrow: boolean | null
+                  landingPageRoute:
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'page'
+                      }
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'post'
+                      }
+                    | null
+                  link: string | null
+                  anchor?: string
+                  fileDownload: {
+                    _type: 'file'
+                    asset: {
+                      _id: string
+                      _type: 'sanity.fileAsset'
+                      url: string | null
+                    } | null
+                  } | null
+                  markDefs: null
+                }
+              | {
+                  hr?: string
+                  size?: string
+                  width?: string
+                  _type: 'hr'
+                  _key: string
+                  markDefs: null
+                }
+              | {
+                  asset?: SanityImageAssetReference
+                  media?: unknown
+                  hotspot?: SanityImageHotspot
+                  crop?: SanityImageCrop
+                  alt?: string
+                  _type: 'image'
+                  _key: string
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'logoRow'
+                  logoRow?: Array<
+                    {
+                      _key: string
+                    } & Logo
+                  >
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'youtube'
+                  url?: string
+                  markDefs: null
+                }
+            > | null
+          } | null
+          faq: {
+            items: Array<{
+              _key: string
+              question: string
+              answer: {
+                portableTextBlock: Array<
+                  | {
+                      children?: Array<{
+                        marks?: Array<string>
+                        text?: string
+                        _type: 'span'
+                        _key: string
+                      }>
+                      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                      listItem?: 'bullet' | 'number'
+                      markDefs: Array<
+                        | {
+                            _key: string
+                            _type: 'internalLink'
+                            item:
+                              | {
+                                  _id: string
+                                  _type: 'class'
+                                  slug: string
+                                  parentPage: {
+                                    parentSlug: string
+                                  } | null
+                                }
+                              | {
+                                  _id: string
+                                  _type: 'page'
+                                  slug: string
+                                }
+                              | null
+                          }
+                        | {
+                            _key: string
+                            _type: 'link'
+                            href: string | null
+                            blank: boolean | null
+                          }
+                      > | null
+                      level?: number
+                      _type: 'block'
+                      _key: string
+                    }
+                  | {
+                      _key: string
+                      _type: 'contactInfo'
+                      headline?: string
+                      phoneNumber: string
+                      phoneLabel?: string
+                      email: string
+                      textColor?: 'blue' | 'white'
+                      size?: 'large' | 'normal'
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'cta'
+                      title: string | null
+                      kind: 'button' | 'link' | null
+                      arrow: boolean | null
+                      landingPageRoute:
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'page'
+                          }
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'post'
+                          }
+                        | null
+                      link: string | null
+                      anchor?: string
+                      fileDownload: {
+                        _type: 'file'
+                        asset: {
+                          _id: string
+                          _type: 'sanity.fileAsset'
+                          url: string | null
+                        } | null
+                      } | null
+                      markDefs: null
+                    }
+                  | {
+                      hr?: string
+                      size?: string
+                      width?: string
+                      _type: 'hr'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      asset?: SanityImageAssetReference
+                      media?: unknown
+                      hotspot?: SanityImageHotspot
+                      crop?: SanityImageCrop
+                      alt?: string
+                      _type: 'image'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'logoRow'
+                      logoRow?: Array<
+                        {
+                          _key: string
+                        } & Logo
+                      >
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'youtube'
+                      url?: string
+                      markDefs: null
+                    }
+                > | null
+              }
+            }> | null
+          } | null
+        } | null
+        disabled: boolean | null
+        image: null
+        programs: null
+        enhanced: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'successStoriesBlock'
+        backgroundColor: 'lightBlue' | 'navy' | 'orange' | 'yellow' | null
+        stories: Array<{
+          portableTextBlock: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+            listItem?: 'bullet' | 'number'
+            markDefs: Array<
+              | {
+                  _key: string
+                  _type: 'internalLink'
+                  item:
+                    | {
+                        _id: string
+                        _type: 'class'
+                        slug: string
+                        parentPage: {
+                          parentSlug: string
+                        } | null
+                      }
+                    | {
+                        _id: string
+                        _type: 'page'
+                        slug: string
+                      }
+                    | null
+                }
+              | {
+                  _key: string
+                  _type: 'link'
+                  href: string | null
+                  blank: boolean | null
+                }
+            > | null
+            level?: number
+            _type: 'block'
+            _key: string
+          }> | null
+        }> | null
+        disabled: boolean | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'testimonialGridContainer'
+        title?: string
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        skinny?: boolean
+        testimonialsArr: Array<{
+          _key: null
+          heading: string | null
+          copy: SimplePortableText | null
+        }> | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'trainersGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        trainers: Array<{
+          _id: string
+          name: string
+          firstName: null
+          lastName: null
+          slug: Slug
+          picture: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          }
+          certifications: SimplePortableText | null
+          role: string | null
+          bio: SimplePortableText | null
+        }> | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+  > | null
+} | null
 
 // Source: sanity/lib/queries.ts
 // Variable: blogLandingPageQuery
 // Query: *[_type == 'blogLandingPage'][0]{    _id,    _type,    title,    slug,    overview,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      ...,      _type == 'heroBanner' => {        _key,        _type,        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        _key,        _type,        size,        backgroundColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      }    }  }
-export type BlogLandingPageQueryResult = null
+export type BlogLandingPageQueryResult = {
+  _id: string
+  _type: 'blogLandingPage'
+  title: string
+  slug: Slug
+  overview: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
+  seo: {
+    seoTitle: string | null
+    seoDescription: string | null
+    noindex: boolean | null
+    canonicalUrl: string | null
+    ogImage: {
+      alt: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        url: string | null
+        metadata: {
+          dimensions: {
+            width: number
+            height: number
+            aspectRatio: number
+          } | null
+          lqip: string | null
+          palette: {
+            dominant: {
+              background: string | null
+            } | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  content: Array<
+    | {
+        _key: string
+        _type: 'heroBanner'
+        size: 'standard' | 'x-large' | null
+        subheading: string | null
+        subHeadingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        heading: string
+        headingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        copy: {
+          portableTextBlock: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+            listItem?: 'bullet' | 'number'
+            markDefs: Array<
+              | {
+                  _key: string
+                  _type: 'internalLink'
+                  item:
+                    | {
+                        _id: string
+                        _type: 'class'
+                        slug: string
+                        parentPage: {
+                          parentSlug: string
+                        } | null
+                      }
+                    | {
+                        _id: string
+                        _type: 'page'
+                        slug: string
+                      }
+                    | null
+                }
+              | {
+                  _key: string
+                  _type: 'link'
+                  href: string | null
+                  blank: boolean | null
+                }
+            > | null
+            level?: number
+            _type: 'block'
+            _key: string
+          }> | null
+        } | null
+        copyColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        overlay: 'blueOverlay' | 'darkOverlay' | 'noOverlay' | null
+        cta: {
+          title: string | null
+          arrow: boolean | null
+          kind: 'button' | 'link' | null
+          link: string | null
+          fileDownload: {
+            _type: 'file'
+            asset: {
+              _id: string
+              _type: 'sanity.fileAsset'
+              url: string | null
+            } | null
+          } | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+        } | null
+        disabled: boolean | null
+      }
+    | {
+        _key: string
+        _type: 'heroTwoPanel'
+        size: 'standard' | 'x-large' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        backgroundColor: '#16abcc' | '#323943' | '#ee6d08' | '#feca2d' | '#ffffff' | null
+        mainPortableText: {
+          portableTextBlock: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                listItem?: 'bullet' | 'number'
+                markDefs: Array<
+                  | {
+                      _key: string
+                      _type: 'internalLink'
+                      item:
+                        | {
+                            _id: string
+                            _type: 'class'
+                            slug: string
+                            parentPage: {
+                              parentSlug: string
+                            } | null
+                          }
+                        | {
+                            _id: string
+                            _type: 'page'
+                            slug: string
+                          }
+                        | null
+                    }
+                  | {
+                      _key: string
+                      _type: 'link'
+                      href: string | null
+                      blank: boolean | null
+                    }
+                > | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                _key: string
+                _type: 'contactInfo'
+                headline?: string
+                phoneNumber: string
+                phoneLabel?: string
+                email: string
+                textColor?: 'blue' | 'white'
+                size?: 'large' | 'normal'
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'cta'
+                title: string | null
+                kind: 'button' | 'link' | null
+                arrow: boolean | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+                link: string | null
+                anchor?: string
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                markDefs: null
+              }
+            | {
+                hr?: string
+                size?: string
+                width?: string
+                _type: 'hr'
+                _key: string
+                markDefs: null
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'logoRow'
+                logoRow?: Array<
+                  {
+                    _key: string
+                  } & Logo
+                >
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'youtube'
+                url?: string
+                markDefs: null
+              }
+          > | null
+        } | null
+        centerText?: boolean
+        disabled: boolean | null
+      }
+    | {
+        _key: string
+        _type: 'postsGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        posts: Array<{
+          _id: string
+          title: string
+          slug: {
+            current: string
+          }
+          excerpt: {
+            portableTextBlock: Array<{
+              children?: Array<{
+                marks?: Array<string>
+                text?: string
+                _type: 'span'
+                _key: string
+              }>
+              style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+              listItem?: 'bullet' | 'number'
+              markDefs: Array<
+                | {
+                    _key: string
+                    _type: 'internalLink'
+                    item:
+                      | {
+                          _id: string
+                          _type: 'class'
+                          slug: string
+                          parentPage: {
+                            parentSlug: string
+                          } | null
+                        }
+                      | {
+                          _id: string
+                          _type: 'page'
+                          slug: string
+                        }
+                      | null
+                  }
+                | {
+                    _key: string
+                    _type: 'link'
+                    href: string | null
+                    blank: boolean | null
+                  }
+              > | null
+              level?: number
+              _type: 'block'
+              _key: string
+            }> | null
+          } | null
+          image: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          author: {
+            _id: string
+            name: string
+            slug: {
+              current: string
+            }
+            picture: {
+              alt: string | null
+              crop: SanityImageCrop | null
+              hotspot: SanityImageHotspot | null
+              asset: {
+                _id: string
+                _type: 'sanity.imageAsset'
+                url: string | null
+                metadata: {
+                  dimensions: {
+                    width: number
+                    height: number
+                    aspectRatio: number
+                  } | null
+                  lqip: string | null
+                  palette: {
+                    dominant: {
+                      background: string | null
+                    } | null
+                  } | null
+                } | null
+              } | null
+            }
+          }
+        }> | null
+        image: null
+      }
+    | {
+        _key: string
+        _type: 'singleColumnContentBlock'
+        title?: string
+        backgroundColor?: '#013b63' | '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        removeBottomPadding?: boolean
+        skinny?: boolean
+        centerContent?: boolean
+        contentBlock?: ContentBlock
+        disabled?: boolean
+        image: null
+      }
+    | {
+        _key: string
+        _type: 'successStoriesBlock'
+        backgroundColor?: 'lightBlue' | 'navy' | 'orange' | 'yellow'
+        stories?: Array<
+          {
+            _key: string
+          } & SimplePortableText
+        >
+        disabled?: boolean
+        image: null
+      }
+  > | null
+} | null
 
 // Source: sanity/lib/queries.ts
 // Variable: getPageQuery
-// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    title,    slug,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  dogName,  namePlacement,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
+// Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    title,    slug,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
 export type GetPageQueryResult = {
   _id: string
   _type: 'page'
-  title: null
+  title: string
   slug: Slug
-  seo: null
-  content: null
+  seo: {
+    seoTitle: string | null
+    seoDescription: string | null
+    noindex: boolean | null
+    canonicalUrl: string | null
+    ogImage: {
+      alt: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        url: string | null
+        metadata: {
+          dimensions: {
+            width: number
+            height: number
+            aspectRatio: number
+          } | null
+          lqip: string | null
+          palette: {
+            dominant: {
+              background: string | null
+            } | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  content: Array<
+    | {
+        _key: string
+        _type: 'classRowsContainer'
+        classRefs: Array<{
+          _id: string
+          name: string
+          trainingType: 'group' | 'onDemand' | 'private'
+          customTrainingTitle: string | null
+          price: string | null
+          slug: {
+            current: string
+          }
+          description: SimplePortableText | null
+          takeaways: Array<string> | null
+          picture: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          acuityCategoryUrl: string | null
+          upcomingClasses: Array<{
+            _key: string
+            dateTime: string
+            acuityId: string | null
+            totalSpots: number | null
+            bookingsCount: number | null
+            availability: 'full' | 'nearlyFull' | 'open' | null
+          }> | null
+        }> | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'contactPageMap'
+        map: string
+        mapLink: string
+        copy?: MainPortableText
+        iconCards?: Array<
+          {
+            _key: string
+          } & IconCard
+        >
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'customComponent'
+        title?: string
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        rows: Array<
+          | {
+              _type: 'aboutUsContainer'
+              _key: string
+              copy: {
+                portableTextBlock: Array<
+                  | {
+                      children?: Array<{
+                        marks?: Array<string>
+                        text?: string
+                        _type: 'span'
+                        _key: string
+                      }>
+                      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                      listItem?: 'bullet' | 'number'
+                      markDefs: Array<
+                        | {
+                            _key: string
+                            _type: 'internalLink'
+                            item:
+                              | {
+                                  _id: string
+                                  _type: 'class'
+                                  slug: string
+                                  parentPage: {
+                                    parentSlug: string
+                                  } | null
+                                }
+                              | {
+                                  _id: string
+                                  _type: 'page'
+                                  slug: string
+                                }
+                              | null
+                          }
+                        | {
+                            _key: string
+                            _type: 'link'
+                            href: string | null
+                            blank: boolean | null
+                          }
+                      > | null
+                      level?: number
+                      _type: 'block'
+                      _key: string
+                    }
+                  | {
+                      _key: string
+                      _type: 'contactInfo'
+                      headline?: string
+                      phoneNumber: string
+                      phoneLabel?: string
+                      email: string
+                      textColor?: 'blue' | 'white'
+                      size?: 'large' | 'normal'
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'cta'
+                      title: string | null
+                      kind: 'button' | 'link' | null
+                      arrow: boolean | null
+                      landingPageRoute:
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'page'
+                          }
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'post'
+                          }
+                        | null
+                      link: string | null
+                      anchor?: string
+                      fileDownload: {
+                        _type: 'file'
+                        asset: {
+                          _id: string
+                          _type: 'sanity.fileAsset'
+                          url: string | null
+                        } | null
+                      } | null
+                      markDefs: null
+                    }
+                  | {
+                      hr?: string
+                      size?: string
+                      width?: string
+                      _type: 'hr'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      asset?: SanityImageAssetReference
+                      media?: unknown
+                      hotspot?: SanityImageHotspot
+                      crop?: SanityImageCrop
+                      alt?: string
+                      _type: 'image'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'logoRow'
+                      logoRow?: Array<
+                        {
+                          _key: string
+                        } & Logo
+                      >
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'youtube'
+                      url?: string
+                      markDefs: null
+                    }
+                > | null
+              } | null
+              iconCards: Array<{
+                heading: string
+                icon: {
+                  alt: string
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+                copy: {
+                  portableTextBlock: Array<{
+                    children?: Array<{
+                      marks?: Array<string>
+                      text?: string
+                      _type: 'span'
+                      _key: string
+                    }>
+                    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                    listItem?: 'bullet' | 'number'
+                    markDefs: Array<
+                      | {
+                          _key: string
+                          _type: 'internalLink'
+                          item:
+                            | {
+                                _id: string
+                                _type: 'class'
+                                slug: string
+                                parentPage: {
+                                  parentSlug: string
+                                } | null
+                              }
+                            | {
+                                _id: string
+                                _type: 'page'
+                                slug: string
+                              }
+                            | null
+                        }
+                      | {
+                          _key: string
+                          _type: 'link'
+                          href: string | null
+                          blank: boolean | null
+                        }
+                    > | null
+                    level?: number
+                    _type: 'block'
+                    _key: string
+                  }> | null
+                } | null
+                cta: {
+                  title: string | null
+                  arrow: boolean | null
+                  kind: 'button' | 'link' | null
+                  link: string | null
+                  fileDownload: {
+                    _type: 'file'
+                    asset: {
+                      _id: string
+                      _type: 'sanity.fileAsset'
+                      url: string | null
+                    } | null
+                  } | null
+                  landingPageRoute:
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'page'
+                      }
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'post'
+                      }
+                    | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'galleryGrid'
+              _key: string
+              galleryArr: Array<{
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  metadata: {
+                    lqip: string | null
+                  } | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'trainerRows'
+              _key: string
+              trainers: Array<{
+                _id: string
+                name: string
+                firstName: null
+                lastName: null
+                slug: Slug
+                picture: {
+                  alt: string | null
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                }
+                certifications: SimplePortableText | null
+                role: string | null
+                bio: SimplePortableText | null
+              }> | null
+            }
+        > | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'heroBanner'
+        size: 'standard' | 'x-large' | null
+        subheading: string | null
+        subHeadingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        heading: string
+        headingColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        copy: {
+          portableTextBlock: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+            listItem?: 'bullet' | 'number'
+            markDefs: Array<
+              | {
+                  _key: string
+                  _type: 'internalLink'
+                  item:
+                    | {
+                        _id: string
+                        _type: 'class'
+                        slug: string
+                        parentPage: {
+                          parentSlug: string
+                        } | null
+                      }
+                    | {
+                        _id: string
+                        _type: 'page'
+                        slug: string
+                      }
+                    | null
+                }
+              | {
+                  _key: string
+                  _type: 'link'
+                  href: string | null
+                  blank: boolean | null
+                }
+            > | null
+            level?: number
+            _type: 'block'
+            _key: string
+          }> | null
+        } | null
+        copyColor: 'blue' | 'grey33' | 'orange' | 'white' | 'yellow' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        overlay: 'blueOverlay' | 'darkOverlay' | 'noOverlay' | null
+        cta: {
+          title: string | null
+          arrow: boolean | null
+          kind: 'button' | 'link' | null
+          link: string | null
+          fileDownload: {
+            _type: 'file'
+            asset: {
+              _id: string
+              _type: 'sanity.fileAsset'
+              url: string | null
+            } | null
+          } | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+        } | null
+        disabled: boolean | null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'heroTwoPanel'
+        size: 'standard' | 'x-large' | null
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        backgroundColor: '#16abcc' | '#323943' | '#ee6d08' | '#feca2d' | '#ffffff' | null
+        mainPortableText: {
+          portableTextBlock: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                listItem?: 'bullet' | 'number'
+                markDefs: Array<
+                  | {
+                      _key: string
+                      _type: 'internalLink'
+                      item:
+                        | {
+                            _id: string
+                            _type: 'class'
+                            slug: string
+                            parentPage: {
+                              parentSlug: string
+                            } | null
+                          }
+                        | {
+                            _id: string
+                            _type: 'page'
+                            slug: string
+                          }
+                        | null
+                    }
+                  | {
+                      _key: string
+                      _type: 'link'
+                      href: string | null
+                      blank: boolean | null
+                    }
+                > | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                _key: string
+                _type: 'contactInfo'
+                headline?: string
+                phoneNumber: string
+                phoneLabel?: string
+                email: string
+                textColor?: 'blue' | 'white'
+                size?: 'large' | 'normal'
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'cta'
+                title: string | null
+                kind: 'button' | 'link' | null
+                arrow: boolean | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+                link: string | null
+                anchor?: string
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                markDefs: null
+              }
+            | {
+                hr?: string
+                size?: string
+                width?: string
+                _type: 'hr'
+                _key: string
+                markDefs: null
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'logoRow'
+                logoRow?: Array<
+                  {
+                    _key: string
+                  } & Logo
+                >
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'youtube'
+                url?: string
+                markDefs: null
+              }
+          > | null
+        } | null
+        centerText: boolean | null
+        disabled: boolean | null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'productGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        productsArr: Array<{
+          _id: string
+          _key: null
+          heading: string
+          price: number
+          image: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          cta: {
+            title: string | null
+            arrow: boolean | null
+            kind: 'button' | 'link' | null
+            link: string | null
+            landingPageRoute:
+              | {
+                  _id: string
+                  slug: string
+                  _type: 'page'
+                }
+              | {
+                  _id: string
+                  slug: string
+                  _type: 'post'
+                }
+              | null
+          } | null
+        }> | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'programsGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        programs: Array<{
+          _id: string
+          name: string
+          enhancedCardTitle: string | null
+          trainingType: 'group' | 'onDemand' | 'private'
+          slug: {
+            current: string
+          }
+          parentPage: {
+            slug: {
+              current: string
+            }
+          } | null
+          cardImage: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          } | null
+          cardTakeaways: Array<string> | null
+          takeaways: Array<string> | null
+          acuityCategoryUrl: string | null
+          upcomingClasses: Array<{
+            _key: string
+            dateTime: string
+            acuityId: string | null
+            totalSpots: number | null
+            bookingsCount: number | null
+            availability: 'full' | 'nearlyFull' | 'open' | null
+          }> | null
+        }> | null
+        enhanced: boolean | null
+        description: {
+          portableTextBlock: Array<
+            | {
+                children?: Array<{
+                  marks?: Array<string>
+                  text?: string
+                  _type: 'span'
+                  _key: string
+                }>
+                style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                listItem?: 'bullet' | 'number'
+                markDefs: Array<
+                  | {
+                      _key: string
+                      _type: 'internalLink'
+                      item:
+                        | {
+                            _id: string
+                            _type: 'class'
+                            slug: string
+                            parentPage: {
+                              parentSlug: string
+                            } | null
+                          }
+                        | {
+                            _id: string
+                            _type: 'page'
+                            slug: string
+                          }
+                        | null
+                    }
+                  | {
+                      _key: string
+                      _type: 'link'
+                      href: string | null
+                      blank: boolean | null
+                    }
+                > | null
+                level?: number
+                _type: 'block'
+                _key: string
+              }
+            | {
+                _key: string
+                _type: 'contactInfo'
+                headline?: string
+                phoneNumber: string
+                phoneLabel?: string
+                email: string
+                textColor?: 'blue' | 'white'
+                size?: 'large' | 'normal'
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'cta'
+                title: string | null
+                kind: 'button' | 'link' | null
+                arrow: boolean | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+                link: string | null
+                anchor?: string
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                markDefs: null
+              }
+            | {
+                hr?: string
+                size?: string
+                width?: string
+                _type: 'hr'
+                _key: string
+                markDefs: null
+              }
+            | {
+                asset?: SanityImageAssetReference
+                media?: unknown
+                hotspot?: SanityImageHotspot
+                crop?: SanityImageCrop
+                alt?: string
+                _type: 'image'
+                _key: string
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'logoRow'
+                logoRow?: Array<
+                  {
+                    _key: string
+                  } & Logo
+                >
+                markDefs: null
+              }
+            | {
+                _key: string
+                _type: 'youtube'
+                url?: string
+                markDefs: null
+              }
+          > | null
+        } | null
+        centerContent: boolean | null
+        image: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'relatedResourcesRow'
+        title?: string
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        backgroundColor?: '#16abcc' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        relatedResources: Array<
+          | {
+              _type: 'post'
+              _id: string
+              title: string
+              slug: string
+              author: {
+                _id: string
+                name: string
+                firstName: null
+                lastName: null
+                slug: Slug
+                picture: {
+                  alt: string | null
+                  crop: SanityImageCrop | null
+                  hotspot: SanityImageHotspot | null
+                  asset: {
+                    _id: string
+                    _type: 'sanity.imageAsset'
+                    url: string | null
+                    metadata: {
+                      dimensions: {
+                        width: number
+                        height: number
+                        aspectRatio: number
+                      } | null
+                      lqip: string | null
+                      palette: {
+                        dominant: {
+                          background: string | null
+                        } | null
+                      } | null
+                    } | null
+                  } | null
+                }
+                certifications: SimplePortableText | null
+                role: string | null
+                bio: SimplePortableText | null
+              }
+              excerpt: SimplePortableText | null
+              coverImage: null
+            }
+          | {
+              _type: 'resource'
+              _id: string
+              title: string | null
+              slug: null
+              excerpt: SimplePortableText | null
+              coverImage: null
+            }
+        > | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+      }
+    | {
+        _key: string
+        _type: 'rowContainer'
+        title?: string
+        hideTitle?: boolean
+        centerTitle?: boolean
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        row?: 'threeColumn' | 'twoColumn'
+        removeBottomPadding?: boolean
+        condensedCopy?: boolean
+        centerCopy?: boolean
+        image: {
+          alt: string | null
+          crop: SanityImageCrop | null
+          hotspot: SanityImageHotspot | null
+          asset: {
+            _id: string
+            _type: 'sanity.imageAsset'
+            url: string | null
+            metadata: {
+              dimensions: {
+                width: number
+                height: number
+                aspectRatio: number
+              } | null
+              lqip: string | null
+              palette: {
+                dominant: {
+                  background: string | null
+                } | null
+              } | null
+            } | null
+          } | null
+        } | null
+        overlay?: 'blueOverlay' | 'darkOverlay' | 'noOverlay'
+        backgroundColor?: '#16abcc' | '#e2e2e2' | '#ee6d08' | '#feca2d' | '#ffffff'
+        rowContent: Array<
+          | {
+              _type: 'acuityForm'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: string
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'carousel'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: Array<{
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  _type: 'sanity.imageAsset'
+                  url: string | null
+                  metadata: {
+                    dimensions: {
+                      width: number
+                      height: number
+                      aspectRatio: number
+                    } | null
+                    lqip: string | null
+                    palette: {
+                      dominant: {
+                        background: string | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+              }> | null
+            }
+          | {
+              _type: 'faq'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+              items: Array<{
+                _key: string
+                question: string
+                answer: {
+                  portableTextBlock: Array<
+                    | {
+                        children?: Array<{
+                          marks?: Array<string>
+                          text?: string
+                          _type: 'span'
+                          _key: string
+                        }>
+                        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                        listItem?: 'bullet' | 'number'
+                        markDefs: Array<
+                          | {
+                              _key: string
+                              _type: 'internalLink'
+                              item:
+                                | {
+                                    _id: string
+                                    _type: 'class'
+                                    slug: string
+                                    parentPage: {
+                                      parentSlug: string
+                                    } | null
+                                  }
+                                | {
+                                    _id: string
+                                    _type: 'page'
+                                    slug: string
+                                  }
+                                | null
+                            }
+                          | {
+                              _key: string
+                              _type: 'link'
+                              href: string | null
+                              blank: boolean | null
+                            }
+                        > | null
+                        level?: number
+                        _type: 'block'
+                        _key: string
+                      }
+                    | {
+                        _key: string
+                        _type: 'contactInfo'
+                        headline?: string
+                        phoneNumber: string
+                        phoneLabel?: string
+                        email: string
+                        textColor?: 'blue' | 'white'
+                        size?: 'large' | 'normal'
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'cta'
+                        title: string | null
+                        kind: 'button' | 'link' | null
+                        arrow: boolean | null
+                        landingPageRoute:
+                          | {
+                              _id: string
+                              slug: string
+                              _type: 'page'
+                            }
+                          | {
+                              _id: string
+                              slug: string
+                              _type: 'post'
+                            }
+                          | null
+                        link: string | null
+                        anchor?: string
+                        fileDownload: {
+                          _type: 'file'
+                          asset: {
+                            _id: string
+                            _type: 'sanity.fileAsset'
+                            url: string | null
+                          } | null
+                        } | null
+                        markDefs: null
+                      }
+                    | {
+                        hr?: string
+                        size?: string
+                        width?: string
+                        _type: 'hr'
+                        _key: string
+                        markDefs: null
+                      }
+                    | {
+                        asset?: SanityImageAssetReference
+                        media?: unknown
+                        hotspot?: SanityImageHotspot
+                        crop?: SanityImageCrop
+                        alt?: string
+                        _type: 'image'
+                        _key: string
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'logoRow'
+                        logoRow?: Array<
+                          {
+                            _key: string
+                          } & Logo
+                        >
+                        markDefs: null
+                      }
+                    | {
+                        _key: string
+                        _type: 'youtube'
+                        url?: string
+                        markDefs: null
+                      }
+                  > | null
+                }
+              }> | null
+            }
+          | {
+              _type: 'form'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: string
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'iconCard'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: string
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: Icon | null
+              title: null
+              cta: {
+                title: string | null
+                arrow: boolean | null
+                kind: 'button' | 'link' | null
+                link: string | null
+                fileDownload: {
+                  _type: 'file'
+                  asset: {
+                    _id: string
+                    _type: 'sanity.fileAsset'
+                    url: string | null
+                  } | null
+                } | null
+                landingPageRoute:
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'page'
+                    }
+                  | {
+                      _id: string
+                      slug: string
+                      _type: 'post'
+                    }
+                  | null
+              } | null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'imageButtonCard'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: string
+              copy: {
+                portableTextBlock: Array<{
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }> | null
+              } | null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: {
+                _id: string
+                slug: string
+                _type: 'page'
+              } | null
+              image: {
+                alt: string | null
+                crop: SanityImageCrop | null
+                hotspot: SanityImageHotspot | null
+                asset: {
+                  _id: string
+                  _type: 'sanity.imageAsset'
+                  url: string | null
+                  metadata: {
+                    dimensions: {
+                      width: number
+                      height: number
+                      aspectRatio: number
+                    } | null
+                    lqip: string | null
+                    palette: {
+                      dominant: {
+                        background: string | null
+                      } | null
+                    } | null
+                  } | null
+                } | null
+              } | null
+              carouselImages: null
+            }
+          | {
+              _type: 'mainImage'
+              _key: string
+              alt: string | null
+              crop: SanityImageCrop | null
+              hotspot: SanityImageHotspot | null
+              asset: {
+                _id: string
+                _type: 'sanity.imageAsset'
+                url: string | null
+                metadata: {
+                  dimensions: {
+                    width: number
+                    height: number
+                    aspectRatio: number
+                  } | null
+                  lqip: string | null
+                  palette: {
+                    dominant: {
+                      background: string | null
+                    } | null
+                  } | null
+                } | null
+              } | null
+              heading: null
+              copy: null
+              portableTextBlock: null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+          | {
+              _type: 'mainPortableText'
+              _key: string
+              alt: null
+              crop: null
+              hotspot: null
+              asset: null
+              heading: null
+              copy: null
+              portableTextBlock: Array<
+                | {
+                    children?: Array<{
+                      marks?: Array<string>
+                      text?: string
+                      _type: 'span'
+                      _key: string
+                    }>
+                    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                    listItem?: 'bullet' | 'number'
+                    markDefs: Array<
+                      | {
+                          _key: string
+                          _type: 'internalLink'
+                          item:
+                            | {
+                                _id: string
+                                _type: 'class'
+                                slug: string
+                                parentPage: {
+                                  parentSlug: string
+                                } | null
+                              }
+                            | {
+                                _id: string
+                                _type: 'page'
+                                slug: string
+                              }
+                            | null
+                        }
+                      | {
+                          _key: string
+                          _type: 'link'
+                          href: string | null
+                          blank: boolean | null
+                        }
+                    > | null
+                    level?: number
+                    _type: 'block'
+                    _key: string
+                  }
+                | {
+                    _key: string
+                    _type: 'contactInfo'
+                    headline?: string
+                    phoneNumber: string
+                    phoneLabel?: string
+                    email: string
+                    textColor?: 'blue' | 'white'
+                    size?: 'large' | 'normal'
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'cta'
+                    title: string | null
+                    kind: 'button' | 'link' | null
+                    arrow: boolean | null
+                    landingPageRoute:
+                      | {
+                          _id: string
+                          slug: string
+                          _type: 'page'
+                        }
+                      | {
+                          _id: string
+                          slug: string
+                          _type: 'post'
+                        }
+                      | null
+                    link: string | null
+                    anchor?: string
+                    fileDownload: {
+                      _type: 'file'
+                      asset: {
+                        _id: string
+                        _type: 'sanity.fileAsset'
+                        url: string | null
+                      } | null
+                    } | null
+                    markDefs: null
+                  }
+                | {
+                    hr?: string
+                    size?: string
+                    width?: string
+                    _type: 'hr'
+                    _key: string
+                    markDefs: null
+                  }
+                | {
+                    asset?: SanityImageAssetReference
+                    media?: unknown
+                    hotspot?: SanityImageHotspot
+                    crop?: SanityImageCrop
+                    alt?: string
+                    _type: 'image'
+                    _key: string
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'logoRow'
+                    logoRow?: Array<
+                      {
+                        _key: string
+                      } & Logo
+                    >
+                    markDefs: null
+                  }
+                | {
+                    _key: string
+                    _type: 'youtube'
+                    url?: string
+                    markDefs: null
+                  }
+              > | null
+              icon: null
+              title: null
+              cta: null
+              landingPageRoute: null
+              image: null
+              carouselImages: null
+            }
+        > | null
+        disabled?: boolean
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+        galleryArr: null
+      }
+    | {
+        _key: string
+        _type: 'singleColumnContentBlock'
+        title?: string
+        backgroundColor: '#013b63' | '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff' | null
+        removeBottomPadding: boolean | null
+        skinny: boolean | null
+        centerContent: boolean | null
+        contentBlock: {
+          contentType: 'faq' | 'mainPortableText' | null
+          portableTextBlock: {
+            portableTextBlock: Array<
+              | {
+                  children?: Array<{
+                    marks?: Array<string>
+                    text?: string
+                    _type: 'span'
+                    _key: string
+                  }>
+                  style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                  listItem?: 'bullet' | 'number'
+                  markDefs: Array<
+                    | {
+                        _key: string
+                        _type: 'internalLink'
+                        item:
+                          | {
+                              _id: string
+                              _type: 'class'
+                              slug: string
+                              parentPage: {
+                                parentSlug: string
+                              } | null
+                            }
+                          | {
+                              _id: string
+                              _type: 'page'
+                              slug: string
+                            }
+                          | null
+                      }
+                    | {
+                        _key: string
+                        _type: 'link'
+                        href: string | null
+                        blank: boolean | null
+                      }
+                  > | null
+                  level?: number
+                  _type: 'block'
+                  _key: string
+                }
+              | {
+                  _key: string
+                  _type: 'contactInfo'
+                  headline?: string
+                  phoneNumber: string
+                  phoneLabel?: string
+                  email: string
+                  textColor?: 'blue' | 'white'
+                  size?: 'large' | 'normal'
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'cta'
+                  title: string | null
+                  kind: 'button' | 'link' | null
+                  arrow: boolean | null
+                  landingPageRoute:
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'page'
+                      }
+                    | {
+                        _id: string
+                        slug: string
+                        _type: 'post'
+                      }
+                    | null
+                  link: string | null
+                  anchor?: string
+                  fileDownload: {
+                    _type: 'file'
+                    asset: {
+                      _id: string
+                      _type: 'sanity.fileAsset'
+                      url: string | null
+                    } | null
+                  } | null
+                  markDefs: null
+                }
+              | {
+                  hr?: string
+                  size?: string
+                  width?: string
+                  _type: 'hr'
+                  _key: string
+                  markDefs: null
+                }
+              | {
+                  asset?: SanityImageAssetReference
+                  media?: unknown
+                  hotspot?: SanityImageHotspot
+                  crop?: SanityImageCrop
+                  alt?: string
+                  _type: 'image'
+                  _key: string
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'logoRow'
+                  logoRow?: Array<
+                    {
+                      _key: string
+                    } & Logo
+                  >
+                  markDefs: null
+                }
+              | {
+                  _key: string
+                  _type: 'youtube'
+                  url?: string
+                  markDefs: null
+                }
+            > | null
+          } | null
+          faq: {
+            items: Array<{
+              _key: string
+              question: string
+              answer: {
+                portableTextBlock: Array<
+                  | {
+                      children?: Array<{
+                        marks?: Array<string>
+                        text?: string
+                        _type: 'span'
+                        _key: string
+                      }>
+                      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+                      listItem?: 'bullet' | 'number'
+                      markDefs: Array<
+                        | {
+                            _key: string
+                            _type: 'internalLink'
+                            item:
+                              | {
+                                  _id: string
+                                  _type: 'class'
+                                  slug: string
+                                  parentPage: {
+                                    parentSlug: string
+                                  } | null
+                                }
+                              | {
+                                  _id: string
+                                  _type: 'page'
+                                  slug: string
+                                }
+                              | null
+                          }
+                        | {
+                            _key: string
+                            _type: 'link'
+                            href: string | null
+                            blank: boolean | null
+                          }
+                      > | null
+                      level?: number
+                      _type: 'block'
+                      _key: string
+                    }
+                  | {
+                      _key: string
+                      _type: 'contactInfo'
+                      headline?: string
+                      phoneNumber: string
+                      phoneLabel?: string
+                      email: string
+                      textColor?: 'blue' | 'white'
+                      size?: 'large' | 'normal'
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'cta'
+                      title: string | null
+                      kind: 'button' | 'link' | null
+                      arrow: boolean | null
+                      landingPageRoute:
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'page'
+                          }
+                        | {
+                            _id: string
+                            slug: string
+                            _type: 'post'
+                          }
+                        | null
+                      link: string | null
+                      anchor?: string
+                      fileDownload: {
+                        _type: 'file'
+                        asset: {
+                          _id: string
+                          _type: 'sanity.fileAsset'
+                          url: string | null
+                        } | null
+                      } | null
+                      markDefs: null
+                    }
+                  | {
+                      hr?: string
+                      size?: string
+                      width?: string
+                      _type: 'hr'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      asset?: SanityImageAssetReference
+                      media?: unknown
+                      hotspot?: SanityImageHotspot
+                      crop?: SanityImageCrop
+                      alt?: string
+                      _type: 'image'
+                      _key: string
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'logoRow'
+                      logoRow?: Array<
+                        {
+                          _key: string
+                        } & Logo
+                      >
+                      markDefs: null
+                    }
+                  | {
+                      _key: string
+                      _type: 'youtube'
+                      url?: string
+                      markDefs: null
+                    }
+                > | null
+              }
+            }> | null
+          } | null
+        } | null
+        disabled: boolean | null
+        image: null
+        programs: null
+        enhanced: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'successStoriesBlock'
+        backgroundColor: 'lightBlue' | 'navy' | 'orange' | 'yellow' | null
+        stories: Array<{
+          portableTextBlock: Array<{
+            children?: Array<{
+              marks?: Array<string>
+              text?: string
+              _type: 'span'
+              _key: string
+            }>
+            style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+            listItem?: 'bullet' | 'number'
+            markDefs: Array<
+              | {
+                  _key: string
+                  _type: 'internalLink'
+                  item:
+                    | {
+                        _id: string
+                        _type: 'class'
+                        slug: string
+                        parentPage: {
+                          parentSlug: string
+                        } | null
+                      }
+                    | {
+                        _id: string
+                        _type: 'page'
+                        slug: string
+                      }
+                    | null
+                }
+              | {
+                  _key: string
+                  _type: 'link'
+                  href: string | null
+                  blank: boolean | null
+                }
+            > | null
+            level?: number
+            _type: 'block'
+            _key: string
+          }> | null
+        }> | null
+        disabled: boolean | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'testimonialGridContainer'
+        title?: string
+        titleColor?: '#16abcc' | '#333333' | '#ee6d08' | '#feca2d' | '#ffffff'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        skinny?: boolean
+        testimonialsArr: Array<{
+          _key: null
+          heading: string | null
+          copy: SimplePortableText | null
+        }> | null
+        disabled?: boolean
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        trainers: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        relatedResources: null
+      }
+    | {
+        _key: string
+        _type: 'trainersGridContainer'
+        backgroundColor?: '#61c8e9' | '#e2e2e2' | '#feca2d' | '#ffffff'
+        trainers: Array<{
+          _id: string
+          name: string
+          firstName: null
+          lastName: null
+          slug: Slug
+          picture: {
+            alt: string | null
+            crop: SanityImageCrop | null
+            hotspot: SanityImageHotspot | null
+            asset: {
+              _id: string
+              _type: 'sanity.imageAsset'
+              url: string | null
+              metadata: {
+                dimensions: {
+                  width: number
+                  height: number
+                  aspectRatio: number
+                } | null
+                lqip: string | null
+                palette: {
+                  dominant: {
+                    background: string | null
+                  } | null
+                } | null
+              } | null
+            } | null
+          }
+          certifications: SimplePortableText | null
+          role: string | null
+          bio: SimplePortableText | null
+        }> | null
+        image: null
+        programs: null
+        enhanced: null
+        centerContent: null
+        description: null
+        classRefs: null
+        productsArr: null
+        posts: null
+        panels: null
+        testimonialsArr: null
+        relatedResources: null
+      }
+  > | null
 } | null
 
 // Source: sanity/lib/queries.ts
@@ -632,21 +5996,28 @@ export type SitemapDataResult = Array<
       _type: 'page'
       _id: string
       _updatedAt: string
-      seo: null
+      seo: {
+        noindex: boolean | null
+      } | null
     }
   | {
       slug: string
       _type: 'post'
       _id: string
       _updatedAt: string
-      seo: null
+      seo: {
+        noindex: boolean | null
+      } | null
     }
 >
 
 // Source: sanity/lib/queries.ts
 // Variable: homepageSitemap
 // Query: *[_type == "home"] {    _id,    _updatedAt  }
-export type HomepageSitemapResult = Array<never>
+export type HomepageSitemapResult = Array<{
+  _id: string
+  _updatedAt: string
+}>
 
 // Source: sanity/lib/queries.ts
 // Variable: allPostsQuery
@@ -657,11 +6028,76 @@ export type AllPostsQueryResult = Array<{
   slug: {
     current: string
   }
-  excerpt: null
-  image: null
+  excerpt: {
+    portableTextBlock: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+      listItem?: 'bullet' | 'number'
+      markDefs: Array<
+        | {
+            _key: string
+            _type: 'internalLink'
+            item:
+              | {
+                  _id: string
+                  _type: 'class'
+                  slug: string
+                  parentPage: {
+                    parentSlug: string
+                  } | null
+                }
+              | {
+                  _id: string
+                  _type: 'page'
+                  slug: string
+                }
+              | null
+          }
+        | {
+            _key: string
+            _type: 'link'
+            href: string | null
+            blank: boolean | null
+          }
+      > | null
+      level?: number
+      _type: 'block'
+      _key: string
+    }> | null
+  } | null
+  image: {
+    alt: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      url: string | null
+      metadata: {
+        dimensions: {
+          width: number
+          height: number
+          aspectRatio: number
+        } | null
+        lqip: string | null
+        palette: {
+          dominant: {
+            background: string | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
   author: {
-    name: null
-    slug: null
+    name: string
+    slug: {
+      current: string
+    }
     picture: {
       alt: string | null
       crop: SanityImageCrop | null
@@ -672,9 +6108,9 @@ export type AllPostsQueryResult = Array<{
         url: string | null
         metadata: {
           dimensions: {
-            width: number | null
-            height: number | null
-            aspectRatio: number | null
+            width: number
+            height: number
+            aspectRatio: number
           } | null
           lqip: string | null
           palette: {
@@ -685,7 +6121,7 @@ export type AllPostsQueryResult = Array<{
         } | null
       } | null
     }
-  } | null
+  }
 }>
 
 // Source: sanity/lib/queries.ts
@@ -697,11 +6133,76 @@ export type MorePostsQueryResult = Array<{
   slug: {
     current: string
   }
-  excerpt: null
-  image: null
+  excerpt: {
+    portableTextBlock: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+      listItem?: 'bullet' | 'number'
+      markDefs: Array<
+        | {
+            _key: string
+            _type: 'internalLink'
+            item:
+              | {
+                  _id: string
+                  _type: 'class'
+                  slug: string
+                  parentPage: {
+                    parentSlug: string
+                  } | null
+                }
+              | {
+                  _id: string
+                  _type: 'page'
+                  slug: string
+                }
+              | null
+          }
+        | {
+            _key: string
+            _type: 'link'
+            href: string | null
+            blank: boolean | null
+          }
+      > | null
+      level?: number
+      _type: 'block'
+      _key: string
+    }> | null
+  } | null
+  image: {
+    alt: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      url: string | null
+      metadata: {
+        dimensions: {
+          width: number
+          height: number
+          aspectRatio: number
+        } | null
+        lqip: string | null
+        palette: {
+          dominant: {
+            background: string | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
   author: {
-    name: null
-    slug: null
+    name: string
+    slug: {
+      current: string
+    }
     picture: {
       alt: string | null
       crop: SanityImageCrop | null
@@ -712,9 +6213,9 @@ export type MorePostsQueryResult = Array<{
         url: string | null
         metadata: {
           dimensions: {
-            width: number | null
-            height: number | null
-            aspectRatio: number | null
+            width: number
+            height: number
+            aspectRatio: number
           } | null
           lqip: string | null
           palette: {
@@ -725,7 +6226,7 @@ export type MorePostsQueryResult = Array<{
         } | null
       } | null
     }
-  } | null
+  }
 }>
 
 // Source: sanity/lib/queries.ts
@@ -734,18 +6235,229 @@ export type MorePostsQueryResult = Array<{
 export type PostQueryResult = {
   _id: string
   title: string
-  subheader: null
+  subheader: string | null
   slug: {
     current: string
   }
-  seo: null
-  excerpt: null
-  image: null
-  body: null
+  seo: {
+    seoTitle: string | null
+    seoDescription: string | null
+    noindex: boolean | null
+    canonicalUrl: string | null
+    ogImage: {
+      alt: string | null
+      crop: SanityImageCrop | null
+      hotspot: SanityImageHotspot | null
+      asset: {
+        _id: string
+        _type: 'sanity.imageAsset'
+        url: string | null
+        metadata: {
+          dimensions: {
+            width: number
+            height: number
+            aspectRatio: number
+          } | null
+          lqip: string | null
+          palette: {
+            dominant: {
+              background: string | null
+            } | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  excerpt: {
+    portableTextBlock: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+      listItem?: 'bullet' | 'number'
+      markDefs: Array<
+        | {
+            _key: string
+            _type: 'internalLink'
+            item:
+              | {
+                  _id: string
+                  _type: 'class'
+                  slug: string
+                  parentPage: {
+                    parentSlug: string
+                  } | null
+                }
+              | {
+                  _id: string
+                  _type: 'page'
+                  slug: string
+                }
+              | null
+          }
+        | {
+            _key: string
+            _type: 'link'
+            href: string | null
+            blank: boolean | null
+          }
+      > | null
+      level?: number
+      _type: 'block'
+      _key: string
+    }> | null
+  } | null
+  image: {
+    alt: string | null
+    crop: SanityImageCrop | null
+    hotspot: SanityImageHotspot | null
+    asset: {
+      _id: string
+      _type: 'sanity.imageAsset'
+      url: string | null
+      metadata: {
+        dimensions: {
+          width: number
+          height: number
+          aspectRatio: number
+        } | null
+        lqip: string | null
+        palette: {
+          dominant: {
+            background: string | null
+          } | null
+        } | null
+      } | null
+    } | null
+  } | null
+  body: {
+    portableTextBlock: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>
+            text?: string
+            _type: 'span'
+            _key: string
+          }>
+          style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'normal'
+          listItem?: 'bullet' | 'number'
+          markDefs: Array<
+            | {
+                _key: string
+                _type: 'internalLink'
+                item:
+                  | {
+                      _id: string
+                      _type: 'class'
+                      slug: string
+                      parentPage: {
+                        parentSlug: string
+                      } | null
+                    }
+                  | {
+                      _id: string
+                      _type: 'page'
+                      slug: string
+                    }
+                  | null
+              }
+            | {
+                _key: string
+                _type: 'link'
+                href: string | null
+                blank: boolean | null
+              }
+          > | null
+          level?: number
+          _type: 'block'
+          _key: string
+        }
+      | {
+          _key: string
+          _type: 'contactInfo'
+          headline?: string
+          phoneNumber: string
+          phoneLabel?: string
+          email: string
+          textColor?: 'blue' | 'white'
+          size?: 'large' | 'normal'
+          markDefs: null
+        }
+      | {
+          _key: string
+          _type: 'cta'
+          title: string | null
+          kind: 'button' | 'link' | null
+          arrow: boolean | null
+          landingPageRoute:
+            | {
+                _id: string
+                slug: string
+                _type: 'page'
+              }
+            | {
+                _id: string
+                slug: string
+                _type: 'post'
+              }
+            | null
+          link: string | null
+          anchor?: string
+          fileDownload: {
+            _type: 'file'
+            asset: {
+              _id: string
+              _type: 'sanity.fileAsset'
+              url: string | null
+            } | null
+          } | null
+          markDefs: null
+        }
+      | {
+          hr?: string
+          size?: string
+          width?: string
+          _type: 'hr'
+          _key: string
+          markDefs: null
+        }
+      | {
+          asset?: SanityImageAssetReference
+          media?: unknown
+          hotspot?: SanityImageHotspot
+          crop?: SanityImageCrop
+          alt?: string
+          _type: 'image'
+          _key: string
+          markDefs: null
+        }
+      | {
+          _key: string
+          _type: 'logoRow'
+          logoRow?: Array<
+            {
+              _key: string
+            } & Logo
+          >
+          markDefs: null
+        }
+      | {
+          _key: string
+          _type: 'youtube'
+          url?: string
+          markDefs: null
+        }
+    > | null
+  }
   author: {
     _id: string
-    name: null
-    slug: null
+    name: string
+    slug: {
+      current: string
+    }
     picture: {
       alt: string | null
       crop: SanityImageCrop | null
@@ -756,9 +6468,9 @@ export type PostQueryResult = {
         url: string | null
         metadata: {
           dimensions: {
-            width: number | null
-            height: number | null
-            aspectRatio: number | null
+            width: number
+            height: number
+            aspectRatio: number
           } | null
           lqip: string | null
           palette: {
@@ -769,8 +6481,8 @@ export type PostQueryResult = {
         } | null
       } | null
     }
-  } | null
-  date: string | null
+  }
+  date: null
   _createdAt: string
   _updatedAt: string
 } | null
@@ -792,16 +6504,20 @@ export type PagesSlugsResult = Array<{
 // Source: sanity/lib/queries.ts
 // Variable: redirectsQuery
 // Query: *[_type == "redirect" && defined(source) && defined(destination)] {    source,    destination,    permanent  }
-export type RedirectsQueryResult = Array<never>
+export type RedirectsQueryResult = Array<{
+  source: string
+  destination: string
+  permanent: boolean | null
+}>
 
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
     '\n  *[_type == "settings"][0] {\n    \n  _id,\n  title,\n  description,\n  ogImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n,\n    metadataBase\n  },\n  menuItems[] {\n    _key,\n    _type,\n    title,\n    cta {\n      \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n    },\n    subnav[] {\n      _key,\n      landingPageRoute -> {\n        _id,\n        "slug": slug.current,\n        title,\n        _type\n      }\n    }\n  },\n  footerLogos[] {\n    _key,\n    alt,\n    asset -> {\n      _id,\n      metadata {\n        lqip\n      }\n    }\n  }\n\n  }\n': SettingsQueryResult
-    '\n  *[_type == \'home\'][0]{\n    _id,\n    _type,\n    title,\n    seo {\n      seoTitle,\n      seoDescription,\n      noindex,\n      canonicalUrl,\n      ogImage {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    "content": content[]{\n      _key,\n      _type,\n      ...,\n      _type == \'heroBanner\' => {\n        size,\n        subheading,\n        subHeadingColor,\n        heading,\n        headingColor,\n        copy {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        copyColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        overlay,\n        cta {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        disabled\n      },\n      _type == \'heroTwoPanel\' => {\n        size,\n        backgroundColor,\n        centerText,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        mainPortableText {\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'successStoriesBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        "stories": stories[] {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'singleColumnContentBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        removeBottomPadding,\n        skinny,\n        centerContent,\n        "contentBlock": contentBlock {\n          contentType,\n          "portableTextBlock": portableTextBlock {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          "faq": faq {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        disabled\n      },\n      image {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      },\n      "programs": programs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  enhancedCardTitle,\n  trainingType,\n  dogName,\n  namePlacement,\n  slug {\n    current\n  },\n  parentPage -> {\n    slug {\n      current\n    }\n  },\n  cardImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cardTakeaways,\n  takeaways,\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      enhanced,\n      centerContent,\n      description {\n        portableTextBlock[] {\n          ...,\n          _type == \'cta\' => {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          markDefs[] {\n            _key,\n            _type,\n            _type == "internalLink" => {\n              item -> {\n                _id,\n                _type,\n                _type == "class" => {\n                  "slug": slug.current,\n                  "parentPage": parentPage-> {\n                    "parentSlug": slug.current\n                  }\n                },\n                _type == \'page\' => {\n                  "slug": slug.current\n                }\n              }\n            },\n            _type == \'link\' => {\n              href,\n              blank\n            },\n            _type != \'internalLink\' && _type != \'link\' => @\n          }\n        }\n      },\n      "trainers": trainers[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "classRefs": classRefs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  trainingType,\n  customTrainingTitle,\n  price,\n  slug {\n    current\n  },\n  description,\n  takeaways,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "productsArr": productsArr[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  _key,\n  heading,\n  price,\n  image {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cta {\n    \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "posts": posts[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  coverImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  author -> {\n    \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n  },\n  date,\n  _updatedAt\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "panels": panels[]{\n        _type == \'reference\' => @-> {\n          _id,\n          heading,\n          copy,\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "testimonialsArr": testimonialsArr[] -> {\n        _key,\n        heading,\n        copy,\n      },\n      "relatedResources": relatedResources[]{\n        _type == \'reference\' => @-> {\n          _type == \'post\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            author {\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            },\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          },\n          _type == \'resource\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      _type == \'customComponent\' => {\n        "rows": rows[]{\n          _type,\n          _key,\n          _type == \'trainerRows\' => {\n            "trainers": trainers[]{\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            }[_type != \'reference\' || @->._id != null]\n          },\n          _type == \'galleryGrid\' => {\n            "galleryArr": galleryArr[] {\n              alt,\n              crop,\n              hotspot,\n              asset-> {\n                _id,\n                metadata {\n                  lqip\n                }\n              }\n            }\n          },\n          _type == \'aboutUsContainer\' => {\n            copy {\n              portableTextBlock[] {\n                ...,\n                _type == \'cta\' => {\n                  title,\n                  arrow,\n                  kind,\n                  link,\n                  fileDownload {\n                    \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                  },\n                  landingPageRoute-> {\n                    _id,\n                    "slug": slug.current,\n                    _type\n                  }\n                },\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            "iconCards": iconCards[]{\n              heading,\n              icon {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              },\n              copy {\n                portableTextBlock[] {\n                  ...,\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              },\n              cta {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              }\n            }\n          }\n        }\n      },\n      _type == \'postsGridContainer\' => {\n        "posts": posts[]{\n          _type == \'reference\' => @-> {\n            _id,\n            title,\n            slug {\n              current\n            },\n            excerpt {\n              portableTextBlock[] {\n                ...,\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            image {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            },\n            author -> {\n              _id,\n              name,\n              slug {\n                current\n              },\n              picture {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              }\n            }\n          }\n        }[_type != \'reference\' || @->._id != null]\n      },\n      _type == \'rowContainer\' => {\n        "rowContent": rowContent[]{\n          _type,\n          _key,\n          alt,\n          crop,\n          hotspot,\n          "asset": asset-> {\n            _id,\n            _type,\n            url,\n            metadata {\n              dimensions {\n                width,\n                height,\n                aspectRatio\n              },\n              lqip,\n              palette {\n                dominant {\n                  background\n                }\n              }\n            }\n          },\n          heading,\n          copy {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == \'internalLink\' => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          },\n          icon,\n          title,\n          cta {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          },\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          carouselImages[] {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          _type == \'faq\' => {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        "trainers": trainers[]{\n          _type == \'reference\' => @-> {\n            \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n          }\n        }[_type != \'reference\' || @->._id != null],\n        "galleryArr": galleryArr[] {\n          alt,\n          crop,\n          hotspot,\n          asset-> {\n            _id,\n            metadata {\n              lqip\n            }\n          }\n        }\n      }\n    },\n  }\n': GetHomePageQueryResult
+    '\n  *[_type == \'home\'][0]{\n    _id,\n    _type,\n    title,\n    seo {\n      seoTitle,\n      seoDescription,\n      noindex,\n      canonicalUrl,\n      ogImage {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    "content": content[]{\n      _key,\n      _type,\n      ...,\n      _type == \'heroBanner\' => {\n        size,\n        subheading,\n        subHeadingColor,\n        heading,\n        headingColor,\n        copy {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        copyColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        overlay,\n        cta {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        disabled\n      },\n      _type == \'heroTwoPanel\' => {\n        size,\n        backgroundColor,\n        centerText,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        mainPortableText {\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'successStoriesBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        "stories": stories[] {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'singleColumnContentBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        removeBottomPadding,\n        skinny,\n        centerContent,\n        "contentBlock": contentBlock {\n          contentType,\n          "portableTextBlock": portableTextBlock {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          "faq": faq {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        disabled\n      },\n      image {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      },\n      "programs": programs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  enhancedCardTitle,\n  trainingType,\n  slug {\n    current\n  },\n  parentPage -> {\n    slug {\n      current\n    }\n  },\n  cardImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cardTakeaways,\n  takeaways,\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      enhanced,\n      centerContent,\n      description {\n        portableTextBlock[] {\n          ...,\n          _type == \'cta\' => {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          markDefs[] {\n            _key,\n            _type,\n            _type == "internalLink" => {\n              item -> {\n                _id,\n                _type,\n                _type == "class" => {\n                  "slug": slug.current,\n                  "parentPage": parentPage-> {\n                    "parentSlug": slug.current\n                  }\n                },\n                _type == \'page\' => {\n                  "slug": slug.current\n                }\n              }\n            },\n            _type == \'link\' => {\n              href,\n              blank\n            },\n            _type != \'internalLink\' && _type != \'link\' => @\n          }\n        }\n      },\n      "trainers": trainers[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "classRefs": classRefs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  trainingType,\n  customTrainingTitle,\n  price,\n  slug {\n    current\n  },\n  description,\n  takeaways,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "productsArr": productsArr[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  _key,\n  heading,\n  price,\n  image {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cta {\n    \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "posts": posts[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  coverImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  author -> {\n    \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n  },\n  date,\n  _updatedAt\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "panels": panels[]{\n        _type == \'reference\' => @-> {\n          _id,\n          heading,\n          copy,\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "testimonialsArr": testimonialsArr[] -> {\n        _key,\n        heading,\n        copy,\n      },\n      "relatedResources": relatedResources[]{\n        _type == \'reference\' => @-> {\n          _type == \'post\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            author {\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            },\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          },\n          _type == \'resource\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      _type == \'customComponent\' => {\n        "rows": rows[]{\n          _type,\n          _key,\n          _type == \'trainerRows\' => {\n            "trainers": trainers[]{\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            }[_type != \'reference\' || @->._id != null]\n          },\n          _type == \'galleryGrid\' => {\n            "galleryArr": galleryArr[] {\n              alt,\n              crop,\n              hotspot,\n              asset-> {\n                _id,\n                metadata {\n                  lqip\n                }\n              }\n            }\n          },\n          _type == \'aboutUsContainer\' => {\n            copy {\n              portableTextBlock[] {\n                ...,\n                _type == \'cta\' => {\n                  title,\n                  arrow,\n                  kind,\n                  link,\n                  fileDownload {\n                    \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                  },\n                  landingPageRoute-> {\n                    _id,\n                    "slug": slug.current,\n                    _type\n                  }\n                },\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            "iconCards": iconCards[]{\n              heading,\n              icon {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              },\n              copy {\n                portableTextBlock[] {\n                  ...,\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              },\n              cta {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              }\n            }\n          }\n        }\n      },\n      _type == \'postsGridContainer\' => {\n        "posts": posts[]{\n          _type == \'reference\' => @-> {\n            _id,\n            title,\n            slug {\n              current\n            },\n            excerpt {\n              portableTextBlock[] {\n                ...,\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            image {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            },\n            author -> {\n              _id,\n              name,\n              slug {\n                current\n              },\n              picture {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              }\n            }\n          }\n        }[_type != \'reference\' || @->._id != null]\n      },\n      _type == \'rowContainer\' => {\n        "rowContent": rowContent[]{\n          _type,\n          _key,\n          alt,\n          crop,\n          hotspot,\n          "asset": asset-> {\n            _id,\n            _type,\n            url,\n            metadata {\n              dimensions {\n                width,\n                height,\n                aspectRatio\n              },\n              lqip,\n              palette {\n                dominant {\n                  background\n                }\n              }\n            }\n          },\n          heading,\n          copy {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == \'internalLink\' => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          },\n          icon,\n          title,\n          cta {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          },\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          carouselImages[] {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          _type == \'faq\' => {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        "trainers": trainers[]{\n          _type == \'reference\' => @-> {\n            \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n          }\n        }[_type != \'reference\' || @->._id != null],\n        "galleryArr": galleryArr[] {\n          alt,\n          crop,\n          hotspot,\n          asset-> {\n            _id,\n            metadata {\n              lqip\n            }\n          }\n        }\n      }\n    },\n  }\n': GetHomePageQueryResult
     '\n  *[_type == \'blogLandingPage\'][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    overview,\n    seo {\n      seoTitle,\n      seoDescription,\n      noindex,\n      canonicalUrl,\n      ogImage {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    "content": content[]{\n      ...,\n      _type == \'heroBanner\' => {\n        _key,\n        _type,\n        size,\n        subheading,\n        subHeadingColor,\n        heading,\n        headingColor,\n        copy {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        copyColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        overlay,\n        cta {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        disabled\n      },\n      _type == \'heroTwoPanel\' => {\n        _key,\n        _type,\n        size,\n        backgroundColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        mainPortableText {\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      image {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      },\n      _type == \'postsGridContainer\' => {\n        "posts": posts[]{\n          _type == \'reference\' => @-> {\n            _id,\n            title,\n            slug {\n              current\n            },\n            excerpt {\n              portableTextBlock[] {\n                ...,\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            image {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            },\n            author -> {\n              _id,\n              name,\n              slug {\n                current\n              },\n              picture {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              }\n            }\n          }\n        }[_type != \'reference\' || @->._id != null]\n      }\n    }\n  }\n': BlogLandingPageQueryResult
-    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    seo {\n      seoTitle,\n      seoDescription,\n      noindex,\n      canonicalUrl,\n      ogImage {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    "content": content[]{\n      _key,\n      _type,\n      ...,\n      _type == \'heroBanner\' => {\n        size,\n        subheading,\n        subHeadingColor,\n        heading,\n        headingColor,\n        copy {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        copyColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        overlay,\n        cta {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        disabled\n      },\n      _type == \'heroTwoPanel\' => {\n        size,\n        backgroundColor,\n        centerText,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        mainPortableText {\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'successStoriesBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        "stories": stories[] {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'singleColumnContentBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        removeBottomPadding,\n        skinny,\n        centerContent,\n        "contentBlock": contentBlock {\n          contentType,\n          "portableTextBlock": portableTextBlock {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          "faq": faq {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        disabled\n      },\n      image {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      },\n      "programs": programs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  enhancedCardTitle,\n  trainingType,\n  dogName,\n  namePlacement,\n  slug {\n    current\n  },\n  parentPage -> {\n    slug {\n      current\n    }\n  },\n  cardImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cardTakeaways,\n  takeaways,\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      enhanced,\n      centerContent,\n      description {\n        portableTextBlock[] {\n          ...,\n          _type == \'cta\' => {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          markDefs[] {\n            _key,\n            _type,\n            _type == "internalLink" => {\n              item -> {\n                _id,\n                _type,\n                _type == "class" => {\n                  "slug": slug.current,\n                  "parentPage": parentPage-> {\n                    "parentSlug": slug.current\n                  }\n                },\n                _type == \'page\' => {\n                  "slug": slug.current\n                }\n              }\n            },\n            _type == \'link\' => {\n              href,\n              blank\n            },\n            _type != \'internalLink\' && _type != \'link\' => @\n          }\n        }\n      },\n      "trainers": trainers[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "classRefs": classRefs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  trainingType,\n  customTrainingTitle,\n  price,\n  slug {\n    current\n  },\n  description,\n  takeaways,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "productsArr": productsArr[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  _key,\n  heading,\n  price,\n  image {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cta {\n    \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "posts": posts[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  coverImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  author -> {\n    \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n  },\n  date,\n  _updatedAt\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "panels": panels[]{\n        _type == \'reference\' => @-> {\n          _id,\n          heading,\n          copy,\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "testimonialsArr": testimonialsArr[] -> {\n        _key,\n        heading,\n        copy,\n      },\n      "relatedResources": relatedResources[]{\n        _type == \'reference\' => @-> {\n          _type == \'post\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            author {\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            },\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          },\n          _type == \'resource\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      _type == \'customComponent\' => {\n        "rows": rows[]{\n          _type,\n          _key,\n          _type == \'trainerRows\' => {\n            "trainers": trainers[]{\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            }[_type != \'reference\' || @->._id != null]\n          },\n          _type == \'galleryGrid\' => {\n            "galleryArr": galleryArr[] {\n              alt,\n              crop,\n              hotspot,\n              asset-> {\n                _id,\n                metadata {\n                  lqip\n                }\n              }\n            }\n          },\n          _type == \'aboutUsContainer\' => {\n            copy {\n              portableTextBlock[] {\n                ...,\n                _type == \'cta\' => {\n                  title,\n                  arrow,\n                  kind,\n                  link,\n                  fileDownload {\n                    \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                  },\n                  landingPageRoute-> {\n                    _id,\n                    "slug": slug.current,\n                    _type\n                  }\n                },\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            "iconCards": iconCards[]{\n              heading,\n              icon {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              },\n              copy {\n                portableTextBlock[] {\n                  ...,\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              },\n              cta {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              }\n            }\n          }\n        }\n      },\n      _type == \'postsGridContainer\' => {\n        "posts": posts[]{\n          _type == \'reference\' => @-> {\n            _id,\n            title,\n            slug {\n              current\n            },\n            excerpt {\n              portableTextBlock[] {\n                ...,\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            image {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            },\n            author -> {\n              _id,\n              name,\n              slug {\n                current\n              },\n              picture {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              }\n            }\n          }\n        }[_type != \'reference\' || @->._id != null]\n      },\n      _type == \'rowContainer\' => {\n        "rowContent": rowContent[]{\n          _type,\n          _key,\n          alt,\n          crop,\n          hotspot,\n          "asset": asset-> {\n            _id,\n            _type,\n            url,\n            metadata {\n              dimensions {\n                width,\n                height,\n                aspectRatio\n              },\n              lqip,\n              palette {\n                dominant {\n                  background\n                }\n              }\n            }\n          },\n          heading,\n          copy {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == \'internalLink\' => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          },\n          icon,\n          title,\n          cta {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          },\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          carouselImages[] {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          _type == \'faq\' => {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        "trainers": trainers[]{\n          _type == \'reference\' => @-> {\n            \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n          }\n        }[_type != \'reference\' || @->._id != null],\n        "galleryArr": galleryArr[] {\n          alt,\n          crop,\n          hotspot,\n          asset-> {\n            _id,\n            metadata {\n              lqip\n            }\n          }\n        }\n      }\n    },\n  }\n': GetPageQueryResult
+    '\n  *[_type == \'page\' && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    seo {\n      seoTitle,\n      seoDescription,\n      noindex,\n      canonicalUrl,\n      ogImage {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      }\n    },\n    "content": content[]{\n      _key,\n      _type,\n      ...,\n      _type == \'heroBanner\' => {\n        size,\n        subheading,\n        subHeadingColor,\n        heading,\n        headingColor,\n        copy {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        copyColor,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        overlay,\n        cta {\n          title,\n          arrow,\n          kind,\n          link,\n          fileDownload {\n            \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          }\n        },\n        disabled\n      },\n      _type == \'heroTwoPanel\' => {\n        size,\n        backgroundColor,\n        centerText,\n        image {\n          \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n        },\n        mainPortableText {\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'successStoriesBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        "stories": stories[] {\n          portableTextBlock[] {\n            ...,\n            markDefs[] {\n              _key,\n              _type,\n              _type == "internalLink" => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          }\n        },\n        disabled\n      },\n      _type == \'singleColumnContentBlock\' => {\n        _key,\n        _type,\n        backgroundColor,\n        removeBottomPadding,\n        skinny,\n        centerContent,\n        "contentBlock": contentBlock {\n          contentType,\n          "portableTextBlock": portableTextBlock {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          "faq": faq {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        disabled\n      },\n      image {\n        \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n      },\n      "programs": programs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  enhancedCardTitle,\n  trainingType,\n  slug {\n    current\n  },\n  parentPage -> {\n    slug {\n      current\n    }\n  },\n  cardImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cardTakeaways,\n  takeaways,\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      enhanced,\n      centerContent,\n      description {\n        portableTextBlock[] {\n          ...,\n          _type == \'cta\' => {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          markDefs[] {\n            _key,\n            _type,\n            _type == "internalLink" => {\n              item -> {\n                _id,\n                _type,\n                _type == "class" => {\n                  "slug": slug.current,\n                  "parentPage": parentPage-> {\n                    "parentSlug": slug.current\n                  }\n                },\n                _type == \'page\' => {\n                  "slug": slug.current\n                }\n              }\n            },\n            _type == \'link\' => {\n              href,\n              blank\n            },\n            _type != \'internalLink\' && _type != \'link\' => @\n          }\n        }\n      },\n      "trainers": trainers[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "classRefs": classRefs[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  name,\n  trainingType,\n  customTrainingTitle,\n  price,\n  slug {\n    current\n  },\n  description,\n  takeaways,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  acuityCategoryUrl,\n  upcomingClasses[] {\n    _key,\n    dateTime,\n    acuityId,\n    totalSpots,\n    bookingsCount,\n    availability\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "productsArr": productsArr[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  _key,\n  heading,\n  price,\n  image {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  cta {\n    \n  title,\n  arrow,\n  kind,\n  link,\n  landingPageRoute -> {\n    _id,\n    "slug": slug.current,\n    _type\n  }\n\n  }\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "posts": posts[]{\n        _type == \'reference\' => @-> {\n          \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  coverImage {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  author -> {\n    \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n  },\n  date,\n  _updatedAt\n\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "panels": panels[]{\n        _type == \'reference\' => @-> {\n          _id,\n          heading,\n          copy,\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      "testimonialsArr": testimonialsArr[] -> {\n        _key,\n        heading,\n        copy,\n      },\n      "relatedResources": relatedResources[]{\n        _type == \'reference\' => @-> {\n          _type == \'post\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            author {\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            },\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          },\n          _type == \'resource\' => {\n            _type,\n            _id,\n            title,\n            "slug": slug.current,\n            excerpt,\n            coverImage {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            }\n          }\n        }\n      }[_type != \'reference\' || @->._id != null],\n      _type == \'customComponent\' => {\n        "rows": rows[]{\n          _type,\n          _key,\n          _type == \'trainerRows\' => {\n            "trainers": trainers[]{\n              _type == \'reference\' => @-> {\n                \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n              }\n            }[_type != \'reference\' || @->._id != null]\n          },\n          _type == \'galleryGrid\' => {\n            "galleryArr": galleryArr[] {\n              alt,\n              crop,\n              hotspot,\n              asset-> {\n                _id,\n                metadata {\n                  lqip\n                }\n              }\n            }\n          },\n          _type == \'aboutUsContainer\' => {\n            copy {\n              portableTextBlock[] {\n                ...,\n                _type == \'cta\' => {\n                  title,\n                  arrow,\n                  kind,\n                  link,\n                  fileDownload {\n                    \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                  },\n                  landingPageRoute-> {\n                    _id,\n                    "slug": slug.current,\n                    _type\n                  }\n                },\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            "iconCards": iconCards[]{\n              heading,\n              icon {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              },\n              copy {\n                portableTextBlock[] {\n                  ...,\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              },\n              cta {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              }\n            }\n          }\n        }\n      },\n      _type == \'postsGridContainer\' => {\n        "posts": posts[]{\n          _type == \'reference\' => @-> {\n            _id,\n            title,\n            slug {\n              current\n            },\n            excerpt {\n              portableTextBlock[] {\n                ...,\n                markDefs[] {\n                  _key,\n                  _type,\n                  _type == "internalLink" => {\n                    item -> {\n                      _id,\n                      _type,\n                      _type == "class" => {\n                        "slug": slug.current,\n                        "parentPage": parentPage-> {\n                          "parentSlug": slug.current\n                        }\n                      },\n                      _type == \'page\' => {\n                        "slug": slug.current\n                      }\n                    }\n                  },\n                  _type == \'link\' => {\n                    href,\n                    blank\n                  },\n                  _type != \'internalLink\' && _type != \'link\' => @\n                }\n              }\n            },\n            image {\n              \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n            },\n            author -> {\n              _id,\n              name,\n              slug {\n                current\n              },\n              picture {\n                \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n              }\n            }\n          }\n        }[_type != \'reference\' || @->._id != null]\n      },\n      _type == \'rowContainer\' => {\n        "rowContent": rowContent[]{\n          _type,\n          _key,\n          alt,\n          crop,\n          hotspot,\n          "asset": asset-> {\n            _id,\n            _type,\n            url,\n            metadata {\n              dimensions {\n                width,\n                height,\n                aspectRatio\n              },\n              lqip,\n              palette {\n                dominant {\n                  background\n                }\n              }\n            }\n          },\n          heading,\n          copy {\n            portableTextBlock[] {\n              ...,\n              _type == \'cta\' => {\n                title,\n                arrow,\n                kind,\n                link,\n                fileDownload {\n                  \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                },\n                landingPageRoute-> {\n                  _id,\n                  "slug": slug.current,\n                  _type\n                }\n              },\n              markDefs[] {\n                _key,\n                _type,\n                _type == "internalLink" => {\n                  item -> {\n                    _id,\n                    _type,\n                    _type == "class" => {\n                      "slug": slug.current,\n                      "parentPage": parentPage-> {\n                        "parentSlug": slug.current\n                      }\n                    },\n                    _type == \'page\' => {\n                      "slug": slug.current\n                    }\n                  }\n                },\n                _type == \'link\' => {\n                  href,\n                  blank\n                },\n                _type != \'internalLink\' && _type != \'link\' => @\n              }\n            }\n          },\n          portableTextBlock[] {\n            ...,\n            _type == \'cta\' => {\n              title,\n              arrow,\n              kind,\n              link,\n              fileDownload {\n                \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n              },\n              landingPageRoute-> {\n                _id,\n                "slug": slug.current,\n                _type\n              }\n            },\n            markDefs[] {\n              _key,\n              _type,\n              _type == \'internalLink\' => {\n                item -> {\n                  _id,\n                  _type,\n                  _type == "class" => {\n                    "slug": slug.current,\n                    "parentPage": parentPage-> {\n                      "parentSlug": slug.current\n                    }\n                  },\n                  _type == \'page\' => {\n                    "slug": slug.current\n                  }\n                }\n              },\n              _type == \'link\' => {\n                href,\n                blank\n              },\n              _type != \'internalLink\' && _type != \'link\' => @\n            }\n          },\n          icon,\n          title,\n          cta {\n            title,\n            arrow,\n            kind,\n            link,\n            fileDownload {\n              \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n            },\n            landingPageRoute-> {\n              _id,\n              "slug": slug.current,\n              _type\n            }\n          },\n          landingPageRoute-> {\n            _id,\n            "slug": slug.current,\n            _type\n          },\n          image {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          carouselImages[] {\n            \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n          },\n          _type == \'faq\' => {\n            "items": items[] {\n              _key,\n              question,\n              "answer": answer {\n                portableTextBlock[] {\n                  ...,\n                  _type == \'cta\' => {\n                    title,\n                    arrow,\n                    kind,\n                    link,\n                    fileDownload {\n                      \n  _type,\n  asset-> {\n    _id,\n    _type,\n    url\n  }\n\n                    },\n                    landingPageRoute-> {\n                      _id,\n                      "slug": slug.current,\n                      _type\n                    }\n                  },\n                  markDefs[] {\n                    _key,\n                    _type,\n                    _type == "internalLink" => {\n                      item -> {\n                        _id,\n                        _type,\n                        _type == "class" => {\n                          "slug": slug.current,\n                          "parentPage": parentPage-> {\n                            "parentSlug": slug.current\n                          }\n                        },\n                        _type == \'page\' => {\n                          "slug": slug.current\n                        }\n                      }\n                    },\n                    _type == \'link\' => {\n                      href,\n                      blank\n                    },\n                    _type != \'internalLink\' && _type != \'link\' => @\n                  }\n                }\n              }\n            }\n          }\n        },\n        "trainers": trainers[]{\n          _type == \'reference\' => @-> {\n            \n  _id,\n  name,\n  firstName,\n  lastName,\n  slug,\n  picture {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  certifications,\n  role,\n  bio\n\n          }\n        }[_type != \'reference\' || @->._id != null],\n        "galleryArr": galleryArr[] {\n          alt,\n          crop,\n          hotspot,\n          asset-> {\n            _id,\n            metadata {\n              lqip\n            }\n          }\n        }\n      }\n    },\n  }\n': GetPageQueryResult
     '\n  *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _id,\n    _updatedAt,\n    seo {\n      noindex\n    }\n  }\n': SitemapDataResult
     '\n  *[_type == "home"] {\n    _id,\n    _updatedAt\n  }\n': HomepageSitemapResult
     '\n  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {\n    \n  _id,\n  title,\n  slug {\n    current\n  },\n  excerpt {\n    portableTextBlock[] {\n      ...,\n      markDefs[] {\n        _key,\n        _type,\n        _type == "internalLink" => {\n          item -> {\n            _id,\n            _type,\n            _type == "class" => {\n              "slug": slug.current,\n              "parentPage": parentPage-> {\n                "parentSlug": slug.current\n              }\n            },\n            _type == \'page\' => {\n              "slug": slug.current\n            }\n          }\n        },\n        _type == \'link\' => {\n          href,\n          blank\n        },\n        _type != \'internalLink\' && _type != \'link\' => @\n      }\n    }\n  },\n  image {\n    \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n  },\n  "author": author-> {\n    name,\n    slug {\n      current\n    },\n    picture {\n      \n  alt,\n  crop,\n  hotspot,\n  asset -> {\n    _id,\n    _type,\n    url,\n    metadata {\n      dimensions {\n        width,\n        height,\n        aspectRatio\n      },\n      lqip,\n      palette {\n        dominant {\n          background\n        }\n      }\n    }\n  }\n\n    }\n  }\n\n  }\n': AllPostsQueryResult

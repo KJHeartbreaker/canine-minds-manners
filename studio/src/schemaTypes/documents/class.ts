@@ -51,7 +51,6 @@ export const classDocument = defineType({
   ],
   initialValue: {
     trainingType: 'group',
-    namePlacement: 'topLeft',
   },
   fields: [
     defineField({
@@ -159,28 +158,6 @@ export const classDocument = defineType({
       type: 'mainImage',
       options: {hotspot: true},
       fieldset: 'classImage',
-    }),
-    defineField({
-      name: 'dogName',
-      title: 'Dog Name',
-      type: 'string',
-      fieldset: 'gridParams',
-    }),
-    defineField({
-      title: 'In which corner should the name appear?',
-      type: 'string',
-      name: 'namePlacement',
-      options: {
-        list: [
-          {title: 'Top Left', value: 'topLeft'},
-          {title: 'Top Right', value: 'topRight'},
-          {title: 'Bottom Left', value: 'bottomLeft'},
-          {title: 'Bottom Right', value: 'bottomRight'},
-        ],
-        layout: 'radio',
-        direction: 'horizontal',
-      },
-      fieldset: 'gridParams',
     }),
     defineField({
       name: 'cardImage',

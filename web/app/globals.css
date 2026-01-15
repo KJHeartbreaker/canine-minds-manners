@@ -384,8 +384,8 @@
     span.upcoming-class-link:hover {
       color: var(--color-blue-33) !important;
 
-      svg {
-        color: var(--color-orange-hover) !important;
+      svg.upcoming-class-arrow {
+        color: var(--color-green-hover) !important;
       }
 
       & span.acuity-badge span.text-green {
@@ -483,7 +483,6 @@
     margin-left: 30px;
 
     li {
-      margin-inline-start: 2em;
       margin-bottom: 8px;
       list-style-image: url("/images/ListStylePaw.svg");
     }
@@ -602,17 +601,6 @@
   .cmmWhite {
     color: var(--color-white);
   }
-
-  /* Hero Two Panel - Background color on desktop, transparent on mobile */
-  .hero-copy-panel {
-    background-color: transparent;
-  }
-
-  @media (min-width: 1024px) {
-    .hero-copy-panel {
-      background-color: var(--hero-bg-color);
-    }
-  }
 }
 
 /* Carousel/Swiper Styles */
@@ -691,6 +679,26 @@ div[data-component="SuccessStoriesBlock"] {
       .swiper-pagination-bullet-active {
         background: var(--color-blue-55) !important;
       }
+    }
+  }
+}
+
+/* Two Panel Hero Block styling */
+section[data-component="HeroTwoPanelBlock"] {
+  /* Hero Two Panel - Background color on desktop, transparent on mobile */
+  .hero-copy-panel {
+    background-color: transparent;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-copy-panel {
+      background-color: var(--hero-bg-color);
+    }
+  }
+
+  div[data-component="ContactInfo"] {
+    a.text-white:hover {
+      color: var(--color-blue-55) !important;
     }
   }
 }

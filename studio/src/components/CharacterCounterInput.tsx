@@ -18,13 +18,20 @@ export function CharacterCounterInput(props: any) {
 	const isOverLimit = currentLength > MAX_LENGTH
 	const isNearLimit = currentLength >= WARNING_THRESHOLD && currentLength <= MAX_LENGTH
 
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const newValue = event.target.value
+	const applyValue = (newValue: string) => {
 		if (newValue) {
 			onChange(set(newValue))
 		} else {
 			onChange(unset())
 		}
+	}
+
+	const handleTextAreaChange: React.FormEventHandler<HTMLTextAreaElement> = (event) => {
+		applyValue(event.currentTarget.value)
+	}
+
+	const handleInputChange: React.FormEventHandler<HTMLInputElement> = (event) => {
+		applyValue(event.currentTarget.value)
 	}
 
 	// Check if this should be a textarea - rows can be in schemaType directly or in options
@@ -36,14 +43,14 @@ export function CharacterCounterInput(props: any) {
 			{isTextarea ? (
 				<TextArea
 					value={value || ''}
-					onChange={handleChange}
+					onChange={handleTextAreaChange}
 					rows={rows}
 					placeholder={schemaType.placeholder}
 				/>
 			) : (
 				<TextInput
 					value={value || ''}
-					onChange={handleChange}
+					onChange={handleInputChange}
 					placeholder={schemaType.placeholder}
 				/>
 			)}

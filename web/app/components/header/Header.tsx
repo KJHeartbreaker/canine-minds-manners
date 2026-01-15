@@ -1,6 +1,7 @@
 import { settingsQuery } from '@/sanity/lib/queries'
 import { sanityFetch } from '@/sanity/lib/live'
 import HeaderClient from './HeaderClient'
+import { type MenuItem } from '../types'
 
 /**
  * Header Server Component
@@ -11,5 +12,9 @@ export default async function Header() {
     query: settingsQuery,
   })
 
-  return <HeaderClient menuItems={settings?.menuItems || []} />
+  const menuItems = (settings?.menuItems || []).filter(
+    (item) => Boolean(item?._key) && (item?._type === 'navCTA' || item?._type === 'navDropdownCTA'),
+  ) as unknown as MenuItem[]
+
+  return <HeaderClient menuItems={menuItems} />
 }
