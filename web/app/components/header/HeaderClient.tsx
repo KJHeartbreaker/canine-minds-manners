@@ -87,13 +87,13 @@ export default function HeaderClient({ menuItems }: HeaderClientProps) {
                             <FaPhone size={24} className="text-white" />
                         </Link>
                         <Link
-                            href="mailto:cmm_info@shaw.ca"
-                            aria-label="Email us at cmm_info@shaw.ca"
+                            href="mailto:support@caninemindsandmanners.ca"
+                            aria-label="Email us at support@caninemindsandmanners.ca"
                             className="flex items-center justify-center w-10 h-10 bg-orange rounded-full transition-colors hover:bg-orange-hover"
                             onClick={() =>
                                 trackDataLayerEvent('email_click', {
                                     location: 'header_mobile_icons',
-                                    email: 'cmm_info@shaw.ca',
+                                    email: 'support@caninemindsandmanners.ca',
                                 })
                             }
                         >
