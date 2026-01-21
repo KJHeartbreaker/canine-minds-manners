@@ -77,7 +77,7 @@ export default function EnhancedProgramCard({
     const orangeButtonLink = isAcuityButton
         ? acuityCategoryUrl
         : !hasUpcomingClasses
-            ? 'mailto:cmm_info@shaw.ca'
+            ? 'mailto:support@caninemindsandmanners.ca'
             : null
 
     return (

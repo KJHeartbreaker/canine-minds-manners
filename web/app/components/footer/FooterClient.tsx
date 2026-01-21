@@ -76,16 +76,16 @@ export default function FooterClient({ menuItems, logos }: FooterClientProps) {
                         </div>
                         <div className="flex flex-col">
                             <Link
-                                href={`mailto:cmm_info@shaw.ca`}
+                                href={`mailto:support@caninemindsandmanners.ca`}
                                 className={cn('font-bold text-md text-white hover:text-blue-22 transition-color')}
                                 onClick={() =>
                                     trackDataLayerEvent('email_click', {
                                         location: 'footer',
-                                        email: 'cmm_info@shaw.ca',
+                                        email: 'support@caninemindsandmanners.ca',
                                     })
                                 }
                             >
-                                cmm_info@shaw.ca
+                                support@caninemindsandmanners.ca
                             </Link>
                         </div>
                     </div>

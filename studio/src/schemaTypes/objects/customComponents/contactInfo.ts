@@ -34,7 +34,7 @@ export const contactInfo = defineType({
       type: 'string',
       title: 'Email Address',
       description: 'Email address to display',
-      initialValue: 'cmm_info@shaw.ca',
+      initialValue: 'support@caninemindsandmanners.ca',
       validation: (rule) => rule.required().email(),
     }),
     defineField({

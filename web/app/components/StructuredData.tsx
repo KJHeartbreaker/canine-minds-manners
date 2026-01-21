@@ -250,7 +250,7 @@ export async function ServiceSchema({
         addressCountry: 'CA',
       },
       telephone: '+1-403-816-5629',
-      email: 'cmm_info@shaw.ca',
+      email: 'support@caninemindsandmanners.ca',
       priceRange: '$$',
       logo: {
         '@type': 'ImageObject',
@@ -366,7 +366,7 @@ export async function ArticleSchema({
       addressCountry: 'CA',
     },
     telephone: '+1-403-816-5629',
-    email: 'cmm_info@shaw.ca',
+    email: 'support@caninemindsandmanners.ca',
     logo: {
       '@type': 'ImageObject',
       url: joinUrl(siteUrl, '/images/CMMPDT_Logo-type.png'),
