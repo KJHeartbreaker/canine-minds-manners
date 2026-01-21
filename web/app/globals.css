@@ -57,9 +57,11 @@
   --unit: 16;
   --font-micro-size: calc(12 / var(--unit) * 1rem);
   --font-micro-line-height: calc(14 / 10);
-  --font-small-size: calc(14 / var(--unit) * 1rem); /* 14px mobile */
+  --font-small-size: calc(14 / var(--unit) * 1rem);
+  /* 14px mobile */
   --font-small-line-height: calc(21 / 14);
-  --font-base-size: 16px; /* 16px desktop */
+  --font-base-size: 16px;
+  /* 16px desktop */
   --font-base-line-height: calc(26 / var(--unit));
   --font-large-size: calc(18 / var(--unit) * 1rem);
   --font-large-line-height: calc(27 / 18);
@@ -212,8 +214,14 @@
   }
 
   /* Spans and other inline elements inside headings should inherit the heading's font */
-  h1, h2, h3, h4, h5 {
-    span, a {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+
+    span,
+    a {
       font-family: inherit;
     }
   }
@@ -372,7 +380,7 @@
     font-size: var(--font-small-size);
     line-height: var(--font-small-line-height);
 
-    > span {
+    >span {
       cursor: pointer !important;
       color: var(--color-blue-44) !important;
       font-weight: 600 !important;
@@ -425,7 +433,7 @@
       font-size: var(--font-base-size);
       line-height: var(--font-base-line-height);
 
-      > span {
+      >span {
         font-size: var(--font-base-size) !important;
         line-height: var(--font-base-line-height) !important;
       }
@@ -442,8 +450,9 @@
     font-size: var(--font-small-size);
     line-height: var(--font-small-line-height);
 
-    > span {
-      color: #9ca3af !important; /* grey-400 */
+    >span {
+      color: #9ca3af !important;
+      /* grey-400 */
       font-weight: 600 !important;
       font-family: var(--font-montserrat), sans-serif !important;
       text-decoration: none !important;
@@ -503,7 +512,7 @@
   section[data-component="Section"].has-bg {
     min-height: 400px;
 
-    > div[class*="absolute"][class*="inset-0"] {
+    >div[class*="absolute"][class*="inset-0"] {
       position: absolute;
       top: 0;
       right: 0;
@@ -513,10 +522,27 @@
       height: 100%;
     }
 
-    > div[class*="absolute"] > div[class*="relative"] {
+    >div[class*="absolute"]>div[class*="relative"] {
       width: 100% !important;
       height: 100% !important;
     }
+  }
+
+  /* ContactInfo: Switch icon backgrounds to blue when on orange section backgrounds */
+  section[style*="background-color:#ee6d08"] [data-component="ContactInfo"] .bg-orange,
+  section[style*="background-color: #ee6d08"] [data-component="ContactInfo"] .bg-orange {
+    background-color: var(--color-blue-33) !important;
+  }
+
+  /* CTA Button: Switch to blue background when on orange section backgrounds */
+  section[style*="background-color:#ee6d08"] a.bg-orange,
+  section[style*="background-color: #ee6d08"] a.bg-orange {
+    background-color: var(--color-blue-33) !important;
+  }
+
+  section[style*="background-color:#ee6d08"] a.bg-orange:hover,
+  section[style*="background-color: #ee6d08"] a.bg-orange:hover {
+    background-color: var(--color-blue-22) !important;
   }
 
   blockquote {
@@ -605,6 +631,7 @@
 
 /* Carousel/Swiper Styles */
 .mainSwiper {
+
   .swiper-button-prev,
   .swiper-button-next {
     color: var(--color-orange) !important;
@@ -648,8 +675,10 @@
 
 /* Success Stories Carousel Styles */
 div[data-component="SuccessStoriesBlock"] {
+
   /* Default: white text and white pagination (for orange, lightBlue, navy) */
-  h3, p {
+  h3,
+  p {
     color: var(--color-white);
   }
 
@@ -667,7 +696,9 @@ div[data-component="SuccessStoriesBlock"] {
 
   /* Yellow background: override to navy text and navy pagination */
   &[data-bg-color="yellow"] {
-    h3, p {
+
+    h3,
+    p {
       color: var(--color-blue-55);
     }
 
@@ -685,6 +716,7 @@ div[data-component="SuccessStoriesBlock"] {
 
 /* Two Panel Hero Block styling */
 section[data-component="HeroTwoPanelBlock"] {
+
   /* Hero Two Panel - Background color on desktop, transparent on mobile */
   .hero-copy-panel {
     background-color: transparent;
