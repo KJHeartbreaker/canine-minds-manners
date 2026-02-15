@@ -97,6 +97,7 @@ export const post = defineType({
       description:
         'This field will appear in places where this post is linked. For example, in a related resources grid.',
       group: 'postSettings',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'image',
