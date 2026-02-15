@@ -31,7 +31,6 @@ interface TrainersCustomComponentProps {
  * Displays trainer profiles in a custom layout
  */
 export default function TrainersCustomComponent({ trainers }: TrainersCustomComponentProps) {
-    console.log('trainers', trainers)
     return (
         <ContentContainer data-component="TrainersCustomComponent">
             {trainers.map((tr, index) => (

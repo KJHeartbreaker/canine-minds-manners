@@ -56,7 +56,7 @@ export default function PostCard({ title, slug, author, excerpt, image }: PostCa
                         <h5 className="text-sm text-blue-33 hover:text-blue-22 transition-colors">{author.name}</h5>
                     </Link>
                 </div>
-                <SimplePortableText value={excerpt.portableTextBlock} />
+                {excerpt?.portableTextBlock && <SimplePortableText value={excerpt.portableTextBlock} />}
             </div>
         </div>
     )
