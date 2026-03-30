@@ -38,11 +38,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     sanityFetch({
       query: getPageQuery,
       params,
+      tags: ['page', `page:${params.slug}`, 'class'],
       // Metadata should never contain stega
       stega: false,
     }),
     sanityFetch({
       query: settingsQuery,
+      tags: ['settings'],
       stega: false,
     }),
   ])
@@ -99,7 +101,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function Page(props: Props) {
   const params = await props.params
-  const [{ data: page }] = await Promise.all([sanityFetch({ query: getPageQuery, params })])
+  const [{ data: page }] = await Promise.all([
+    sanityFetch({query: getPageQuery, params, tags: ['page', `page:${params.slug}`, 'class']}),
+  ])
 
   if (!page?._id) {
     return notFound()

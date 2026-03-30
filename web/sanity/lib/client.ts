@@ -7,7 +7,9 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  // For server-rendered content that will be cached by Next/Vercel and revalidated on-demand,
+  // bypass the Sanity CDN so cache fills are always guaranteed-fresh.
+  useCdn: false,
   perspective: 'published',
   token, // Required if you have a private dataset
   stega: {
