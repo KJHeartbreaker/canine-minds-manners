@@ -12,7 +12,15 @@
  * ---------------------------------------------------------------------------------
  */
 
-// Source: ../studio/schema.json
+export declare const internalGroqTypeReferenceTo: unique symbol
+
+type ArrayOf<T> = Array<
+  T & {
+    _key: string
+  }
+>
+
+// Source: schema.json
 export type ContentBlock = {
   contentType?: 'mainPortableText' | 'faq'
   portableTextBlock?: MainPortableText
@@ -634,7 +642,7 @@ export type Post = {
     _key: string
   }>
   author: TrainerReference
-  excerpt?: SimplePortableText
+  excerpt: SimplePortableText
   image?: MainImage
   subheader?: string
   body: MainPortableText
@@ -788,9 +796,48 @@ export type Settings = {
     | ({
         _key: string
       } & NavDropdownCTA)
-    | ({
+    | {
+        title: string
+        slug: Slug
+        seo?: Seo
+        overview: Array<{
+          children?: Array<{
+            marks?: Array<string>
+            text?: string
+            _type: 'span'
+            _key: string
+          }>
+          style?: 'normal'
+          listItem?: never
+          markDefs?: Array<{
+            href?: string
+            _type: 'link'
+            _key: string
+          }>
+          level?: number
+          _type: 'block'
+          _key: string
+        }>
+        content?: Array<
+          | ({
+              _key: string
+            } & HeroBanner)
+          | ({
+              _key: string
+            } & HeroTwoPanel)
+          | ({
+              _key: string
+            } & SingleColumnContentBlock)
+          | ({
+              _key: string
+            } & SuccessStoriesBlock)
+          | ({
+              _key: string
+            } & PostsGridContainer)
+        >
+        _type: 'blogLandingPage'
         _key: string
-      } & BlogLandingPage)
+      }
   >
   footerLogos?: Array<
     {
@@ -1111,14 +1158,14 @@ export type SanityFileAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   source?: SanityAssetSourceData
 }
 
@@ -1140,14 +1187,14 @@ export type SanityImageAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   metadata?: SanityImageMetadata
   source?: SanityAssetSourceData
 }
@@ -1244,15 +1291,7 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint
 
-export declare const internalGroqTypeReferenceTo: unique symbol
-
-type ArrayOf<T> = Array<
-  T & {
-    _key: string
-  }
->
-
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0] {      _id,  title,  description,  ogImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  },    metadataBase  },  menuItems[] {    _key,    _type,    title,    cta {        title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }    },    subnav[] {      _key,      landingPageRoute -> {        _id,        "slug": slug.current,        title,        _type      }    }  },  footerLogos[] {    _key,    alt,    asset -> {      _id,      metadata {        lqip      }    }  }  }
 export type SettingsQueryResult = {
@@ -1266,7 +1305,7 @@ export type SettingsQueryResult = {
     asset: {
       _id: string
       _type: 'sanity.imageAsset'
-      url: string | null
+      url: string
       metadata: {
         dimensions: {
           width: number
@@ -1286,8 +1325,8 @@ export type SettingsQueryResult = {
   menuItems: Array<
     | {
         _key: string
-        _type: null
-        title: null
+        _type: 'blogLandingPage'
+        title: string
         cta: null
         subnav: null
       }
@@ -1368,7 +1407,7 @@ export type SettingsQueryResult = {
   }> | null
 } | null
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: getHomePageQuery
 // Query: *[_type == 'home'][0]{    _id,    _type,    title,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
 export type GetHomePageQueryResult = {
@@ -1387,7 +1426,7 @@ export type GetHomePageQueryResult = {
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -1426,7 +1465,7 @@ export type GetHomePageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -1575,7 +1614,7 @@ export type GetHomePageQueryResult = {
                         asset: {
                           _id: string
                           _type: 'sanity.fileAsset'
-                          url: string | null
+                          url: string
                         } | null
                       } | null
                       markDefs: null
@@ -1625,7 +1664,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -1693,7 +1732,7 @@ export type GetHomePageQueryResult = {
                     asset: {
                       _id: string
                       _type: 'sanity.fileAsset'
-                      url: string | null
+                      url: string
                     } | null
                   } | null
                   landingPageRoute:
@@ -1742,7 +1781,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -1836,7 +1875,7 @@ export type GetHomePageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -1863,7 +1902,7 @@ export type GetHomePageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.fileAsset'
-              url: string | null
+              url: string
             } | null
           } | null
           landingPageRoute:
@@ -1903,7 +1942,7 @@ export type GetHomePageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -1998,7 +2037,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 markDefs: null
@@ -2069,7 +2108,7 @@ export type GetHomePageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -2141,7 +2180,7 @@ export type GetHomePageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -2248,7 +2287,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 markDefs: null
@@ -2324,7 +2363,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -2344,7 +2383,7 @@ export type GetHomePageQueryResult = {
                 role: string | null
                 bio: SimplePortableText | null
               }
-              excerpt: SimplePortableText | null
+              excerpt: SimplePortableText
               coverImage: null
             }
           | {
@@ -2387,7 +2426,7 @@ export type GetHomePageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -2486,7 +2525,7 @@ export type GetHomePageQueryResult = {
                 asset: {
                   _id: string
                   _type: 'sanity.imageAsset'
-                  url: string | null
+                  url: string
                   metadata: {
                     dimensions: {
                       width: number
@@ -2600,7 +2639,7 @@ export type GetHomePageQueryResult = {
                           asset: {
                             _id: string
                             _type: 'sanity.fileAsset'
-                            url: string | null
+                            url: string
                           } | null
                         } | null
                         markDefs: null
@@ -2764,7 +2803,7 @@ export type GetHomePageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 landingPageRoute:
@@ -2850,7 +2889,7 @@ export type GetHomePageQueryResult = {
                 asset: {
                   _id: string
                   _type: 'sanity.imageAsset'
-                  url: string | null
+                  url: string
                   metadata: {
                     dimensions: {
                       width: number
@@ -2877,7 +2916,7 @@ export type GetHomePageQueryResult = {
               asset: {
                 _id: string
                 _type: 'sanity.imageAsset'
-                url: string | null
+                url: string
                 metadata: {
                   dimensions: {
                     width: number
@@ -2988,7 +3027,7 @@ export type GetHomePageQueryResult = {
                       asset: {
                         _id: string
                         _type: 'sanity.fileAsset'
-                        url: string | null
+                        url: string
                       } | null
                     } | null
                     markDefs: null
@@ -3138,7 +3177,7 @@ export type GetHomePageQueryResult = {
                     asset: {
                       _id: string
                       _type: 'sanity.fileAsset'
-                      url: string | null
+                      url: string
                     } | null
                   } | null
                   markDefs: null
@@ -3261,7 +3300,7 @@ export type GetHomePageQueryResult = {
                         asset: {
                           _id: string
                           _type: 'sanity.fileAsset'
-                          url: string | null
+                          url: string
                         } | null
                       } | null
                       markDefs: null
@@ -3420,7 +3459,7 @@ export type GetHomePageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -3455,7 +3494,7 @@ export type GetHomePageQueryResult = {
   > | null
 } | null
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: blogLandingPageQuery
 // Query: *[_type == 'blogLandingPage'][0]{    _id,    _type,    title,    slug,    overview,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      ...,      _type == 'heroBanner' => {        _key,        _type,        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        _key,        _type,        size,        backgroundColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      }    }  }
 export type BlogLandingPageQueryResult = {
@@ -3493,7 +3532,7 @@ export type BlogLandingPageQueryResult = {
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -3569,7 +3608,7 @@ export type BlogLandingPageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -3596,7 +3635,7 @@ export type BlogLandingPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.fileAsset'
-              url: string | null
+              url: string
             } | null
           } | null
           landingPageRoute:
@@ -3625,7 +3664,7 @@ export type BlogLandingPageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -3720,7 +3759,7 @@ export type BlogLandingPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 markDefs: null
@@ -3815,7 +3854,7 @@ export type BlogLandingPageQueryResult = {
               _type: 'block'
               _key: string
             }> | null
-          } | null
+          }
           image: {
             alt: string | null
             crop: SanityImageCrop | null
@@ -3823,7 +3862,7 @@ export type BlogLandingPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -3852,7 +3891,7 @@ export type BlogLandingPageQueryResult = {
               asset: {
                 _id: string
                 _type: 'sanity.imageAsset'
-                url: string | null
+                url: string
                 metadata: {
                   dimensions: {
                     width: number
@@ -3899,7 +3938,7 @@ export type BlogLandingPageQueryResult = {
   > | null
 } | null
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: getPageQuery
 // Query: *[_type == 'page' && slug.current == $slug][0]{    _id,    _type,    title,    slug,    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    "content": content[]{      _key,      _type,      ...,      _type == 'heroBanner' => {        size,        subheading,        subHeadingColor,        heading,        headingColor,        copy {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        copyColor,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        overlay,        cta {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        disabled      },      _type == 'heroTwoPanel' => {        size,        backgroundColor,        centerText,        image {            alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }        },        mainPortableText {          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'successStoriesBlock' => {        _key,        _type,        backgroundColor,        "stories": stories[] {          portableTextBlock[] {            ...,            markDefs[] {              _key,              _type,              _type == "internalLink" => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          }        },        disabled      },      _type == 'singleColumnContentBlock' => {        _key,        _type,        backgroundColor,        removeBottomPadding,        skinny,        centerContent,        "contentBlock": contentBlock {          contentType,          "portableTextBlock": portableTextBlock {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          "faq": faq {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        disabled      },      image {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      },      "programs": programs[]{        _type == 'reference' => @-> {            _id,  name,  enhancedCardTitle,  trainingType,  slug {    current  },  parentPage -> {    slug {      current    }  },  cardImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cardTakeaways,  takeaways,  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      enhanced,      centerContent,      description {        portableTextBlock[] {          ...,          _type == 'cta' => {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          markDefs[] {            _key,            _type,            _type == "internalLink" => {              item -> {                _id,                _type,                _type == "class" => {                  "slug": slug.current,                  "parentPage": parentPage-> {                    "parentSlug": slug.current                  }                },                _type == 'page' => {                  "slug": slug.current                }              }            },            _type == 'link' => {              href,              blank            },            _type != 'internalLink' && _type != 'link' => @          }        }      },      "trainers": trainers[]{        _type == 'reference' => @-> {            _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio        }      }[_type != 'reference' || @->._id != null],      "classRefs": classRefs[]{        _type == 'reference' => @-> {            _id,  name,  trainingType,  customTrainingTitle,  price,  slug {    current  },  description,  takeaways,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  acuityCategoryUrl,  upcomingClasses[] {    _key,    dateTime,    acuityId,    totalSpots,    bookingsCount,    availability  }        }      }[_type != 'reference' || @->._id != null],      "productsArr": productsArr[]{        _type == 'reference' => @-> {            _id,  _key,  heading,  price,  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  cta {      title,  arrow,  kind,  link,  landingPageRoute -> {    _id,    "slug": slug.current,    _type  }  }        }      }[_type != 'reference' || @->._id != null],      "posts": posts[]{        _type == 'reference' => @-> {            _id,  title,  "slug": slug.current,  excerpt,  coverImage {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  author -> {      _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio  },  date,  _updatedAt        }      }[_type != 'reference' || @->._id != null],      "panels": panels[]{        _type == 'reference' => @-> {          _id,          heading,          copy,          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          }        }      }[_type != 'reference' || @->._id != null],      "testimonialsArr": testimonialsArr[] -> {        _key,        heading,        copy,      },      "relatedResources": relatedResources[]{        _type == 'reference' => @-> {          _type == 'post' => {            _type,            _id,            title,            "slug": slug.current,            author {              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            },            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          },          _type == 'resource' => {            _type,            _id,            title,            "slug": slug.current,            excerpt,            coverImage {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            }          }        }      }[_type != 'reference' || @->._id != null],      _type == 'customComponent' => {        "rows": rows[]{          _type,          _key,          _type == 'trainerRows' => {            "trainers": trainers[]{              _type == 'reference' => @-> {                  _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio              }            }[_type != 'reference' || @->._id != null]          },          _type == 'galleryGrid' => {            "galleryArr": galleryArr[] {              alt,              crop,              hotspot,              asset-> {                _id,                metadata {                  lqip                }              }            }          },          _type == 'aboutUsContainer' => {            copy {              portableTextBlock[] {                ...,                _type == 'cta' => {                  title,                  arrow,                  kind,                  link,                  fileDownload {                      _type,  asset-> {    _id,    _type,    url  }                  },                  landingPageRoute-> {                    _id,                    "slug": slug.current,                    _type                  }                },                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            "iconCards": iconCards[]{              heading,              icon {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              },              copy {                portableTextBlock[] {                  ...,                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              },              cta {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              }            }          }        }      },      _type == 'postsGridContainer' => {        "posts": posts[]{          _type == 'reference' => @-> {            _id,            title,            slug {              current            },            excerpt {              portableTextBlock[] {                ...,                markDefs[] {                  _key,                  _type,                  _type == "internalLink" => {                    item -> {                      _id,                      _type,                      _type == "class" => {                        "slug": slug.current,                        "parentPage": parentPage-> {                          "parentSlug": slug.current                        }                      },                      _type == 'page' => {                        "slug": slug.current                      }                    }                  },                  _type == 'link' => {                    href,                    blank                  },                  _type != 'internalLink' && _type != 'link' => @                }              }            },            image {                alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }            },            author -> {              _id,              name,              slug {                current              },              picture {                  alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }              }            }          }        }[_type != 'reference' || @->._id != null]      },      _type == 'rowContainer' => {        "rowContent": rowContent[]{          _type,          _key,          alt,          crop,          hotspot,          "asset": asset-> {            _id,            _type,            url,            metadata {              dimensions {                width,                height,                aspectRatio              },              lqip,              palette {                dominant {                  background                }              }            }          },          heading,          copy {            portableTextBlock[] {              ...,              _type == 'cta' => {                title,                arrow,                kind,                link,                fileDownload {                    _type,  asset-> {    _id,    _type,    url  }                },                landingPageRoute-> {                  _id,                  "slug": slug.current,                  _type                }              },              markDefs[] {                _key,                _type,                _type == "internalLink" => {                  item -> {                    _id,                    _type,                    _type == "class" => {                      "slug": slug.current,                      "parentPage": parentPage-> {                        "parentSlug": slug.current                      }                    },                    _type == 'page' => {                      "slug": slug.current                    }                  }                },                _type == 'link' => {                  href,                  blank                },                _type != 'internalLink' && _type != 'link' => @              }            }          },          portableTextBlock[] {            ...,            _type == 'cta' => {              title,              arrow,              kind,              link,              fileDownload {                  _type,  asset-> {    _id,    _type,    url  }              },              landingPageRoute-> {                _id,                "slug": slug.current,                _type              }            },            markDefs[] {              _key,              _type,              _type == 'internalLink' => {                item -> {                  _id,                  _type,                  _type == "class" => {                    "slug": slug.current,                    "parentPage": parentPage-> {                      "parentSlug": slug.current                    }                  },                  _type == 'page' => {                    "slug": slug.current                  }                }              },              _type == 'link' => {                href,                blank              },              _type != 'internalLink' && _type != 'link' => @            }          },          icon,          title,          cta {            title,            arrow,            kind,            link,            fileDownload {                _type,  asset-> {    _id,    _type,    url  }            },            landingPageRoute-> {              _id,              "slug": slug.current,              _type            }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          },          image {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          carouselImages[] {              alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }          },          _type == 'faq' => {            "items": items[] {              _key,              question,              "answer": answer {                portableTextBlock[] {                  ...,                  _type == 'cta' => {                    title,                    arrow,                    kind,                    link,                    fileDownload {                        _type,  asset-> {    _id,    _type,    url  }                    },                    landingPageRoute-> {                      _id,                      "slug": slug.current,                      _type                    }                  },                  markDefs[] {                    _key,                    _type,                    _type == "internalLink" => {                      item -> {                        _id,                        _type,                        _type == "class" => {                          "slug": slug.current,                          "parentPage": parentPage-> {                            "parentSlug": slug.current                          }                        },                        _type == 'page' => {                          "slug": slug.current                        }                      }                    },                    _type == 'link' => {                      href,                      blank                    },                    _type != 'internalLink' && _type != 'link' => @                  }                }              }            }          }        },        "trainers": trainers[]{          _type == 'reference' => @-> {              _id,  name,  firstName,  lastName,  slug,  picture {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  certifications,  role,  bio          }        }[_type != 'reference' || @->._id != null],        "galleryArr": galleryArr[] {          alt,          crop,          hotspot,          asset-> {            _id,            metadata {              lqip            }          }        }      }    },  }
 export type GetPageQueryResult = {
@@ -3919,7 +3958,7 @@ export type GetPageQueryResult = {
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -3958,7 +3997,7 @@ export type GetPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -4107,7 +4146,7 @@ export type GetPageQueryResult = {
                         asset: {
                           _id: string
                           _type: 'sanity.fileAsset'
-                          url: string | null
+                          url: string
                         } | null
                       } | null
                       markDefs: null
@@ -4157,7 +4196,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -4225,7 +4264,7 @@ export type GetPageQueryResult = {
                     asset: {
                       _id: string
                       _type: 'sanity.fileAsset'
-                      url: string | null
+                      url: string
                     } | null
                   } | null
                   landingPageRoute:
@@ -4274,7 +4313,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -4368,7 +4407,7 @@ export type GetPageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -4395,7 +4434,7 @@ export type GetPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.fileAsset'
-              url: string | null
+              url: string
             } | null
           } | null
           landingPageRoute:
@@ -4435,7 +4474,7 @@ export type GetPageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -4530,7 +4569,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 markDefs: null
@@ -4601,7 +4640,7 @@ export type GetPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -4673,7 +4712,7 @@ export type GetPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -4780,7 +4819,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 markDefs: null
@@ -4856,7 +4895,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.imageAsset'
-                    url: string | null
+                    url: string
                     metadata: {
                       dimensions: {
                         width: number
@@ -4876,7 +4915,7 @@ export type GetPageQueryResult = {
                 role: string | null
                 bio: SimplePortableText | null
               }
-              excerpt: SimplePortableText | null
+              excerpt: SimplePortableText
               coverImage: null
             }
           | {
@@ -4919,7 +4958,7 @@ export type GetPageQueryResult = {
           asset: {
             _id: string
             _type: 'sanity.imageAsset'
-            url: string | null
+            url: string
             metadata: {
               dimensions: {
                 width: number
@@ -5018,7 +5057,7 @@ export type GetPageQueryResult = {
                 asset: {
                   _id: string
                   _type: 'sanity.imageAsset'
-                  url: string | null
+                  url: string
                   metadata: {
                     dimensions: {
                       width: number
@@ -5132,7 +5171,7 @@ export type GetPageQueryResult = {
                           asset: {
                             _id: string
                             _type: 'sanity.fileAsset'
-                            url: string | null
+                            url: string
                           } | null
                         } | null
                         markDefs: null
@@ -5296,7 +5335,7 @@ export type GetPageQueryResult = {
                   asset: {
                     _id: string
                     _type: 'sanity.fileAsset'
-                    url: string | null
+                    url: string
                   } | null
                 } | null
                 landingPageRoute:
@@ -5382,7 +5421,7 @@ export type GetPageQueryResult = {
                 asset: {
                   _id: string
                   _type: 'sanity.imageAsset'
-                  url: string | null
+                  url: string
                   metadata: {
                     dimensions: {
                       width: number
@@ -5409,7 +5448,7 @@ export type GetPageQueryResult = {
               asset: {
                 _id: string
                 _type: 'sanity.imageAsset'
-                url: string | null
+                url: string
                 metadata: {
                   dimensions: {
                     width: number
@@ -5520,7 +5559,7 @@ export type GetPageQueryResult = {
                       asset: {
                         _id: string
                         _type: 'sanity.fileAsset'
-                        url: string | null
+                        url: string
                       } | null
                     } | null
                     markDefs: null
@@ -5670,7 +5709,7 @@ export type GetPageQueryResult = {
                     asset: {
                       _id: string
                       _type: 'sanity.fileAsset'
-                      url: string | null
+                      url: string
                     } | null
                   } | null
                   markDefs: null
@@ -5793,7 +5832,7 @@ export type GetPageQueryResult = {
                         asset: {
                           _id: string
                           _type: 'sanity.fileAsset'
-                          url: string | null
+                          url: string
                         } | null
                       } | null
                       markDefs: null
@@ -5952,7 +5991,7 @@ export type GetPageQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.imageAsset'
-              url: string | null
+              url: string
               metadata: {
                 dimensions: {
                   width: number
@@ -5987,7 +6026,7 @@ export type GetPageQueryResult = {
   > | null
 } | null
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: sitemapData
 // Query: *[_type == "page" || _type == "post" && defined(slug.current)] | order(_type asc) {    "slug": slug.current,    _type,    _id,    _updatedAt,    seo {      noindex    }  }
 export type SitemapDataResult = Array<
@@ -6011,7 +6050,7 @@ export type SitemapDataResult = Array<
     }
 >
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: homepageSitemap
 // Query: *[_type == "home"] {    _id,    _updatedAt  }
 export type HomepageSitemapResult = Array<{
@@ -6019,7 +6058,7 @@ export type HomepageSitemapResult = Array<{
   _updatedAt: string
 }>
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: allPostsQuery
 // Query: *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {      _id,  title,  slug {    current  },  excerpt {    portableTextBlock[] {      ...,      markDefs[] {        _key,        _type,        _type == "internalLink" => {          item -> {            _id,            _type,            _type == "class" => {              "slug": slug.current,              "parentPage": parentPage-> {                "parentSlug": slug.current              }            },            _type == 'page' => {              "slug": slug.current            }          }        },        _type == 'link' => {          href,          blank        },        _type != 'internalLink' && _type != 'link' => @      }    }  },  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  "author": author-> {    name,    slug {      current    },    picture {        alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }    }  }  }
 export type AllPostsQueryResult = Array<{
@@ -6069,7 +6108,7 @@ export type AllPostsQueryResult = Array<{
       _type: 'block'
       _key: string
     }> | null
-  } | null
+  }
   image: {
     alt: string | null
     crop: SanityImageCrop | null
@@ -6077,7 +6116,7 @@ export type AllPostsQueryResult = Array<{
     asset: {
       _id: string
       _type: 'sanity.imageAsset'
-      url: string | null
+      url: string
       metadata: {
         dimensions: {
           width: number
@@ -6105,7 +6144,7 @@ export type AllPostsQueryResult = Array<{
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -6124,7 +6163,7 @@ export type AllPostsQueryResult = Array<{
   }
 }>
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: morePostsQuery
 // Query: *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {      _id,  title,  slug {    current  },  excerpt {    portableTextBlock[] {      ...,      markDefs[] {        _key,        _type,        _type == "internalLink" => {          item -> {            _id,            _type,            _type == "class" => {              "slug": slug.current,              "parentPage": parentPage-> {                "parentSlug": slug.current              }            },            _type == 'page' => {              "slug": slug.current            }          }        },        _type == 'link' => {          href,          blank        },        _type != 'internalLink' && _type != 'link' => @      }    }  },  image {      alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }  },  "author": author-> {    name,    slug {      current    },    picture {        alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }    }  }  }
 export type MorePostsQueryResult = Array<{
@@ -6174,7 +6213,7 @@ export type MorePostsQueryResult = Array<{
       _type: 'block'
       _key: string
     }> | null
-  } | null
+  }
   image: {
     alt: string | null
     crop: SanityImageCrop | null
@@ -6182,7 +6221,7 @@ export type MorePostsQueryResult = Array<{
     asset: {
       _id: string
       _type: 'sanity.imageAsset'
-      url: string | null
+      url: string
       metadata: {
         dimensions: {
           width: number
@@ -6210,7 +6249,7 @@ export type MorePostsQueryResult = Array<{
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -6229,7 +6268,7 @@ export type MorePostsQueryResult = Array<{
   }
 }>
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: postQuery
 // Query: *[_type == "post" && slug.current == $slug] [0] {    _id,    title,    subheader,    slug {      current    },    seo {      seoTitle,      seoDescription,      noindex,      canonicalUrl,      ogImage {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    excerpt {      portableTextBlock[] {        ...,        markDefs[] {          _key,          _type,          _type == "internalLink" => {            item -> {              _id,              _type,              _type == "class" => {                "slug": slug.current,                "parentPage": parentPage-> {                  "parentSlug": slug.current                }              },              _type == 'page' => {                "slug": slug.current              }            }          },          _type == 'link' => {            href,            blank          },          _type != 'internalLink' && _type != 'link' => @        }      }    },    image {        alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }    },    body {      portableTextBlock[] {        ...,        _type == 'cta' => {          title,          arrow,          kind,          link,          fileDownload {              _type,  asset-> {    _id,    _type,    url  }          },          landingPageRoute-> {            _id,            "slug": slug.current,            _type          }        },        markDefs[] {          _key,          _type,          _type == "internalLink" => {            item -> {              _id,              _type,              _type == "class" => {                "slug": slug.current,                "parentPage": parentPage-> {                  "parentSlug": slug.current                }              },              _type == 'page' => {                "slug": slug.current              }            }          },          _type == 'link' => {            href,            blank          },          _type != 'internalLink' && _type != 'link' => @        }      }    },    author -> {      _id,      name,      slug {        current      },      picture {          alt,  crop,  hotspot,  asset -> {    _id,    _type,    url,    metadata {      dimensions {        width,        height,        aspectRatio      },      lqip,      palette {        dominant {          background        }      }    }  }      }    },    date,    _createdAt,    _updatedAt  }
 export type PostQueryResult = {
@@ -6251,7 +6290,7 @@ export type PostQueryResult = {
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -6309,7 +6348,7 @@ export type PostQueryResult = {
       _type: 'block'
       _key: string
     }> | null
-  } | null
+  }
   image: {
     alt: string | null
     crop: SanityImageCrop | null
@@ -6317,7 +6356,7 @@ export type PostQueryResult = {
     asset: {
       _id: string
       _type: 'sanity.imageAsset'
-      url: string | null
+      url: string
       metadata: {
         dimensions: {
           width: number
@@ -6411,7 +6450,7 @@ export type PostQueryResult = {
             asset: {
               _id: string
               _type: 'sanity.fileAsset'
-              url: string | null
+              url: string
             } | null
           } | null
           markDefs: null
@@ -6465,7 +6504,7 @@ export type PostQueryResult = {
       asset: {
         _id: string
         _type: 'sanity.imageAsset'
-        url: string | null
+        url: string
         metadata: {
           dimensions: {
             width: number
@@ -6487,21 +6526,21 @@ export type PostQueryResult = {
   _updatedAt: string
 } | null
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: postPagesSlugs
 // Query: *[_type == "post" && defined(slug.current)]  {"slug": slug.current}
 export type PostPagesSlugsResult = Array<{
   slug: string
 }>
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: pagesSlugs
 // Query: *[_type == "page" && defined(slug.current)]  {"slug": slug.current}
 export type PagesSlugsResult = Array<{
   slug: string
 }>
 
-// Source: sanity/lib/queries.ts
+// Source: ../web/sanity/lib/queries.ts
 // Variable: redirectsQuery
 // Query: *[_type == "redirect" && defined(source) && defined(destination)] {    source,    destination,    permanent  }
 export type RedirectsQueryResult = Array<{

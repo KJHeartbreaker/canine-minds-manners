@@ -16,11 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
   const [{ data: page }, { data: settings }] = await Promise.all([
     sanityFetch({
       query: getHomePageQuery,
+      tags: ['home'],
       // Metadata should never contain stega
       stega: false,
     }),
     sanityFetch({
       query: settingsQuery,
+      tags: ['settings'],
       stega: false,
     }),
   ])
@@ -73,6 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page() {
   const { data: page } = await sanityFetch({
     query: getHomePageQuery,
+    tags: ['home'],
   })
 
   const siteUrl = await getSiteUrl()
