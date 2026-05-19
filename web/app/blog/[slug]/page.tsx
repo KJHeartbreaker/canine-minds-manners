@@ -41,11 +41,13 @@ export async function generateMetadata(props: Props, parent: ResolvingMetadata):
     sanityFetch({
       query: postQuery,
       params,
+      tags: ['post', `post:${params.slug}`],
       // Metadata should never contain stega
       stega: false,
     }),
     sanityFetch({
       query: settingsQuery,
+      tags: ['settings'],
       stega: false,
     }),
   ])
@@ -100,7 +102,9 @@ export async function generateMetadata(props: Props, parent: ResolvingMetadata):
 
 export default async function PostPage(props: Props) {
   const params = await props.params
-  const [{ data: post }] = await Promise.all([sanityFetch({ query: postQuery, params })])
+  const [{ data: post }] = await Promise.all([
+    sanityFetch({query: postQuery, params, tags: ['post', `post:${params.slug}`]}),
+  ])
 
   if (!post?._id) {
     return notFound()

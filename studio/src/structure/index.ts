@@ -13,8 +13,6 @@ import type {StructureBuilder, StructureResolver} from 'sanity/structure'
  * Learn more: https://www.sanity.io/docs/structure-builder-introduction
  */
 
-const DISABLED_TYPES = ['assist.instruction.context']
-
 // Define singletons - these are single documents that should be accessible directly
 const SINGLETONS = [
   {name: 'home', title: 'Home', icon: GoHome},
@@ -22,7 +20,7 @@ const SINGLETONS = [
   {name: 'settings', title: 'Settings and Menus', icon: GiSettingsKnobs},
 ]
 
-export const structure: StructureResolver = (S: StructureBuilder) =>
+export const structure: StructureResolver = (S: StructureBuilder, context) =>
   S.list()
     .title('Content')
     .items([
@@ -35,9 +33,30 @@ export const structure: StructureResolver = (S: StructureBuilder) =>
       ),
       // Contact page (specific page)
       S.listItem()
+        .id('contact')
         .title('Contact')
         .icon(BsTelephone)
-        .child(S.document().schemaType('page').documentId('169e36ec-e78e-438b-9a51-800da17be6b6')),
+        .child(async () => {
+          const client = context.getClient({apiVersion: '2025-09-25'})
+          const contactId = await client.fetch<string | null>(
+            '*[_type == "page" && slug.current == $slug][0]._id',
+            {slug: 'contact'},
+          )
+
+          if (contactId) {
+            return S.document().schemaType('page').documentId(contactId)
+          }
+
+          // If the Contact page doesn't exist yet, show a read-only list (no “Create”)
+          // so editors don’t accidentally make multiple “Contact” pages.
+          return S.documentList()
+            .title('Contact')
+            .schemaType('page')
+            .filter('_type == "page" && slug.current == $slug')
+            .params({slug: 'contact'})
+            .initialValueTemplates([])
+            .child((documentId) => S.document().schemaType('page').documentId(documentId))
+        }),
       // Pages (excluding contact)
       S.listItem()
         .title('Pages')

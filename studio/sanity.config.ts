@@ -24,7 +24,31 @@ const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
 // URL for preview functionality, defaults to localhost:3000 if not set
-const SANITY_STUDIO_PREVIEW_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'http://localhost:3000'
+function getPreviewOrigin(): string {
+  const raw = process.env.SANITY_STUDIO_PREVIEW_URL
+  if (!raw) return 'http://localhost:3000'
+
+  const trimmed = raw.trim()
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
+
+  try {
+    return new URL(withProtocol).origin
+  } catch {
+    console.warn('Invalid SANITY_STUDIO_PREVIEW_URL, falling back to localhost', {
+      SANITY_STUDIO_PREVIEW_URL: raw,
+    })
+    return 'http://localhost:3000'
+  }
+}
+
+const previewOrigin = getPreviewOrigin()
+
+if (previewOrigin.endsWith('.sanity.studio')) {
+  console.warn(
+    'SANITY_STUDIO_PREVIEW_URL points at the Studio. It must be the website origin (where /api/draft-mode/enable lives).',
+    {previewOrigin},
+  )
+}
 
 // Define the home location for the presentation tool
 const homeLocation = {
@@ -47,6 +71,8 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
 }
 
 // Main Sanity configuration
+const singletonTypes = new Set(['home', 'settings', 'blogLandingPage'])
+
 export default defineConfig({
   name: 'default',
   title: 'Canine Minds and Manners',
@@ -58,7 +84,7 @@ export default defineConfig({
     // Presentation tool configuration for Visual Editing
     presentationTool({
       previewUrl: {
-        origin: SANITY_STUDIO_PREVIEW_URL,
+        origin: previewOrigin,
         previewMode: {
           enable: '/api/draft-mode/enable',
         },
@@ -143,8 +169,17 @@ export default defineConfig({
 
   // Document actions
   document: {
-    actions: (prev) => {
-      return [...prev, unpublishAction]
+    actions: (prev, context) => {
+      const isSingleton = singletonTypes.has(context.schemaType) && context.documentId === context.schemaType
+      const withUnpublish = [...prev, unpublishAction]
+
+      if (!isSingleton) return withUnpublish
+
+      return withUnpublish.filter(({action}) => action !== 'delete' && action !== 'duplicate')
+    },
+    newDocumentOptions: (prev, {creationContext}) => {
+      if (creationContext.type !== 'global') return prev
+      return prev.filter((templateItem) => !singletonTypes.has(templateItem.templateId))
     },
   },
 })

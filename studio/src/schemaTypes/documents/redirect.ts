@@ -27,7 +27,17 @@ export const redirect = defineType({
       title: 'Destination Path',
       description:
         'The path to redirect to. Can be relative (e.g., /new-page) or absolute (e.g., https://example.com)',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.required().custom((value) => {
+          if (!value) return true
+          const v = value.trim()
+          const isRelativePath = v.startsWith('/')
+          const isAbsoluteUrl = /^https?:\/\//i.test(v)
+          if (!isRelativePath && !isAbsoluteUrl) {
+            return 'Destination must start with / (relative path) or http(s):// (absolute URL)'
+          }
+          return true
+        }),
     }),
     defineField({
       type: 'boolean',

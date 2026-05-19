@@ -838,7 +838,6 @@ export const blogLandingPageQuery = defineQuery(`
     _type,
     title,
     slug,
-    overview,
     seo {
       seoTitle,
       seoDescription,

@@ -14,6 +14,12 @@ const ALLOWED_TAGS = new Set([
   'settings',
   'post',
   'blogLandingPage',
+  // Other published collections
+  'resource',
+  'product',
+  'trainer',
+  'testimonial',
+  'redirect',
 ])
 
 export async function POST(req: NextRequest) {
