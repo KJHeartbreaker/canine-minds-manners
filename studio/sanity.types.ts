@@ -365,7 +365,7 @@ export type NavCTA = {
 export type Seo = {
   _type: 'seo'
   seoTitle?: string
-  seoDescription?: string
+  seoDescription: string
   noindex?: boolean
   canonicalUrl?: string
   ogImage?: {
@@ -627,20 +627,6 @@ export type Post = {
   title: string
   slug: Slug
   seo?: Seo
-  overview?: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: null
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
   author: TrainerReference
   excerpt: SimplePortableText
   image?: MainImage
@@ -675,24 +661,6 @@ export type Home = {
   _updatedAt: string
   _rev: string
   title: string
-  overview: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      href?: string
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
   seo?: Seo
   content?: Array<
     | ({
@@ -746,24 +714,6 @@ export type BlogLandingPage = {
   title: string
   slug: Slug
   seo?: Seo
-  overview: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: Array<{
-      href?: string
-      _type: 'link'
-      _key: string
-    }>
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
   content?: Array<
     | ({
         _key: string
@@ -800,24 +750,6 @@ export type Settings = {
         title: string
         slug: Slug
         seo?: Seo
-        overview: Array<{
-          children?: Array<{
-            marks?: Array<string>
-            text?: string
-            _type: 'span'
-            _key: string
-          }>
-          style?: 'normal'
-          listItem?: never
-          markDefs?: Array<{
-            href?: string
-            _type: 'link'
-            _key: string
-          }>
-          level?: number
-          _type: 'block'
-          _key: string
-        }>
         content?: Array<
           | ({
               _key: string
@@ -880,20 +812,6 @@ export type Page = {
   title: string
   slug: Slug
   seo?: Seo
-  overview?: Array<{
-    children?: Array<{
-      marks?: Array<string>
-      text?: string
-      _type: 'span'
-      _key: string
-    }>
-    style?: 'normal'
-    listItem?: never
-    markDefs?: null
-    level?: number
-    _type: 'block'
-    _key: string
-  }>
   content?: Array<
     | ({
         _key: string

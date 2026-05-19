@@ -66,7 +66,35 @@ export const classProjection = `
   slug {
     current
   },
-  description,
+  description {
+    portableTextBlock[] {
+      ...,
+      markDefs[] {
+        _key,
+        _type,
+        _type == "internalLink" => {
+          item -> {
+            _id,
+            _type,
+            _type == "class" => {
+              "slug": slug.current,
+              "parentPage": parentPage-> {
+                "parentSlug": slug.current
+              }
+            },
+            _type == "page" => {
+              "slug": slug.current
+            }
+          }
+        },
+        _type == "link" => {
+          href,
+          blank
+        },
+        _type != "internalLink" && _type != "link" => @
+      }
+    }
+  },
   takeaways,
   picture {
     ${imageProjection}

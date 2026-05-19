@@ -52,6 +52,8 @@ export default function SanityImage({
         const imageAlt = alt || source.alt || ''
         const imageWidth = width || source.asset?.metadata?.dimensions?.width || 400
         const imageHeight = height || source.asset?.metadata?.dimensions?.height || 300
+        const blurDataURL: string | undefined = source.asset?.metadata?.lqip
+        const placeholder: 'blur' | undefined = blurDataURL ? 'blur' : undefined
 
         if (fill) {
             const aspectClass = aspectRatio
@@ -68,6 +70,8 @@ export default function SanityImage({
                         quality={quality}
                         sizes={sizes}
                         loading={loading}
+                        placeholder={placeholder}
+                        blurDataURL={blurDataURL}
                     />
                 </div>
             )
@@ -84,6 +88,8 @@ export default function SanityImage({
                 quality={quality}
                 sizes={sizes}
                 loading={loading}
+                placeholder={placeholder}
+                blurDataURL={blurDataURL}
             />
         )
     }
@@ -100,6 +106,8 @@ export default function SanityImage({
 
     const dimensions = getImageDimensions(source)
     const imageAlt = alt || stegaClean(source?.alt) || ''
+    const blurDataURL: string | undefined = source?.asset?.metadata?.lqip
+    const placeholder: 'blur' | undefined = blurDataURL ? 'blur' : undefined
 
     // If fill is true, use fill mode
     if (fill) {
@@ -117,6 +125,8 @@ export default function SanityImage({
                     quality={quality}
                     sizes={sizes}
                     loading={loading}
+                    placeholder={placeholder}
+                    blurDataURL={blurDataURL}
                 />
             </div>
         )
@@ -142,6 +152,8 @@ export default function SanityImage({
             quality={quality}
             sizes={sizes}
             loading={loading}
+            placeholder={placeholder}
+            blurDataURL={blurDataURL}
         />
     )
 }

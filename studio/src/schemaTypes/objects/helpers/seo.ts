@@ -40,6 +40,7 @@ export const seo = defineType({
       },
       validation: (rule) =>
         rule
+          .required()
           .max(155)
           .warning(
             'Meta descriptions should be 155 characters or less to avoid truncation in search results',

@@ -12,6 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "module": "preserve",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,

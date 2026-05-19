@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { toPlainText } from 'next-sanity'
 
 import PageBuilder from '@/app/components/PageBuilder'
 import { BreadcrumbListSchemaComponent } from '@/app/components/StructuredData'
@@ -16,10 +15,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const [{ data: page }, { data: settings }] = await Promise.all([
     sanityFetch({
       query: blogLandingPageQuery,
+      tags: ['blogLandingPage'],
       stega: false,
     }),
     sanityFetch({
       query: settingsQuery,
+      tags: ['settings'],
       stega: false,
     }),
   ])
@@ -33,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   // Get SEO fields with fallbacks
   const seoTitle = typedPage.seo?.seoTitle || typedPage.title
-  const seoDescription = typedPage.seo?.seoDescription || (typedPage.overview ? toPlainText(typedPage.overview) : '')
+  const seoDescription = typedPage.seo?.seoDescription || ''
   const noindex = typedPage.seo?.noindex || false
   const canonicalUrl = typedPage.seo?.canonicalUrl
 
@@ -76,6 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BlogPage() {
   const { data: page } = await sanityFetch({
     query: blogLandingPageQuery,
+    tags: ['blogLandingPage'],
   })
 
   const siteUrl = await getSiteUrl()
@@ -100,6 +102,7 @@ export default async function BlogPage() {
   // Otherwise, fetch all posts and display them
   const { data: posts } = await sanityFetch({
     query: allPostsQuery,
+    tags: ['post'],
   })
 
   if (!posts || posts.length === 0) {

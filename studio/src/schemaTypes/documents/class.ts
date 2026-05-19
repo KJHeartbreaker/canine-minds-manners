@@ -10,20 +10,20 @@ export const classDocument = defineType({
   icon: DocumentIcon,
   groups: [
     {
-      name: 'acuity',
-      title: 'Acuity',
+      name: 'content',
+      title: 'Content',
       default: true,
+    },
+    {
+      name: 'acuity',
+      title: 'Acuity / Scheduling',
+    },
+    {
+      name: 'display',
+      title: 'Display',
     },
   ],
   fieldsets: [
-    {
-      title: 'Text Fields',
-      name: 'textFields',
-      options: {
-        collapsible: true,
-        collapsed: true,
-      },
-    },
     {
       title: 'Class Image',
       name: 'classImage',
@@ -57,6 +57,7 @@ export const classDocument = defineType({
       name: 'name',
       title: 'Class Name',
       type: 'string',
+      group: 'content',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -65,6 +66,7 @@ export const classDocument = defineType({
       description: `This refers to the page where the class details are displayed. If nothing is referenced, links to this class will go directly to the slug. If there is a parent page, the slug will be used as an anchor link.`,
       type: 'reference',
       to: [{type: 'page'}],
+      group: 'content',
     }),
     defineField({
       type: 'slug',
@@ -73,6 +75,7 @@ export const classDocument = defineType({
       options: {
         source: 'name',
       },
+      group: 'content',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -88,14 +91,16 @@ export const classDocument = defineType({
         layout: 'radio',
         direction: 'horizontal',
       },
+      group: 'content',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'customTrainingTitle',
       title: 'Custom Training Type Title',
       description:
-        'If no title is provided, the default title will appear. The defaults are Group Class, and Private Training.',
+        'This training type title appears above the class name on the class itself. If no title is provided, the default title will appear. The defaults are "Group Class", and "Private Training".',
       type: 'string',
+      group: 'display',
     }),
     defineField({
       name: 'price',
@@ -103,7 +108,7 @@ export const classDocument = defineType({
       description:
         'If no price is provided, a link will appear in its place that says Contact Us, and points to the Contact page.',
       type: 'string',
-      fieldset: 'textFields',
+      group: 'content',
     }),
     defineField({
       name: 'upcomingClasses',
@@ -131,8 +136,10 @@ export const classDocument = defineType({
       title: 'Key Takeaways',
       name: 'takeaways',
       type: 'array',
+      description: 'These will be displayed on the class page itself under "You&apos;ll Learn".',
       of: [{type: 'string'}],
       validation: (Rule) => Rule.max(4),
+      group: 'content',
     }),
     defineField({
       title: 'Card Takeaways',
@@ -141,16 +148,17 @@ export const classDocument = defineType({
       of: [{type: 'string'}],
       validation: (Rule) => Rule.max(4),
       description:
-        'Paste your bullet points from Google Docs here. These will be displayed on the card component (separate from Key Takeaways). The component will automatically extract and clean up to 4 bullet points.',
+        'These will be displayed on the enhanced card component on the homepage. The component will automatically extract and clean up to 4 bullet points.',
       components: {
         input: BulletPointsInput,
       },
+      group: 'display',
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'simplePortableText',
-      fieldset: 'textFields',
+      group: 'content',
     }),
     defineField({
       name: 'picture',
@@ -158,6 +166,7 @@ export const classDocument = defineType({
       type: 'mainImage',
       options: {hotspot: true},
       fieldset: 'classImage',
+      group: 'display',
     }),
     defineField({
       name: 'cardImage',
@@ -166,6 +175,7 @@ export const classDocument = defineType({
       description: 'This image will be displayed on the card in the training grid',
       options: {hotspot: true},
       fieldset: 'gridParams',
+      group: 'display',
     }),
     defineField({
       name: 'enhancedCardTitle',
@@ -173,6 +183,7 @@ export const classDocument = defineType({
       type: 'string',
       description:
         'Optional title to display on enhanced program cards. If not provided, the class name will be used.',
+      group: 'display',
     }),
   ],
   preview: {

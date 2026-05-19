@@ -1,3 +1,10 @@
 packages:
   - 'studio'
   - 'web'
+
+# pnpm v10 blocks dependency build scripts by default.
+# Allow only the minimal set we rely on (Next.js image optimization & bundling).
+pnpm:
+  onlyBuiltDependencies:
+    - esbuild
+    - sharp
