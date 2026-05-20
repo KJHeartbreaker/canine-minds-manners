@@ -7,6 +7,8 @@ import {GoHome, GoMegaphone, GoArrowSwitch} from 'react-icons/go'
 import {GiSettingsKnobs} from 'react-icons/gi'
 import type {StructureBuilder, StructureResolver} from 'sanity/structure'
 
+import {editorGuideListItem} from '../guide/structure/editorGuide'
+
 /**
  * Structure builder is useful whenever you want to control how documents are grouped and
  * listed in the studio or for adding additional in-studio previews or content to documents.
@@ -104,4 +106,6 @@ export const structure: StructureResolver = (S: StructureBuilder, context) =>
         .title('Testimonials')
         .icon(SlSpeech)
         .child(S.documentTypeList('testimonial').title('Testimonials')),
+      S.divider(),
+      editorGuideListItem(S),
     ])
