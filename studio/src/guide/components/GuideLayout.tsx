@@ -106,7 +106,12 @@ export function GuideLayout({title, description, sections, tocItems}: GuideLayou
               alignItems: 'flex-start',
             }}
           >
-            <GuideToc items={tocItems} activeId={activeId} onNavigate={navigateToSection} />
+            <GuideToc
+              items={tocItems}
+              activeId={activeId}
+              onNavigate={navigateToSection}
+              scrollRoot={scrollRoot}
+            />
 
             <Stack space={5} style={{flex: 1, minWidth: 0, maxWidth: '42rem'}}>
               {renderSections(sections)}
