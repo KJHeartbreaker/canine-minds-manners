@@ -1,6 +1,8 @@
 import {BiBone as icon} from 'react-icons/bi'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+import {noDuplicateReferences} from '../../../lib/validations/noDuplicateReferences'
+
 export const classRowsContainer = defineType({
   name: 'classRowsContainer',
   type: 'object',
@@ -18,6 +20,8 @@ export const classRowsContainer = defineType({
           to: [{type: 'class'}],
         }),
       ],
+      validation: (Rule) =>
+        Rule.custom(noDuplicateReferences('Each class can only be added once to this row.')),
     }),
   ],
   preview: {

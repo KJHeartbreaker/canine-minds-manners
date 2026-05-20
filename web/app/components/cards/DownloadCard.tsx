@@ -24,17 +24,23 @@ export interface DownloadCardProps {
  */
 export default function DownloadCard({ title, excerpt, image, file }: DownloadCardProps) {
     return (
-        <div data-component="DownloadCard" className="flex flex-col bg-white rounded-[20px] overflow-hidden">
+        <div data-component="DownloadCard" className="flex h-full flex-col bg-white rounded-[20px] overflow-hidden">
             <SanityImage
                 image={image}
                 width={400}
                 height={300}
-                className="w-full max-h-[200px] object-cover md:max-h-[300px]"
+                className="w-full h-[200px] shrink-0 object-cover md:h-[300px]"
             />
-            <div className="flex flex-col justify-start items-start text-left p-5 overflow-hidden copy-block">
+            <div className="flex flex-1 flex-col justify-start items-start text-left p-5 overflow-hidden copy-block">
                 <h4 className="mb-0">{title}</h4>
                 <SimplePortableText value={excerpt.portableTextBlock} />
-                <CTAButton title="Download PDF" kind="link" arrow={false} fileDownload={file} />
+                <CTAButton
+                    title="Download PDF"
+                    kind="link"
+                    arrow={false}
+                    fileDownload={file}
+                    className="mt-auto"
+                />
             </div>
         </div>
     )

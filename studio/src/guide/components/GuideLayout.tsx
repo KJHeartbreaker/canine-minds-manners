@@ -16,17 +16,21 @@ type GuideLayoutProps = {
   tocItems: GuideTocItem[]
 }
 
-function renderSections(sections: GuideSection[]): ReactNode {
+type GuideHeadingLevel = 'h2' | 'h3' | 'h4'
+
+function nextHeadingLevel(level: GuideHeadingLevel): GuideHeadingLevel {
+  if (level === 'h2') return 'h3'
+  if (level === 'h3') return 'h4'
+  return 'h4'
+}
+
+function renderSections(sections: GuideSection[], level: GuideHeadingLevel = 'h2'): ReactNode {
   return sections.map((section) => (
-    <GuideSectionBlock key={section.id} id={section.id} title={section.title}>
+    <GuideSectionBlock key={section.id} id={section.id} title={section.title} level={level}>
       {section.content}
       {section.children && section.children.length > 0 ? (
-        <Stack space={4} paddingTop={1}>
-          {section.children.map((child) => (
-            <GuideSectionBlock key={child.id} id={child.id} title={child.title} level="h3">
-              {child.content}
-            </GuideSectionBlock>
-          ))}
+        <Stack space={level === 'h2' ? 4 : 3} paddingTop={1}>
+          {renderSections(section.children, nextHeadingLevel(level))}
         </Stack>
       ) : null}
     </GuideSectionBlock>

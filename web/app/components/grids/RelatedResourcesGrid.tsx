@@ -35,9 +35,9 @@ export default function RelatedResourcesGrid({
             <h2 className="mb-5" style={{ color: titleColor }}>
                 {title}
             </h2>
-            <div className="grid grid-cols-1 gap-2.5 w-full sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+            <div className="grid grid-cols-1 items-stretch gap-2.5 w-full sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
                 {relatedResourcesArr.map((rr, i) => (
-                    <div key={getStableKey(rr as { _id?: string; _key?: string }, i)} className="h-full">
+                    <div key={getStableKey(rr as { _id?: string; _key?: string }, i)} className="flex h-full min-h-0">
                         {'author' in rr ? (
                             <PostCard
                                 title={rr.title}

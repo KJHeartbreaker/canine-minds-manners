@@ -2,7 +2,7 @@
  * Custom Portable Text Component
  * Full-featured portable text renderer with support for:
  * - Images, CTAs, YouTube videos, Horizontal rules, Logo rows
- * - Custom color marks (cmmYellow, cmmBlue, cmmOrange, cmmWhite)
+ * - Custom color marks (cmmYellow, cmmBlue, cmmDarkBlue, cmmOrange, cmmWhite)
  * - Internal and external links
  *
  * You can learn more about Portable Text on:
@@ -11,7 +11,7 @@
  * https://portabletext.org/
  */
 
-import { PortableText, type PortableTextComponents, type PortableTextBlock } from 'next-sanity'
+import {PortableText, type PortableTextComponents, type PortableTextBlock} from 'next-sanity'
 import Link from 'next/link'
 import getYouTubeID from 'get-youtube-id'
 
@@ -22,7 +22,7 @@ import HorizontalRule from '@/app/components/HorizontalRule'
 import YouTubePlayer from '@/app/components/YouTubePlayer'
 import LogoRow from '../rows/LogoRow'
 import ContactInfo from '@/app/components/ContactInfo'
-import { cn } from '@/lib/utils'
+import {cn} from '@/lib/utils'
 
 interface CustomPortableTextProps {
   className?: string
@@ -39,25 +39,25 @@ export default function CustomPortableText({
 }: CustomPortableTextProps) {
   const components: PortableTextComponents = {
     block: {
-      normal: ({ children }) => {
+      normal: ({children}) => {
         // Check if children is an array with a single empty string
         if (Array.isArray(children) && children.length === 1 && children[0] === '') {
           return <br />
         }
         return <p className={paragraphClasses || className}>{children}</p>
       },
-      h1: ({ children }) => <h1>{children}</h1>,
-      h2: ({ children }) => <h2>{children}</h2>,
-      h3: ({ children }) => <h3>{children}</h3>,
-      h4: ({ children }) => <h4>{children}</h4>,
-      h5: ({ children }) => <h5>{children}</h5>,
-      blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+      h1: ({children}) => <h1>{children}</h1>,
+      h2: ({children}) => <h2>{children}</h2>,
+      h3: ({children}) => <h3>{children}</h3>,
+      h4: ({children}) => <h4>{children}</h4>,
+      h5: ({children}) => <h5>{children}</h5>,
+      blockquote: ({children}) => <blockquote>{children}</blockquote>,
     },
     marks: {
-      link: ({ children, value: link }) => {
+      link: ({children, value: link}) => {
         return <ResolvedLink link={link}>{children}</ResolvedLink>
       },
-      internalLink: ({ children, value }) => {
+      internalLink: ({children, value}) => {
         // Handle internal links - item is dereferenced in the query
         // For classes: item.slug is a string, item.parentPage.parentSlug is a string
         // For pages: item.slug is a string
@@ -85,21 +85,24 @@ export default function CustomPortableText({
         const href = parentSlug ? `/${parentSlug}#${slug}` : `/${slug}`
         return <Link href={href}>{children}</Link>
       },
-      cmmYellow: ({ children }) => <span className="text-yellow">{children}</span>,
-      cmmBlue: ({ children }) => <span className="text-blue-33">{children}</span>,
-      cmmOrange: ({ children }) => <span className="text-orange">{children}</span>,
-      cmmWhite: ({ children }) => <span className="text-white">{children}</span>,
+      cmmYellow: ({children}) => <span className="text-yellow">{children}</span>,
+      cmmBlue: ({children}) => <span className="text-blue-33">{children}</span>,
+      cmmDarkBlue: ({children}) => <span className="text-[#013b63]">{children}</span>,
+      cmmOrange: ({children}) => <span className="text-orange">{children}</span>,
+      cmmWhite: ({children}) => <span className="text-white">{children}</span>,
     },
     types: {
-      image: ({ value }: { value: any }) => (
-        <div className="my-6 space-y-2">
-          <SanityImage image={value} alt={value?.alt} />
-        </div>
-      ),
-      hr: ({ value }: { value: { width?: string; size?: string; align?: 'left' | 'center' | 'right' } }) => (
+      image: ({value}: {value: any}) => {
+        return (
+          <div className={cn('my-6 space-y-2', centered && 'flex justify-center')}>
+            <SanityImage image={value} alt={value?.alt} />
+          </div>
+        )
+      },
+      hr: ({value}: {value: {width?: string; size?: string; align?: 'left' | 'center' | 'right'}}) => (
         <HorizontalRule width={value?.width} size={value?.size} align={value?.align} />
       ),
-      cta: ({ value }: { value: any }) => {
+      cta: ({value}: {value: any}) => {
         return (
           <div className="my-3">
             <CTAButton
@@ -113,8 +116,8 @@ export default function CustomPortableText({
           </div>
         )
       },
-      youtube: ({ value }: { value: { url?: string } }) => {
-        const { url } = value
+      youtube: ({value}: {value: {url?: string}}) => {
+        const {url} = value
         if (!url) {
           return <div>Missing YouTube URL</div>
         }
@@ -126,8 +129,8 @@ export default function CustomPortableText({
 
         return <YouTubePlayer videoId={id} />
       },
-      logoRow: ({ value }: { value: { logoRow?: any[] } }) => <LogoRow logos={value?.logoRow || []} />,
-      contactInfo: ({ value }: { value: any }) => (
+      logoRow: ({value}: {value: {logoRow?: any[]}}) => <LogoRow logos={value?.logoRow || []} />,
+      contactInfo: ({value}: {value: any}) => (
         <div className={cn('my-2 sm:my-6', centered && 'flex justify-center')}>
           <ContactInfo
             headline={value?.headline}

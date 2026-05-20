@@ -6,13 +6,13 @@ import type {GuideSection} from '../types'
 
 export const navigationSection: GuideSection = {
   id: 'navigation',
-  title: 'Header navigation',
+  title: 'Navigation & site settings',
   content: (
     <Stack space={5}>
       <GuideParagraph>
-        The site header menu (and a simplified version in the footer) is managed in one place:{' '}
-        <strong>Settings and Menus</strong>. Changes here apply across the whole site after you{' '}
-        <strong>Publish</strong>.
+        <strong>Settings and Menus</strong> is a single document for site-wide chrome: header menu,
+        footer accreditation logos, and the default social sharing image. Changes apply everywhere
+        after you <strong>Publish</strong> this document.
       </GuideParagraph>
 
       <Stack space={4}>
@@ -79,10 +79,28 @@ export const navigationSection: GuideSection = {
         results.
       </GuideCallout>
 
+      <Stack space={4}>
+        <GuideSubheading>Footer logos</GuideSubheading>
+        <GuideParagraph>
+          <strong>Footer Logos</strong> are accreditation or partner marks shown in the site footer (not
+          the main navigation). Add <strong>Logo</strong> entries with image and alt text; reorder by
+          dragging. Publish Settings and Menus after changes.
+        </GuideParagraph>
+      </Stack>
+
+      <Stack space={4}>
+        <GuideSubheading>Default social sharing image</GuideSubheading>
+        <GuideParagraph>
+          <strong>Open Graph Image</strong> is the fallback image when a page or post does not set its
+          own SEO social image — used for link previews on social platforms and some search contexts.
+          Upload an on-brand image and add <strong>alt text</strong> (required when an image is set).
+          Page-level SEO images override this default; see <strong>SEO settings</strong>.
+        </GuideParagraph>
+      </Stack>
+
       <GuideCallout tone="positive" title="Tip">
-        After changing the menu, publish Settings and check the live site header (and mobile menu).
-        Clear naming in dropdowns helps visitors find puppy classes, private training, resources, and
-        similar pages quickly.
+        After changing the menu, footer, or default image, publish <strong>Settings and Menus</strong>{' '}
+        and check the live site header, footer, and a sample page share preview if needed.
       </GuideCallout>
     </Stack>
   ),

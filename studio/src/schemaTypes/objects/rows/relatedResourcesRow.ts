@@ -1,6 +1,8 @@
 import {TbCirclesRelation as icon} from 'react-icons/tb'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+import {noDuplicateReferences} from '../../../lib/validations/noDuplicateReferences'
+
 export const relatedResourcesRow = defineType({
   name: 'relatedResourcesRow',
   type: 'object',
@@ -84,7 +86,12 @@ export const relatedResourcesRow = defineType({
           to: [{type: 'post'}, {type: 'resource'}],
         }),
       ],
-      validation: (Rule) => Rule.max(4).warning('You can only add up to 4 references.'),
+      validation: (Rule) =>
+        Rule.max(4)
+          .warning('You can only add up to 4 references.')
+          .custom(
+            noDuplicateReferences('Each post or resource can only be added once to this row.'),
+          ),
     }),
 
     defineField({

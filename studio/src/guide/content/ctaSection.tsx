@@ -27,7 +27,8 @@ export const ctaSection: GuideSection = {
               <strong>Hero Banner</strong> — optional hero button
             </>,
             <>
-              <strong>Portable Text</strong> — insert a “CTA” block in page copy, FAQs, and similar
+              <strong>Portable Text</strong> — insert a “CTA” block in page copy, FAQs, and similar (see{' '}
+              <strong>Portable Text</strong> in this guide)
             </>,
             <>
               <strong>Icon cards</strong> and <strong>Products</strong> — button on cards or product

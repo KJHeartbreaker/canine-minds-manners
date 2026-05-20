@@ -3,8 +3,16 @@ import {Stack, Text} from '@sanity/ui'
 import {GuideCallout} from '../components/GuideCallout'
 import {GuideList, GuideParagraph, GuideSteps, GuideSubheading} from '../components/GuideProse'
 import type {GuideSection} from '../types'
+import {blogLandingSection} from './blogLandingSection'
+import {classesSection} from './classesSection'
 import {ctaSection} from './ctaSection'
+import {portableTextSection} from './portableTextSection'
+import {presentationSection} from './presentationSection'
+import {imagesAltSection} from './imagesAltSection'
 import {navigationSection} from './navigationSection'
+import {publishChecklistSection} from './publishChecklistSection'
+import {referencedContentSection} from './referencedContentSection'
+import {redirectsSection} from './redirectsSection'
 import {seoSettingsSection} from './seoSettingsSection'
 
 const workflowSectionsBeforeSeo: GuideSection[] = [
@@ -31,7 +39,7 @@ const workflowSectionsBeforeSeo: GuideSection[] = [
               </>,
               <>
                 <strong>Settings and Menus</strong> — header navigation, footer logos, default social
-                image
+                image (see <strong>Navigation &amp; site settings</strong>)
               </>,
               <>
                 <strong>Contact</strong> — the Contact page (slug <code>contact</code>)
@@ -46,8 +54,12 @@ const workflowSectionsBeforeSeo: GuideSection[] = [
                 <strong>Redirects</strong> — URL redirects for old links
               </>,
               <>
-                <strong>Our Team</strong>, <strong>Classes</strong>, <strong>Resources</strong>,{' '}
-                <strong>Products</strong>, <strong>Testimonials</strong> — supporting content
+                <strong>Classes</strong> — training programs, schedules, and booking (see{' '}
+                <strong>Classes</strong> in this guide)
+              </>,
+              <>
+                <strong>Our Team</strong>, <strong>Resources</strong>, <strong>Testimonials</strong>{' '}
+                — reusable documents (see <strong>Referenced content</strong>)
               </>,
             ]}
           />
@@ -101,40 +113,7 @@ const workflowSectionsBeforeSeo: GuideSection[] = [
       </Stack>
     ),
   },
-  {
-    id: 'presentation',
-    title: 'Presentation mode',
-    content: (
-      <Stack space={5}>
-        <GuideParagraph>
-          The <strong>Presentation</strong> tool shows the real website inside Studio so you can
-          preview layout before publishing. With Draft Mode on, you see unpublished changes in that
-          preview.
-        </GuideParagraph>
-
-        <GuideSteps
-          steps={[
-            <>Open the <strong>Presentation</strong> tool in the Studio toolbar.</>,
-            <>Pick the page or route you want to preview.</>,
-            <>Click <strong>Enable Draft Mode</strong> if prompted.</>,
-            <>Edit content in Studio while watching the preview update.</>,
-            <><strong>Publish</strong> when you are satisfied — Draft Mode alone does not make changes live.</>,
-          ]}
-        />
-
-        <GuideCallout tone="primary" title="Draft Mode">
-          Draft Mode is only for previewing. Turn it off to return to published-only content in the
-          preview frame.
-        </GuideCallout>
-
-        <GuideCallout tone="caution" title="If preview will not connect">
-          Contact your developer if Presentation shows “Unable to connect” or “Invalid Secret” — that
-          usually means preview URL or permissions need to be fixed (not something editors change in
-          content).
-        </GuideCallout>
-      </Stack>
-    ),
-  },
+  presentationSection,
   {
     id: 'pages',
     title: 'Creating and editing pages',
@@ -168,8 +147,7 @@ const workflowSectionsBeforeSeo: GuideSection[] = [
         </GuideParagraph>
 
         <GuideCallout tone="positive" title="Tip">
-          See <strong>SEO settings</strong> and <strong>Page builder components</strong> below for
-          more detail.
+          See <strong>SEO settings</strong> and <strong>Page builder</strong> below for more detail.
         </GuideCallout>
       </Stack>
     ),
@@ -202,46 +180,19 @@ const workflowSectionsAfterSeo: GuideSection[] = [
       </Stack>
     ),
   },
-  {
-    id: 'other-content',
-    title: 'Classes, resources, and more',
-    content: (
-      <Stack space={5}>
-        <Stack space={4}>
-          <GuideSubheading>Classes</GuideSubheading>
-          <GuideParagraph>
-            Open <strong>Classes</strong> to manage training offerings. Use the <strong>Content</strong>{' '}
-            tab for names, descriptions, and pricing; <strong>Acuity / Scheduling</strong> for booking
-            URLs and upcoming sessions; <strong>Display</strong> for card images and labels on listing
-            pages. Publish when ready.
-          </GuideParagraph>
-        </Stack>
-
-        <Stack space={4}>
-          <GuideSubheading>Resources, Products, Our Team, Testimonials</GuideSubheading>
-          <GuideParagraph>
-            Create or edit the document, fill in the fields, and <strong>Publish</strong>. Grids and
-            rows on pages reference these documents — publish them before expecting them to appear in
-            a page section.
-          </GuideParagraph>
-        </Stack>
-
-        <Stack space={4}>
-          <GuideSubheading>Redirects</GuideSubheading>
-          <GuideParagraph>
-            Use <strong>Redirects</strong> when an old URL should send visitors to a new page (for
-            example after renaming a slug).
-          </GuideParagraph>
-        </Stack>
-      </Stack>
-    ),
-  },
+  blogLandingSection,
+  referencedContentSection,
 ]
 
 export const workflowSections: GuideSection[] = [
   ...workflowSectionsBeforeSeo,
+  publishChecklistSection,
+  classesSection,
   seoSettingsSection,
+  imagesAltSection,
+  portableTextSection,
   navigationSection,
   ctaSection,
   ...workflowSectionsAfterSeo,
+  redirectsSection,
 ]
