@@ -32,7 +32,14 @@ function getPreviewOrigin(): string {
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
 
   try {
-    return new URL(withProtocol).origin
+    const url = new URL(withProtocol)
+    if (url.pathname.includes('/api/draft-mode')) {
+      console.warn(
+        'SANITY_STUDIO_PREVIEW_URL should be the website origin only (e.g. https://your-site.vercel.app), not the /api/draft-mode/enable path.',
+        {SANITY_STUDIO_PREVIEW_URL: raw, origin: url.origin},
+      )
+    }
+    return url.origin
   } catch {
     console.warn('Invalid SANITY_STUDIO_PREVIEW_URL, falling back to localhost', {
       SANITY_STUDIO_PREVIEW_URL: raw,
@@ -61,7 +68,7 @@ const homeLocation = {
 function resolveHref(documentType?: string, slug?: string): string | undefined {
   switch (documentType) {
     case 'post':
-      return slug ? `/posts/${slug}` : undefined
+      return slug ? `/blog/${slug}` : undefined
     case 'page':
       return slug ? `/${slug}` : undefined
     default:
@@ -101,7 +108,7 @@ export default defineConfig({
             filter: `_type == "page" && slug.current == $slug || _id == $slug`,
           },
           {
-            route: '/posts/:slug',
+            route: '/blog/:slug',
             filter: `_type == "post" && slug.current == $slug || _id == $slug`,
           },
         ]),

@@ -66,7 +66,7 @@ export const seo = defineType({
       type: 'image',
       title: 'Social Sharing Image',
       description:
-        'Image displayed when this page is shared on social media (Facebook, Twitter, LinkedIn, etc.). Recommended size: 1200x630 pixels. If not set, the page hero image or site default will be used.',
+        'Image displayed when *this* page is shared on social media (Facebook, Twitter, LinkedIn, etc.). Recommended size: 1200x630 pixels. If not set, the page hero image or site default will be used.',
       options: {
         hotspot: true,
         aiAssist: {
