@@ -1,18 +1,41 @@
 import {Box, Stack, Text} from '@sanity/ui'
-import {useCallback} from 'react'
+import {useCallback, useEffect, useRef, useState} from 'react'
 
 import type {GuideTocItem} from '../types'
+import {measureTocMaxHeight, TOC_STICKY_TOP_REM} from '../utils/measureTocMaxHeight'
+import {scrollTocLinkIntoView} from '../utils/scrollTocLinkIntoView'
 
 type GuideTocProps = {
   items: GuideTocItem[]
   activeId: string
   onNavigate: (id: string) => void
+  /** Guide scroll container — used to size max-height to the visible pane. */
+  scrollRoot?: HTMLElement | null
 }
 
-export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
+export function GuideToc({items, activeId, onNavigate, scrollRoot}: GuideTocProps) {
+  const navRef = useRef<HTMLDivElement>(null)
+  const [maxHeightPx, setMaxHeightPx] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!scrollRoot) return
+
+    const update = () => setMaxHeightPx(measureTocMaxHeight(scrollRoot))
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(scrollRoot)
+    return () => observer.disconnect()
+  }, [scrollRoot])
+
   const scrollTo = useCallback(
     (id: string) => {
       onNavigate(id)
+      requestAnimationFrame(() => {
+        const nav = navRef.current
+        const link = nav?.querySelector<HTMLElement>(`[data-toc-id="${id}"]`)
+        if (nav && link) scrollTocLinkIntoView(nav, link)
+      })
     },
     [onNavigate],
   )
@@ -20,21 +43,29 @@ export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
   return (
     <Box
       as="nav"
+      ref={navRef}
       aria-label="On this page"
       paddingRight={4}
+      onWheel={(event) => event.stopPropagation()}
       style={{
         position: 'sticky',
-        top: '1.5rem',
+        top: `${TOC_STICKY_TOP_REM}rem`,
         alignSelf: 'flex-start',
         width: '14rem',
         flexShrink: 0,
+        maxHeight: maxHeightPx != null ? `${maxHeightPx}px` : `calc(100vh - ${TOC_STICKY_TOP_REM}rem)`,
+        overflowY: 'auto',
+        overscrollBehavior: 'contain',
       }}
     >
       <Stack space={4}>
         <Text size={0} weight="semibold" muted>
           On this page
         </Text>
-        <Box as="ul" style={{listStyle: 'none', margin: 0, padding: 0}}>
+        <Box
+          as="ul"
+          style={{listStyle: 'none', margin: 0, padding: 0, paddingBottom: '3.125rem'}}
+        >
           {items.map((item, index) => {
             const isActive = item.id === activeId
             const prev = items[index - 1]
@@ -65,6 +96,7 @@ export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
                 >
                   <button
                     type="button"
+                    data-toc-id={item.id}
                     onClick={() => scrollTo(item.id)}
                     style={{
                       all: 'unset',
