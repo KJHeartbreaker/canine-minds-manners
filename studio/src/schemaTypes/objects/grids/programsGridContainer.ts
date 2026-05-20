@@ -1,6 +1,8 @@
 import {GiJumpingDog as icon} from 'react-icons/gi'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+import {noDuplicateReferences} from '../../../lib/validations/noDuplicateReferences'
+
 export const programsGridContainer = defineType({
   name: 'programsGridContainer',
   type: 'object',
@@ -38,6 +40,8 @@ export const programsGridContainer = defineType({
           to: [{type: 'class'}],
         }),
       ],
+      validation: (Rule) =>
+        Rule.custom(noDuplicateReferences('Each class can only be added once to this grid.')),
     }),
     defineField({
       name: 'enhanced',

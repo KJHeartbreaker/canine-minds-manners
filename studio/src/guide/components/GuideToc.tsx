@@ -38,14 +38,15 @@ export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
           {items.map((item, index) => {
             const isActive = item.id === activeId
             const prev = items[index - 1]
-            const isFirstNested = item.depth > 0 && (!prev || prev.depth === 0)
+            const isFirstNested = item.depth > 0 && (!prev || prev.depth < item.depth)
             const isLast = index === items.length - 1
+            const tocPaddingLeft = item.depth === 0 ? 0 : item.depth === 1 ? 2 : 4
 
             return (
               <Box
                 as="li"
                 key={item.id}
-                paddingLeft={item.depth > 0 ? 3 : 0}
+                paddingLeft={tocPaddingLeft}
                 style={{
                   display: 'block',
                   marginTop: isFirstNested ? '0.5rem' : undefined,
@@ -53,10 +54,15 @@ export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
                     ? 0
                     : item.depth === 0
                       ? '0.875rem'
-                      : '0.625rem',
+                      : item.depth === 1
+                        ? '0.5rem'
+                        : '0.375rem',
                 }}
               >
-                <Text size={1} style={{lineHeight: 1.55}}>
+                <Text
+                  size={item.depth >= 2 ? 0 : 1}
+                  style={{lineHeight: 1.55}}
+                >
                   <button
                     type="button"
                     onClick={() => scrollTo(item.id)}
@@ -66,7 +72,7 @@ export function GuideToc({items, activeId, onNavigate}: GuideTocProps) {
                       display: 'block',
                       padding: '0.125rem 0',
                       color: isActive ? 'var(--card-fg-color)' : 'var(--card-muted-fg-color)',
-                      fontWeight: isActive ? 600 : 400,
+                      fontWeight: isActive ? 600 : item.depth >= 2 ? 400 : 400,
                       textDecoration: isActive ? 'underline' : 'none',
                       textUnderlineOffset: '0.2em',
                       lineHeight: 1.55,

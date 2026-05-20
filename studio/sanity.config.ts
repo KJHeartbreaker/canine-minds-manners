@@ -23,13 +23,27 @@ import {unpublishAction} from './src/actions/unpublish'
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 
+// Origins Presentation may navigate to (URLPattern syntax). The preview origin is added automatically.
+const presentationAllowOrigins = [
+  'http://localhost:*',
+  'http://127.0.0.1:*',
+  'https://canine-minds-manners-web.vercel.app',
+  'https://www.caninemindsandmanners.ca',
+  'https://caninemindsandmanners.ca',
+]
+
 // URL for preview functionality, defaults to localhost:3000 if not set
 function getPreviewOrigin(): string {
   const raw = process.env.SANITY_STUDIO_PREVIEW_URL
   if (!raw) return 'http://localhost:3000'
 
   const trimmed = raw.trim()
-  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
+  const withProtocol = (() => {
+    if (/^https?:\/\//i.test(trimmed)) return trimmed
+    // Local dev servers use http — avoid https://localhost (won't connect)
+    if (/^(localhost|127\.0\.0\.1)(:\d+)?$/i.test(trimmed)) return `http://${trimmed}`
+    return `https://${trimmed}`
+  })()
 
   try {
     const url = new URL(withProtocol)
@@ -49,6 +63,10 @@ function getPreviewOrigin(): string {
 }
 
 const previewOrigin = getPreviewOrigin()
+
+console.info('[Presentation] preview origin:', previewOrigin, {
+  fromEnv: process.env.SANITY_STUDIO_PREVIEW_URL || '(default http://localhost:3000)',
+})
 
 if (previewOrigin.endsWith('.sanity.studio')) {
   console.warn(
@@ -90,8 +108,9 @@ export default defineConfig({
   plugins: [
     // Presentation tool configuration for Visual Editing
     presentationTool({
+      allowOrigins: presentationAllowOrigins,
       previewUrl: {
-        origin: previewOrigin,
+        initial: `${previewOrigin}/`,
         previewMode: {
           enable: '/api/draft-mode/enable',
         },

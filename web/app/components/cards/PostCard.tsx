@@ -32,15 +32,15 @@ export default function PostCard({ title, slug, author, excerpt, image }: PostCa
     const authorSlug = `/our-team#${author.slug.current}`
 
     return (
-        <div data-component="PostCard" className="flex flex-col bg-white rounded-[20px] overflow-hidden">
-            <Link href={hrefSlug} className="group">
+        <div data-component="PostCard" className="flex h-full flex-col bg-white rounded-[20px] overflow-hidden">
+            <Link href={hrefSlug} className="group shrink-0">
                 <SanityImage
                     image={image}
                     fill
                     className="w-full h-[200px] md:h-[300px] overflow-hidden transition-transform duration-200 group-hover:scale-105"
                 />
             </Link>
-            <div className="flex flex-col justify-start items-start text-left p-5 overflow-hidden copy-block">
+            <div className="flex flex-1 flex-col justify-start items-start text-left p-5 overflow-hidden copy-block">
                 <Link href={hrefSlug} className="group">
                     <h4 className="mb-2.5 group-hover:text-orange-hover transition-colors">{title}</h4>
                 </Link>
